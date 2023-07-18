@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annapurna Hotel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        .top-navbar {
+            height: 15px;
+            width: auto;
+            color: white;
+            background-color: #4F5153;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .top-left {
+            text-align: left;
+        }
+
+        .top-left p {
+            margin: 0;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .top-social {
+            display: flex;
+            align-items: center;
+        }
+
+        .top-social a {
+            padding: 5px;
+            color: #fff;
+            transition: color 0.3s;
+        }
+
+        .top-social a:hover {
+            color: #FF7D00;
+        }
+
+        .top-menubar {
+            height: 50px;
+            width: auto;
+            color: #4F5153;
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .top-logo h3 {
+            margin: 0;
+            text-align: center;
+        }
+
+        .top-menuitems ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .top-menuitems li {
+            margin-right: 15px;
+        }
+
+        .top-menuitems a {
+            text-decoration: none;
+            color: #000;
+            transition: color 0.3s;
+        }
+
+        .top-menuitems a:hover {
+            color: #FF7D00;
+        }
+
+        .top-menuitems .nav-link {
+            padding: 5px;
+            color: #000;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .top-menuitems .nav-link:hover {
+            color: #FF7D00;
+        }
+
+        .title-container {
+            justify-content: space-around;
+            padding: 10px 0 0 30px;
+            color: red;
+        }
+
+        .gallery-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 0 20px 20px 20px;
+        }
+
+        .room-container {
+            width: 23%;
+            margin: 10px 0;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .room-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .room-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+        }
+
+        .room-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .availability {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .available {
+            color: #fff;
+            background-color: #4caf50;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .booked {
+            color: #fff;
+            background-color: #f44336;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .copyright-info-container {
+            height: auto;
+            width: auto;
+            background-color: #FFF;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            align-items: center;
+            position: relative;
+        }
+
+        .copyright-info-container .copy-text {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .copyright-info-container .copy-text h4 a {
+            text-decoration: none;
+        }
+
+        .copyright-info-container .down-social {
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .copyright-info-container .go-up {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        .copyright-info-container .go-up:hover {
+            background-color: #0056b3;
+        }
+
+        .copyright-info-container .down-social {
+            left: 0;
+            font-size: 24px;
+        }
+
+        .copyright-info-container .nav-link {
+            margin: 5px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .copyright-info-container .nav-link:hover {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <section class="top-navbar">
+        <div class="top-left">
+            <p>42400,<span>Tinkune-Kathmandu, Nepal</span></p>
+        </div>
+        <div class="top-right">
+            <div class="top-social">
+                <a class="nav-link" href="#"><i class="fa fa-circle"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-circle"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-facebook"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-instagram"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-twitter"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-pinterest"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-google"></i></a>
+                <a class="nav-link" href="login.html"><i class="fa fa-user"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="top-menubar">
+        <div class="top-logo">
+            <h3><span id="logo-max-text">Annapurna</span><br><span id="logo-mini-text">Hotel &amp; Restaurant</span>
+            </h3>
+        </div>
+        <div class="top-menuitems">
+            <ul>
+                <li><a href="../Index.html">Home</a></li>
+                <li><a href="Menu.html">Menu</a></li>
+                <li><a href="Booking.html">Booking</a></li>
+                <li><a href="Blogs.html">Blogs</a></li>
+                <li><a href="Contact.html">Contact</a></li>
+                <li><a class="nav-link" href="#"><i class="fa fa-search"></i></a></li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="title-container">
+        <h1>Click to view more information:</h1>
+    </div>
+    <div class="gallery-container">
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room100.jpg" alt="Room 1">
+            <div class="room-info">
+                <div class="room-title">Room 100</div>
+                <div class="availability available">Available</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room101.jpg" alt="Room 2">
+            <div class="room-info">
+                <div class="room-title">Room 101</div>
+                <div class="availability booked">Booked</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room102.jpg" alt="Room 3">
+            <div class="room-info">
+                <div class="room-title">Room 102</div>
+                <div class="availability available">Available</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room103.jpg" alt="Room 4">
+            <div class="room-info">
+                <div class="room-title">Room 103</div>
+                <div class="availability booked">Booked</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room100.jpg" alt="Room 1">
+            <div class="room-info">
+                <div class="room-title">Room 100</div>
+                <div class="availability available">Available</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room101.jpg" alt="Room 2">
+            <div class="room-info">
+                <div class="room-title">Room 101</div>
+                <div class="availability booked">Booked</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room102.jpg" alt="Room 3">
+            <div class="room-info">
+                <div class="room-title">Room 102</div>
+                <div class="availability available">Available</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room103.jpg" alt="Room 4">
+            <div class="room-info">
+                <div class="room-title">Room 103</div>
+                <div class="availability booked">Booked</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room100.jpg" alt="Room 1">
+            <div class="room-info">
+                <div class="room-title">Room 100</div>
+                <div class="availability available">Available</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room101.jpg" alt="Room 2">
+            <div class="room-info">
+                <div class="room-title">Room 101</div>
+                <div class="availability booked">Booked</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room102.jpg" alt="Room 3">
+            <div class="room-info">
+                <div class="room-title">Room 102</div>
+                <div class="availability available">Available</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room103.jpg" alt="Room 4">
+            <div class="room-info">
+                <div class="room-title">Room 103</div>
+                <div class="availability booked">Booked</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room100.jpg" alt="Room 1">
+            <div class="room-info">
+                <div class="room-title">Room 100</div>
+                <div class="availability available">Available</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room101.jpg" alt="Room 2">
+            <div class="room-info">
+                <div class="room-title">Room 101</div>
+                <div class="availability booked">Booked</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room102.jpg" alt="Room 3">
+            <div class="room-info">
+                <div class="room-title">Room 102</div>
+                <div class="availability available">Available</div>
+            </div>
+        </div>
+
+        <div class="room-container" onclick="window.location.href='../Rooms/room.html'">
+            <img class="room-image" src="../Images/Room_Images/room103.jpg" alt="Room 4">
+            <div class="room-info">
+                <div class="room-title">Room 103</div>
+                <div class="availability booked">Booked</div>
+            </div>
+        </div>
+    </div>
+
+    <section class="copyright-info-container">
+        <div class="copy-text">
+            <h2>copyright &copy; 2023 Annapurna Hotel and Restaurant</h2>
+            <h4>Designed By, <a href="https:/www.mahendrasingh.com.np/" target="_blank">Mahendra Mahara</a></h4>
+        </div>
+        <div class="go-up" onclick="scrollToTop()">
+            <a class="nav-link" href="#"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+        </div>
+        <div class="down-social">
+            <a class="nav-link" href="#"><i class="fa fa-circle"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-circle"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-facebook"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-instagram"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-twitter"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-pinterest"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-google"></i></a>
+            <a class="nav-link" href="login.html"><i class="fa fa-user"></i></a>
+        </div>
+    </section>
+    <script src="../Script.js"></script>
+</body>
+
+</html>
