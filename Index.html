@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annapurna Hotel</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <section class="top-navbar">
+        <div class="top-left">
+            <p>42400,<span>Tinkune-Kathmandu, Nepal</span></p>
+        </div>
+        <div class="top-right">
+            <div class="top-social">
+                <a class="nav-link" href="#"><i class="fa fa-circle"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-circle"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-facebook"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-instagram"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-twitter"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-pinterest"></i></a>
+                <a class="nav-link" href="#"><i class="fa fa-google"></i></a>
+                <a class="nav-link" href="Pages/login.html"><i class="fa fa-user"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="top-menubar">
+        <div class="top-logo">
+            <h3><span id="logo-max-text">Annapurna</span><br><span id="logo-mini-text">Hotel &amp; Restaurant</span>
+            </h3>
+        </div>
+        <div class="top-menuitems">
+            <ul>
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="Pages/Menu.html">Menu</a></li>
+                <li><a href="Pages/Booking.html">Booking</a></li>
+                <li><a href="Pages/Blogs.html">Blogs</a></li>
+                <li><a href="Pages/Contact.html">Contact</a></li>
+                <li><a class="nav-link" href="#"><i class="fa fa-search"></i></a></li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="home-images-container">
+        <div class="slider-container">
+            <div class="slider">
+                <div class="slide"><img src="Images/Home_Images/img1.jpg" alt="Image 1"></div>
+                <div class="slide"><img src="Images/Home_Images/img2.jpg" alt="Image 2"></div>
+                <div class="slide"><img src="Images/Home_Images/img3.jpg" alt="Image 3"></div>
+                <div class="slide"><img src="Images/Home_Images/img4.jpg" alt="Image 4"></div>
+                <div class="slide"><img src="Images/Home_Images/img5.jpg" alt="Image 5"></div>
+            </div>
+
+            <button class="slider-arrow slider-arrow-left" onclick="prevSlide()">‹</button>
+            <button class="slider-arrow slider-arrow-right" onclick="nextSlide()">›</button>
+
+            <div class="slide-indicators"></div>
+        </div>
+    </section>
+
+    <section class="master-room-container">
+        <div class="master-text">
+            <h2>Hotel Master's Room</h2>
+            <div class="button-click">
+                <button class="button" onclick="viewRooms('Pages/Rooms.html')">View All Rooms <i
+                        class="fa fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section class="food-items-container">
+        <div>
+            <h2>Available Food Items And Price:</h2>
+        </div>
+        <div>
+            <div class="post-card">
+                <a href="#" class="post-link">
+                    <img src="Images/Food_Items/food1.jpg" alt="Food 1" class="post-image">
+                    <div class="post-content">
+                        <h2 class="post-title">Food Item</h2>
+                        <p class="post-text">Price: 298</p>
+                    </div>
+                </a>
+            </div>
+            <div class="post-card">
+                <a href="#" class="post-link">
+                    <img src="Images/Food_Items/food2.jpg" alt="Food 1" class="post-image">
+                    <div class="post-content">
+                        <h2 class="post-title">Food Item</h2>
+                        <p class="post-text">Price: 298</p>
+                    </div>
+                </a>
+            </div>
+            <div class="post-card">
+                <a href="#" class="post-link">
+                    <img src="Images/Food_Items/food3.jpg" alt="Food 3" class="post-image">
+                    <div class="post-content">
+                        <h2 class="post-title">Food Item</h2>
+                        <p class="post-text">Price: 298</p>
+                    </div>
+                </a>
+            </div>
+            <div class="post-card">
+                <a href="#" class="post-link">
+                    <img src="Images/Food_Items/food4.jpg" alt="Food 4" class="post-image">
+                    <div class="post-content">
+                        <h2 class="post-title">Food Item</h2>
+                        <p class="post-text">Price: 298</p>
+                    </div>
+                </a>
+            </div>
+            <div class="post-card">
+                <a href="#" class="post-link">
+                    <img src="Images/Food_Items/food5.jpg" alt="Food 5" class="post-image">
+                    <div class="post-content">
+                        <h2 class="post-title">Food Item</h2>
+                        <p class="post-text">Price: 298</p>
+                    </div>
+                </a>
+            </div>
+            <div class="post-card">
+                <a href="#" class="post-link">
+                    <img src="Images/Food_Items/food6.jpg" alt="Food 6" class="post-image">
+                    <div class="post-content">
+                        <h2 class="post-title">Food Item</h2>
+                        <p class="post-text">Price: 298</p>
+                    </div>
+                </a>
+            </div>
+            <div class="post-card">
+                <a href="#" class="post-link">
+                    <img src="Images/Food_Items/food7.jpg" alt="Food 7" class="post-image">
+                    <div class="post-content">
+                        <h2 class="post-title">Food Item</h2>
+                        <p class="post-text">Price: 298</p>
+                    </div>
+                </a>
+            </div>
+            <div class="post-card">
+                <a href="#" class="post-link">
+                    <img src="Images/Food_Items/food8.jpg" alt="Food 8" class="post-image">
+                    <div class="post-content">
+                        <h2 class="post-title">Food Item</h2>
+                        <p class="post-text">Price: 298</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="offer-container">
+        <div class="offer-title">
+            <h1>Special Offers:</h1>
+        </div>
+        <div class="offer-images">
+            <div class="offer-images-collection">
+                <div class="offerSlide"><img src="Images/Offer_Images/special1.jpg" alt="Image 1"></div>
+                <div class="offerSlide"><img src="Images/Offer_Images/special2.jpg" alt="Image 2"></div>
+                <div class="offerSlide"><img src="Images/Offer_Images/special3.jpg" alt="Image 1"></div>
+                <div class="offerSlide"><img src="Images/Offer_Images/special4.jpg" alt="Image 2"></div>
+                <div class="offerSlide"><img src="Images/Offer_Images/special5.jpg" alt="Image 1"></div>
+            </div>
+
+            <button class="offerSlider-arrow left" onclick="prevOfferSlide()">&#9665;</button>
+            <button class="offerSlider-arrow right" onclick="nextOfferSlide()">&#9655;</button>
+
+            <div class="offerSlider-indicators"></div>
+        </div>
+    </section>
+
+    <section class="order-now-container">
+        <div class="button-click">
+            <button class="button">Order Food Now <i class="fa fa-arrow-right"></i></button>
+        </div>
+    </section>
+
+    <section class="my-staffs-container">
+        <div class="my-staffs-title">
+            <h1>Our Staffs:</h1>
+        </div>
+        <div class="card-container">
+            <a href="Workers/worker1.html" class="worker-card">
+                <img src="Images/Staff_Images/owner.jpg" alt="STAFF-IMAGE">
+                <h3>Mahendra Mahara</h3>
+            </a>
+            <a href="Workers/worker2.html" class="worker-card">
+                <img src="Images/Staff_Images/staff1.jpg" alt="STAFF-IMAGE">
+                <h3>Mahendra Mahara</h3>
+            </a>
+            <a href="Workers/worker2.html" class="worker-card">
+                <img src="Images/Staff_Images/staff2.jpg" alt="STAFF-IMAGE">
+                <h3>Mahendra Mahara</h3>
+            </a>
+            <a href="Workers/worker2.html" class="worker-card">
+                <img src="Images/Staff_Images/staff3.jpg" alt="STAFF-IMAGE">
+                <h3>Mahendra Mahara</h3>
+            </a>
+            <a href="Workers/worker2.html" class="worker-card">
+                <img src="Images/Staff_Images/staff4.jpg" alt="STAFF-IMAGE">
+                <h3>Mahendra Mahara</h3>
+            </a>
+            <a href="Workers/worker2.html" class="worker-card">
+                <img src="Images/Staff_Images/staff5.jpg" alt="STAFF-IMAGE">
+                <h3>Mahendra Mahara</h3>
+            </a>
+            <a href="Workers/worker2.html" class="worker-card">
+                <img src="Images/Staff_Images/staff6.jpg" alt="STAFF-IMAGE">
+                <h3>Mahendra Mahara</h3>
+            </a>
+            <a href="Workers/worker2.html" class="worker-card">
+                <img src="Images/Staff_Images/staff7.jpg" alt="STAFF-IMAGE">
+                <h3>Mahendra Mahara</h3>
+            </a>
+            <a href="Workers/worker2.html" class="worker-card">
+                <img src="Images/Staff_Images/staff8.jpg" alt="STAFF-IMAGE">
+                <h3>Mahendra Mahara</h3>
+            </a>
+            <a href="Workers/worker2.html" class="worker-card">
+                <img src="Images/Staff_Images/staff9.jpg" alt="STAFF-IMAGE">
+                <h3>Mahendra Mahara</h3>
+            </a>
+        </div>
+
+    </section>
+
+    <section class="customer-reviews-container">
+
+        <div>
+            <h1>Customer Reviews:</h1>
+        </div>
+        <div>
+            <div class="review">
+                <div class="rating">
+                    <span class="stars">★★★★★</span>
+                </div>
+                <blockquote class="quote">
+                    "Great Place, I Love It Man!"
+                    <cite class="customer-name">- Harish</cite>
+                </blockquote>
+                <img class="customer-image" src="Images/Customer_Images/img-1.jpg" alt="Mahendra Mahara">
+            </div>
+
+            <div class="review">
+                <div class="rating">
+                    <span class="stars">★★★★☆</span>
+                </div>
+                <blockquote class="quote">
+                    "Good quality for the price."
+                    <cite class="customer-name">- Mahesh</cite>
+                </blockquote>
+                <img class="customer-image" src="Images/Customer_Images/img-2.jpg" alt="Mahendra Mahara">
+            </div>
+
+            <div class="review">
+                <div class="rating">
+                    <span class="stars">★★★★★</span>
+                </div>
+                <blockquote class="quote">
+                    "What a Food, Really Awesome!"
+                    <cite class="customer-name">- Urmila</cite>
+                </blockquote>
+                <img class="customer-image" src="Images/Customer_Images/img-3.jpg" alt="Mahendra Mahara">
+            </div>
+
+            <div class="review">
+                <div class="rating">
+                    <span class="stars">★★★★★</span>
+                </div>
+                <blockquote class="quote">
+                    "Great Place, I Love It Man!"
+                    <cite class="customer-name">- Harish</cite>
+                </blockquote>
+                <img class="customer-image" src="Images/Customer_Images/img-1.jpg" alt="Mahendra Mahara">
+            </div>
+
+            <div class="review">
+                <div class="rating">
+                    <span class="stars">★★★★☆</span>
+                </div>
+                <blockquote class="quote">
+                    "Good quality for the price."
+                    <cite class="customer-name">- Mahesh</cite>
+                </blockquote>
+                <img class="customer-image" src="Images/Customer_Images/img-2.jpg" alt="Mahendra Mahara">
+            </div>
+
+            <div class="review">
+                <div class="rating">
+                    <span class="stars">★★★★★</span>
+                </div>
+                <blockquote class="quote">
+                    "What a Food, Really Awesome!"
+                    <cite class="customer-name">- Urmila</cite>
+                </blockquote>
+                <img class="customer-image" src="Images/Customer_Images/img-3.jpg" alt="Mahendra Mahara">
+            </div>
+    </section>
+
+    <section class="services-ul-li-container">
+        <div class="services-title">
+            <h1>Our Facilities:</h1>
+        </div>
+        <div class="facilities-lists">
+            <div class="service-list">
+                <h2>Service</h2>
+                <ul>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                    <li>Item 3</li>
+                </ul>
+            </div>
+            <div class="service-list">
+                <h2>We Provide</h2>
+                <ul>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                    <li>Item 3</li>
+                </ul>
+            </div>
+            <div class="service-list">
+                <h2>Our Social</h2>
+                <ul>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                    <li>Item 3</li>
+                </ul>
+            </div>
+            <div class="service-list">
+                <h2>Services</h2>
+                <ul>
+                    <li>Item 1</li>
+                    <li>Item 2</li>
+                    <li>Item 3</li>
+                    <li>Item 3</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="copyright-info-container">
+        <div class="copy-text">
+            <h2>copyright &copy; 2023 Annapurna Hotel and Restaurant</h2>
+            <h4>Designed By, <a href="https:/www.mahendrasingh.com.np/" target="_blank">Mahendra Mahara</a></h4>
+        </div>
+        <div class="go-up" onclick="scrollToTop()">
+            <a class="nav-link" href="#"><i class="fa fa-arrow-up" aria-hidden="true"></i></a>
+        </div>
+        <div class="down-social">
+            <a class="nav-link" href="#"><i class="fa fa-circle"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-circle"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-facebook"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-instagram"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-twitter"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-pinterest"></i></a>
+            <a class="nav-link" href="#"><i class="fa fa-google"></i></a>
+            <a class="nav-link" href="Pages/login.html"><i class="fa fa-user"></i></a>
+        </div>
+    </section>
+    <script src="Script.js"></script>
+</body>
+
+</html>
