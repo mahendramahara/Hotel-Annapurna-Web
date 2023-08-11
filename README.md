@@ -21,12 +21,17 @@ cd Hotel-Annapurna-Web
 npm install
 ```
 
-2. **Navigate to the Project Directory:**
-cd Hotel-Annapurna-Web
 
+2. **Navigate to the Project Directory:**
+- Open your terminal or command prompt.
+- Change directory to the location where you cloned the repository. For example:
+  ```
+  cd path/to/Hotel-Annapurna-Web
+  
+  ```
 
 3. **Open the Project in Your Preferred Code Editor:**
-code .
+- Once you're in the project directory, open the project files in your preferred code editor manually.
 
 4. **Customize the Project:**
 - Modify HTML, CSS, and JavaScript files to tailor the project to your needs.
