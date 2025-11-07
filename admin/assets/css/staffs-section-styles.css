@@ -1,0 +1,380 @@
+/* Enhanced CSS with better responsiveness and alignment */
+.staff-container {
+    padding: 20px;
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    display: none;
+}
+
+.staff-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.staff-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-dark);
+}
+
+.staff-title ion-icon {
+    font-size: 24px;
+    color: var(--primary-color);
+}
+
+.staff-title h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.staff-add-button {
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.staff-add-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.staff-table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.staff-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 1000px;
+    background: var(--white);
+}
+
+.staff-table th {
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 15px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+.staff-table tr:nth-child(even) {
+    background: var(--table-stripe);
+}
+
+.staff-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+    vertical-align: middle;
+}
+
+.staff-profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    object-fit: cover;
+    border: 2px solid var(--white);
+}
+
+.staff-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.staff-status.active {
+    background: var(--color-confirmed-bg);
+    color: var(--color-confirmed-text);
+}
+
+.staff-status.inactive {
+    background: var(--color-cancelled-bg);
+    color: var(--color-cancelled-text);
+}
+
+.staff-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.staff-action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.staff-action-btn ion-icon {
+    font-size: 1.2rem;
+}
+
+.staff-action-btn.edit {
+    color: var(--primary-color);
+}
+
+.staff-action-btn.delete {
+    color: var(--color-button-danger);
+}
+
+.staff-action-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+}
+
+/* Modal Styles */
+.staff-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+#modalTitle {
+    margin: 0 0 25px 0;
+    color: var(--text-dark);
+    font-size: 1.5rem;
+}
+
+.staff-modal-content {
+    position: relative;
+    background-color: var(--white);
+    margin: 20px auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 8px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.staff-close-btn {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-dark);
+
+    line-height: 1;
+}
+
+/* Form Styles */
+/* .staff-form-group {
+    margin-bottom: 20px;
+    width: 100%;
+} */
+.staff-form-group {
+    flex: 1;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.staff-form-row {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 10px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.staff-form-group label {
+    display: block;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.staff-form-row .staff-form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.staff-form-group input[type="text"],
+.staff-form-group input[type="email"],
+.staff-form-group input[type="tel"],
+.staff-form-group input[type="number"],
+.staff-form-group input[type="date"],
+.staff-form-group input[type="file"],
+.staff-form-group select {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Toggle Switch */
+.staff-toggle {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 40px;
+    margin-top: 8px;
+}
+
+.staff-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.staff-toggle-label {
+    margin-bottom: 8px;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.staff-toggle-label:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.staff-toggle-label {
+    background-color: var(--color-button-success);
+}
+
+input:checked+.staff-toggle-label:before {
+    transform: translateX(26px);
+}
+
+/* Form Actions */
+.staff-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.staff-submit-btn,
+.staff-cancel-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.staff-submit-btn {
+    background-color: var(--color-button-success);
+    color: var(--white);
+}
+
+.staff-cancel-btn {
+    background-color: #6c757d;
+    color: var(--white);
+}
+
+
+@media (max-width: 768px) {
+    .staff-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .staff-modal-content {
+        padding: 20px;
+    }
+
+    .staff-form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .staff-form-group {
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .staff-container {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .staff-modal {
+        padding: 15px;
+    }
+
+    .staff-modal-content {
+        padding: 15px;
+    }
+
+    .staff-form-actions {
+        margin-top: 20px;
+        padding-top: 15px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .staff-container {
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+    }
+
+    .staff-add-button,
+    .staff-actions {
+        display: none;
+    }
+
+    .staff-table {
+        min-width: auto;
+    }
+
+    .staff-table th {
+        background: #f8f9fa !important;
+        color: #000;
+    }
+}

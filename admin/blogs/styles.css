@@ -1,0 +1,350 @@
+:root {
+    /* Using the provided color scheme */
+    --primary-color: #1891d1;
+    --primary-dark: #1d64c2;
+    --background-color: #e6f2ff;
+    --text-dark: #002960;
+    --white: #ffffff;
+    --box1-color: #ffd39a;
+    --box2-color: #c1d5a4;
+    --box3-color: #E2D9FF;
+    --box4-color: #99BEBC;
+    --table-stripe: #ceecf6;
+    --color-pending-bg: #fff3cd;
+    --color-pending-text: #856404;
+    --color-confirmed-bg: #d4edda;
+    --color-confirmed-text: #155724;
+    --color-completed-bg: #cce5ff;
+    --color-completed-text: #004085;
+    --color-cancelled-bg: #f8d7da;
+    --color-cancelled-text: #721c24;
+    --color-button-success: #28a745;
+    --color-button-danger: #dc3545;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    color: var(--primary-dark);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.blog-form {
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Rich Text Editor Styles */
+.tox-tinymce {
+    border: 2px solid #e0e0e0 !important;
+    border-radius: 5px !important;
+}
+
+.tox .tox-toolbar__group {
+    padding: 0 5px !important;
+}
+
+/* Tags Input Styles */
+.tags-input-container {
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 0.5rem;
+    background-color: var(--white);
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.tag {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.tag .remove-tag {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    font-size: 0.8rem;
+}
+
+.tag .remove-tag:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+#tagInput {
+    border: none;
+    outline: none;
+    padding: 0.5rem;
+    width: 100%;
+    font-size: 1rem;
+}
+
+/* Image Upload Improvements */
+.image-upload-container {
+    position: relative;
+    margin-top: 0.5rem;
+}
+
+.image-preview {
+    width: 100%;
+    min-height: 200px;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background-color: #f8f9fa;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.remove-image-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(220, 53, 69, 0.9);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.remove-image-btn:hover {
+    background-color: var(--color-button-danger);
+    transform: scale(1.1);
+}
+
+/* Post Meta Styles */
+.post-meta {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    color: var(--text-dark);
+    opacity: 0.8;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+}
+
+.post-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Rest of the previous CSS remains the same */
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+input[type="text"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+
+.upload-label {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+}
+
+.upload-label i {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+input[type="file"] {
+    display: none;
+}
+
+
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-save {
+    background-color: var(--color-button-success);
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #218838;
+}
+
+.btn-delete {
+    background-color: var(--color-button-danger);
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.btn-cancel {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #5a6268;
+}
+
+.error-container {
+    color: var(--color-cancelled-text);
+    background-color: var(--color-cancelled-bg);
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    display: none;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 500px;
+    margin: 20vh auto;
+    text-align: center;
+}
+
+.modal-content h2 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.modal-content p {
+    margin-bottom: 1.5rem;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        margin: 1rem auto;
+    }
+
+    .blog-form {
+        padding: 1rem;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+}

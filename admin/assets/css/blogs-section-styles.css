@@ -1,0 +1,131 @@
+.blogs-data-table {
+    display: none;
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.blogs-data-table .title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-dark);
+}
+
+.blogs-data-table .title-icon {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+}
+
+.blogs-data-table .text {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.blogs-container {
+    overflow-x: auto;
+}
+
+.blogs-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.blogs-table th {
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 500;
+}
+
+.blogs-table tr:nth-child(even) {
+    background: var(--table-stripe);
+}
+
+.blogs-table td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.blogs-table img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.blog-status {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    display: inline-block;
+}
+
+.status-public {
+    background: var(--color-confirmed-bg);
+    color: var(--color-confirmed-text);
+}
+
+.status-hidden {
+    background: var(--color-pending-bg);
+    color: var(--color-pending-text);
+}
+
+.status-draft {
+    background: var(--color-completed-bg);
+    color: var(--color-completed-text);
+}
+
+.blogs-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.action-btn:hover {
+    background: var(--table-stripe);
+}
+
+.action-btn.edit {
+    color: var(--primary-color);
+}
+
+.action-btn.delete {
+    color: var(--color-button-danger);
+}
+
+.add-blog-btn {
+    background: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+.add-blog-btn:hover {
+    background: var(--primary-dark);
+}
+
+@media (max-width: 768px) {
+    .blogs-data-table {
+        padding: 1rem;
+    }
+}

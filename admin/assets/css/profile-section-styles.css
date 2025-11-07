@@ -1,0 +1,227 @@
+/* Profile Container Styles */
+.profile-container {
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Profile Header Styles */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.profile-icon {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+.profile-title {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+/* Profile Content Layout */
+.profile-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 968px) {
+    .profile-content {
+        grid-template-columns: 3fr 2fr;
+    }
+}
+
+/* Profile Card Styles */
+.profile-card {
+    background-color: var(--white);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 1.5rem;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--primary-color);
+}
+
+.profile-image-edit {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.profile-image-edit:hover {
+    background-color: var(--primary-dark);
+}
+
+.profile-name {
+    text-align: center;
+    color: var(--text-dark);
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.profile-role {
+    display: block;
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 1rem;
+    margin-bottom: 2rem;
+}
+
+.profile-details {
+    display: grid;
+    gap: 1rem;
+}
+
+.profile-detail-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background-color: var(--background-color);
+}
+
+.profile-detail-item ion-icon {
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+.profile-label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.profile-value {
+    color: var(--text-dark);
+}
+
+.profile-status-active {
+    color: var(--color-confirmed-text);
+    background-color: var(--color-confirmed-bg);
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+/* Password Change Section Styles */
+.profile-password-section {
+    background-color: var(--white);
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-password-section h3 {
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.profile-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.profile-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.profile-password-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.profile-password-input input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.profile-password-toggle {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    color: var(--text-dark);
+    cursor: pointer;
+}
+
+.profile-password-strength {
+    height: 4px;
+    margin-top: 0.5rem;
+    border-radius: 2px;
+    background-color: #ddd;
+}
+
+.profile-save-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.profile-save-btn:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .profile-container {
+        margin: 1rem;
+    }
+
+    .profile-content {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-detail-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+}

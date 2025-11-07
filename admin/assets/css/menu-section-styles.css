@@ -1,0 +1,193 @@
+.menu-dashboard {
+    display: none;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.menu-section {
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+.menu-section-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
+}
+
+.menu-section-title ion-icon {
+    margin-right: 10px;
+    color: var(--primary-color);
+    font-size: 24px;
+}
+
+.menu-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.menu-table th {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 12px;
+    text-align: left;
+}
+
+.menu-table tr:nth-child(even) {
+    background-color: var(--table-stripe);
+}
+
+.menu-table td {
+    padding: 12px;
+    vertical-align: middle;
+}
+
+.menu-table img {
+    max-width: 80px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.menu-action-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.menu-action-icons i {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.menu-action-icons i.edit {
+    color: var(--primary-color);
+}
+
+.menu-action-icons i.delete {
+    color: var(--color-button-danger);
+}
+
+.menu-action-icons i:hover {
+    opacity: 0.7;
+}
+
+.menu-add-button {
+    display: inline-block;
+    background-color: var(--color-button-success);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.menu-add-button:hover {
+    background-color: #218838;
+}
+
+/* Modal Styles */
+.menu-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-modal-content {
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.menu-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--color-button-danger);
+}
+
+.menu-form-group {
+    margin-bottom: 15px;
+}
+
+.menu-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-dark);
+}
+
+.menu-form-group input,
+.menu-form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.menu-modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.menu-modal-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.menu-modal-button.save {
+    background-color: var(--color-button-success);
+    color: var(--white);
+}
+
+.menu-modal-button.clear {
+    background-color: var(--color-pending-bg);
+    color: var(--color-pending-text);
+}
+
+.menu-modal-button.delete {
+    background-color: var(--color-button-danger);
+    color: var(--white);
+}
+
+.menu-modal-button:hover {
+    opacity: 0.8;
+}
+
+@media screen and (max-width: 768px) {
+    .menu-table {
+        font-size: 14px;
+    }
+
+    .menu-table img {
+        max-width: 50px;
+    }
+
+    .menu-modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+}

@@ -1,0 +1,194 @@
+
+.contacts-data-table {
+    display: none;
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: var(--white);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.title-icon {
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.contacts-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.contacts-table thead {
+    background-color: var(--primary-dark);
+    color: var(--white);
+}
+
+.contacts-table th, 
+.contacts-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.contacts-table tbody tr:nth-child(even) {
+    background-color: var(--table-stripe);
+}
+
+.contacts-table .action-icons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.action-icons ion-icon {
+    cursor: pointer;
+    font-size: 20px;
+    transition: color 0.3s;
+}
+
+.action-icons ion-icon:hover {
+    color: var(--primary-color);
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}
+
+.status-responded {
+    background-color: var(--color-confirmed-bg);
+    color: var(--color-confirmed-text);
+}
+
+.status-important {
+    background-color: var(--color-pending-bg);
+    color: var(--color-pending-text);
+}
+
+.contacts-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.contacts-modal-content {
+    background-color: var(--white);
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.contacts-close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input, 
+.form-group select, 
+.form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-save, .btn-send, .btn-cancel {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-save, .btn-send {
+    background-color: var(--color-button-success);
+    color: var(--white);
+}
+
+.btn-cancel {
+    background-color: var(--color-button-danger);
+    color: var(--white);
+}
+/* Responsive Breakpoints */
+@media screen and (max-width: 1024px) {
+    .contacts-table {
+        font-size: var(--font-size-small);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        padding: 0.5rem;
+    }
+
+    .contacts-table {
+        font-size: 0.8rem;
+    }
+
+    .contacts-table th, 
+    .contacts-table td {
+        padding: 0.5rem;
+    }
+
+    .action-icons ion-icon {
+        font-size: 1rem;
+    }
+
+    .contacts-modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .btn-save, .btn-send, .btn-cancel {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .title {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .contacts-table {
+        font-size: 0.7rem;
+    }
+}
