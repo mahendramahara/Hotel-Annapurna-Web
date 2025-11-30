@@ -52,6 +52,32 @@
 </footer>
 
 <script src="assets/js/script.js"></script>
+<script>
+document.querySelectorAll('.blogs-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const readMoreBtn = this.querySelector('.blogs-read-more');
+        if (readMoreBtn) {
+            readMoreBtn.click();
+        }
+    });
+    
+    card.addEventListener('mousedown', function() {
+        this.style.transform = 'translateY(-4px)';
+    });
+    
+    card.addEventListener('mouseup', function() {
+        this.style.transform = 'translateY(-8px)';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(-8px)';
+    });
+});
+
+document.querySelectorAll('.contact-info-item, .contact-team-member').forEach(item => {
+    item.style.cursor = 'pointer';
+});
+</script>
 </body>
 
 </html>

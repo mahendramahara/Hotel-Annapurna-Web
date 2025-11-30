@@ -56,24 +56,27 @@
                 <div class="table-form-group">
                     <label for="table-status">Booking Status</label>
                     <select id="table-status">
-                        <option value="free">Free</option>
+                        <option value="available">Available</option>
                         <option value="booked">Booked</option>
+                        <option value="reserved">Reserved</option>
+                        <option value="maintenance">Maintenance</option>
                     </select>
                 </div>
                 <div class="table-form-group">
-                    <label for="table-price-standard">Standard Price</label>
-                    <input type="number" id="table-price-standard" step="0.01" required>
+                    <label for="table-price-standard">Standard Price (RS)</label>
+                    <input type="number" id="table-price-standard" step="0.01" required placeholder="Enter price in RS">
                 </div>
                 <div class="table-form-group">
-                    <label for="table-price-today">Today's Special Price</label>
-                    <input type="number" id="table-price-today" step="0.01">
+                    <label for="table-price-today">Today's Special Price (RS)</label>
+                    <input type="number" id="table-price-today" step="0.01" placeholder="Optional special price in RS">
                 </div>
                 <div class="table-form-group">
                     <label for="table-location">Location</label>
                     <select id="table-location">
-                        <option value="indoor">Indoor</option>
-                        <option value="outdoor">Outdoor</option>
-                        <option value="vip">VIP</option>
+                        <option value="ground floor">Ground Floor</option>
+                        <option value="first floor">First Floor</option>
+                        <option value="outside">Outside</option>
+                        <option value="inside">Inside</option>
                     </select>
                 </div>
                 <div class="table-form-actions">

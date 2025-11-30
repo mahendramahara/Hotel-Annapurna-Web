@@ -1,1182 +1,178 @@
 "use strict";
 
-function addServiceRequest(data) {
-    const tbody = document.querySelector('.table-design table tbody');
-    const tr = document.createElement('tr');
-
-    tr.innerHTML = `
-        <td>#${data.requestId}</td>
-        <td>${data.customerName}</td>
-        <td>${data.serviceType}</td>
-        <td>${data.date}</td>
-        <td>
-            <span class="status-badge status-${data.status.toLowerCase()}">
-                <ion-icon name="${getStatusIcon(data.status)}"></ion-icon>
-                ${data.status}
-            </span>
-        </td>
-        <td>
-            <div class="action-buttons">
-                <button class="btn-action view" title="View Details" onclick="viewRequest('${data.requestId}')">
-                    <ion-icon name="eye-outline"></ion-icon>
-                </button>
-                <button class="btn-action delete" title="Delete" onclick="deleteRequest('${data.requestId}')">
-                    <ion-icon name="trash-outline"></ion-icon>
-                </button>
-            </div>
-        </td>
-    `;
-
-    tbody.appendChild(tr);
-}
-
-// Function to get status icon
-function getStatusIcon(status) {
-    const icons = {
-        'Pending': 'time-outline',
-        'Confirmed': 'checkmark-circle-outline',
-        'Completed': 'checkbox-outline',
-        'Cancelled': 'close-circle-outline'
-    };
-    return icons[status] || 'help-outline';
-}
-
-// Function to add new activity log
-function addActivityLog(time, date, message) {
-    const logEntries = document.querySelector('.log-entries');
-    const logEntry = document.createElement('div');
-    logEntry.className = 'log-entry';
-
-    logEntry.innerHTML = `
-        <div class="log-time">
-            <span>${time}</span>
-            <span class="date">${date}</span>
-        </div>
-        <div class="log-message">${message}</div>
-    `;
-
-    logEntries.insertBefore(logEntry, logEntries.firstChild);
-
-    // Keep only last 20 entries
-    const entries = logEntries.querySelectorAll('.log-entry');
-    if (entries.length > 20) {
-        logEntries.removeChild(entries[entries.length - 1]);
-    }
-}
-
-// Example functions for handling actions
-function viewRequest(requestId) {
-    console.log(`Viewing request ${requestId}`);
-    // Implement view logic
-}
-
-function deleteRequest(requestId) {
-    if (confirm(`Are you sure you want to delete request ${requestId}?`)) {
-        console.log(`Deleting request ${requestId}`);
-        // Implement delete logic
-    }
-}
-
-// Event listener for view more button
-document.querySelector('.view-more-btn').addEventListener('click', () => {
-    window.location.href = '/activity-logs';
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDashboard();
+    setupSectionNavigation();
+    setupModalHandlers();
+    setupProfileHandlers();
+    loadDashboardData();
 });
 
-
-// Main Script
-document.querySelectorAll(".navList").forEach(function (element) {
-    element.addEventListener('click', function () {
-        // Remove active class from all nav items
-        document.querySelectorAll(".navList").forEach(function (e) {
-            e.classList.remove('active');
-        });
-        this.classList.add('active');
-        const href = this.querySelector('a').getAttribute('href');
-        const dashboardSection = document.querySelectorAll(".data-table");
-
-        if (href === '#dashboard') {
-            dashboardSection.forEach(table => {
-                table.style.display = 'block';
-            });
-        } else {
-            dashboardSection.forEach(table => {
-                table.style.display = 'none';
-            });
-        }
-
-        const requestSection = document.querySelector('.request-data-table');
-        if (href === '#requests') {
-            requestSection.style.display = 'block';
-        } else {
-            requestSection.style.display = 'none';
-        }
-
-        const menuSection = document.querySelector('.menu-dashboard');
-        if (href === '#menu') {
-            menuSection.style.display = 'block';
-        } else {
-            menuSection.style.display = 'none';
-        }
-
-        const tableSection = document.querySelector('.table-management-container');
-        if (href === '#tables') {
-            tableSection.style.display = 'block';
-        } else {
-            tableSection.style.display = 'none';
-        }
-
-        const roomSection = document.querySelector('.room-section');
-        if (href === '#rooms') {
-            roomSection.style.display = 'block';
-        } else {
-            roomSection.style.display = 'none';
-        }
-
-        const staffSection = document.querySelector('.staff-container');
-        if (href === '#staff') {
-            staffSection.style.display = 'block';
-        } else {
-            staffSection.style.display = 'none';
-        }
-
-        const blogsSection = document.querySelector('.blogs-data-table');
-        if (href === '#blogs') {
-            blogsSection.style.display = 'block';
-        } else {
-            blogsSection.style.display = 'none';
-        }
-
-        const customerSection = document.querySelector('.customers-container');
-        if (href === '#customers') {
-            customerSection.style.display = 'block';
-        } else {
-            customerSection.style.display = 'none';
-        }
-
-        const reviewSection = document.querySelector('.reviews-container');
-        if (href === '#reviews') {
-            reviewSection.style.display = 'block';
-        } else {
-            reviewSection.style.display = 'none';
-        }
-
-        const contactSection = document.querySelector('.contacts-data-table');
-        if (href === '#contacts') {
-            contactSection.style.display = 'block';
-        } else {
-            contactSection.style.display = 'none';
-        }
-    });
-});
-
-
-/* ------------------------------------------------------------------------------------- */
-// Request section JS
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.service-tab');
-    const tables = document.querySelectorAll('.service-table');
-    const searchInput = document.querySelector('.service-search-input');
-    const searchButton = document.querySelector('.service-search-button');
-    const updateContainer = document.querySelector('.service-update-container');
-
-    // Tab switching
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tables.forEach(table => table.classList.remove('active'));
-
-            tab.classList.add('active');
-            const tableId = tab.getAttribute('data-tab') + '-table';
-            document.getElementById(tableId).classList.add('active');
-        });
-    });
-
-    // Search functionality
-    searchButton.addEventListener('click', () => {
-        const searchTerm = searchInput.value.toLowerCase();
-        const activeTable = document.querySelector('.service-table.active');
-        const rows = activeTable.querySelectorAll('tbody tr');
-
-        rows.forEach(row => {
-            const matchFound = Array.from(row.cells).some(cell =>
-                cell.textContent.toLowerCase().includes(searchTerm)
-            );
-            row.style.display = matchFound ? '' : 'none';
-        });
-
-        // Show update container if search is successful
-        updateContainer.style.display = 'block';
-    });
-});
-
-
-
-
-/* -----------------------------------MENU SECTION ------------------------------- */
-let currentMenuType = '';
-let currentEditingItem = null;
-
-// Modal and Form Elements
-const menuModal = document.getElementById('menu-modal');
-const confirmModal = document.getElementById('confirm-modal');
-const modalTitle = document.getElementById('modal-title');
-const menuItemForm = document.getElementById('menu-item-form');
-const specialDayGroup = document.getElementById('special-day-group');
-const deleteButton = document.getElementById('delete-button');
-
-// Form Input Elements
-const foodNameInput = document.getElementById('food-name');
-const priceInput = document.getElementById('price');
-const discountPriceInput = document.getElementById('discount-price');
-const imageUploadInput = document.getElementById('image-upload');
-const availableDaySelect = document.getElementById('available-day');
-
-// Function to open Add/Edit Modal
-function openAddModal(menuType) {
-    currentMenuType = menuType;
-    modalTitle.textContent = `Add ${menuType.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} Item`;
-
-    // Reset form
-    menuItemForm.reset();
-    deleteButton.style.display = 'none';
-
-    // Show/hide special day dropdown
-    specialDayGroup.style.display = menuType === 'special' ? 'block' : 'none';
-
-    // Reset current editing item
-    currentEditingItem = null;
-
-    // Open modal
-    menuModal.style.display = 'block';
-}
-
-// Function to open Edit Modal
-function openEditModal(menuType, item) {
-    currentMenuType = menuType;
-    modalTitle.textContent = `Edit ${menuType.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())} Item`;
-
-    // Populate form with item details
-    foodNameInput.value = item.foodName;
-    priceInput.value = item.price;
-    discountPriceInput.value = item.discountPrice;
-
-    // Show delete button
-    deleteButton.style.display = 'block';
-
-    // Show/hide special day dropdown
-    specialDayGroup.style.display = menuType === 'special' ? 'block' : 'none';
-    if (menuType === 'special') {
-        availableDaySelect.value = item.availableDay;
-    }
-
-    // Store current editing item
-    currentEditingItem = item;
-
-    // Open modal
-    menuModal.style.display = 'block';
-}
-
-// Function to save menu item
-function saveMenuItem() {
-    // Validate form
-    if (!validateForm()) return;
-
-    const newItem = {
-        foodName: foodNameInput.value,
-        price: priceInput.value,
-        discountPrice: discountPriceInput.value,
-        availableDay: currentMenuType === 'special' ? availableDaySelect.value : null
-    };
-
-    // Handle image upload
-    const imageFile = imageUploadInput.files[0];
-    if (imageFile) {
-        newItem.image = URL.createObjectURL(imageFile);
-    }
-
-    // Determine action: add or update
-    if (currentEditingItem) {
-        // Update existing item (in a real app, this would be an API call)
-        updateMenuItem(newItem);
-    } else {
-        // Add new item (in a real app, this would be an API call)
-        addNewMenuItem(newItem);
-    }
-
-    // Close modal
-    closeModal();
-}
-
-// Function to add new menu item
-function addNewMenuItem(item) {
-    const tableBody = document.querySelector(`#${currentMenuType}-menu tbody`);
-    const newRow = tableBody.insertRow();
-
-    newRow.innerHTML = `
-        <td>${tableBody.rows.length}</td>
-        <td><img src="${item.image || '/api/placeholder/80/80'}" alt="${item.foodName}"></td>
-        <td>${item.foodName}</td>
-        <td>₹${item.price}</td>
-        <td>₹${item.discountPrice}</td>
-        ${currentMenuType === 'special' ? `<td>${item.availableDay}</td>` : ''}
-        <td>
-            <div class="menu-action-icons">
-                <i class="fas fa-edit edit" onclick="openEditModal('${currentMenuType}', ${JSON.stringify(item)})"></i>
-                <i class="fas fa-trash-alt delete" onclick="openDeleteConfirm(${JSON.stringify(item)})"></i>
-            </div>
-        </td>
-    `;
-}
-
-// Function to update existing menu item
-function updateMenuItem(item) {
-    // In a real app, this would be an API call to update the item
-    // For this example, we'll just update the table row
-    const rows = document.querySelectorAll(`#${currentMenuType}-menu tbody tr`);
-    const rowToUpdate = Array.from(rows).find(row =>
-        row.cells[2].textContent === currentEditingItem.foodName
-    );
-
-    if (rowToUpdate) {
-        rowToUpdate.cells[2].textContent = item.foodName;
-        rowToUpdate.cells[3].textContent = `₹${item.price}`;
-        rowToUpdate.cells[4].textContent = `₹${item.discountPrice}`;
-
-        if (currentMenuType === 'special') {
-            rowToUpdate.cells[5].textContent = item.availableDay;
-        }
-
-        // Update edit icon's onclick to pass new item details
-        const editIcon = rowToUpdate.querySelector('.fa-edit');
-        editIcon.setAttribute('onclick', `openEditModal('${currentMenuType}', ${JSON.stringify(item)})`);
-    }
-}
-
-// Function to open delete confirmation
-function openDeleteConfirm(item) {
-    currentEditingItem = item;
-    document.getElementById('confirm-message').textContent = `Are you sure you want to delete ${item.foodName}?`;
-    confirmModal.style.display = 'block';
-}
-
-// Function to confirm delete action
-function confirmAction() {
-    if (currentEditingItem) {
-        deleteMenuItem();
-    }
-    closeConfirmModal();
-}
-
-// Function to delete menu item
-function deleteMenuItem() {
-    const rows = document.querySelectorAll(`#${currentMenuType}-menu tbody tr`);
-    const rowToDelete = Array.from(rows).find(row =>
-        row.cells[2].textContent === currentEditingItem.foodName
-    );
-
-    if (rowToDelete) {
-        rowToDelete.remove();
-    }
-
-    // Close modals
-    closeModal();
-}
-
-// Function to validate form
-function validateForm() {
-    if (!foodNameInput.value) {
-        alert('Please enter a food name');
-        return false;
-    }
-
-    if (!priceInput.value) {
-        alert('Please enter a price');
-        return false;
-    }
-
-    if (currentMenuType === 'special' && !availableDaySelect.value) {
-        alert('Please select an available day');
-        return false;
-    }
-
-    return true;
-}
-
-// Function to clear form data
-function clearForm() {
-    menuItemForm.reset();
-    currentEditingItem = null;
-}
-
-// Function to close modal
-function closeModal() {
-    menuModal.style.display = 'none';
-    currentMenuType = '';
-    currentEditingItem = null;
-}
-
-// Function to close confirmation modal
-function closeConfirmModal() {
-    confirmModal.style.display = 'none';
-    currentEditingItem = null;
-}
-
-// Event Listeners
-document.querySelector('.menu-modal-close').addEventListener('click', closeModal);
-
-/* ------------------------------------------------------Table Management ------------------------- */
-document.addEventListener('DOMContentLoaded', () => {
-    const tableListBody = document.getElementById('table-list-body');
-    const tableModal = document.getElementById('table-modal');
-    const tableModalClose = document.querySelector('.table-modal-close');
-    const tableModalCancel = document.getElementById('table-modal-cancel');
-    const tableAddNewBtn = document.getElementById('table-add-new-btn');
-    const tableForm = document.getElementById('table-form');
-    const tableModalTitle = document.getElementById('table-modal-title');
-    const tableEditId = document.getElementById('table-edit-id');
-
-    let tables = JSON.parse(localStorage.getItem('restaurantTables')) || [];
-
-    function renderTables() {
-        tableListBody.innerHTML = '';
-        tables.forEach((table, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${index + 1}</td>
-                <td><img src="${table.image || ''}" class="table-thumbnail" alt="Table ${table.number}" /></td>
-                <td>${table.number}</td>
-                <td>${table.capacity}</td>
-                <td>${table.status}</td>
-                <td>$${table.priceStandard}</td>
-                <td>$${table.priceToday || table.priceStandard}</td>
-                <td>${table.location}</td>
-                <td>${table.lastUpdated}</td>
-                <td class="table-list-actions">
-                    <ion-icon name="create-outline" class="table-edit" data-id="${index}"></ion-icon>
-                    <ion-icon name="trash-outline" class="table-delete" data-id="${index}"></ion-icon>
-                </td>
-            `;
-            tableListBody.appendChild(row);
-        });
-        attachTableActionListeners();
-    }
-
-    function attachTableActionListeners() {
-        document.querySelectorAll('.table-edit').forEach(editBtn => {
-            editBtn.addEventListener('click', () => openEditModal(editBtn.dataset.id));
-        });
-
-        document.querySelectorAll('.table-delete').forEach(deleteBtn => {
-            deleteBtn.addEventListener('click', () => deleteTable(deleteBtn.dataset.id));
-        });
-    }
-
-    function openModal() {
-        tableModal.style.display = 'block';
-    }
-
-    function closeModal() {
-        tableModal.style.display = 'none';
-        tableForm.reset();
-    }
-
-    function openEditModal(index) {
-        const table = tables[index];
-        tableModalTitle.textContent = 'Edit Table';
-        tableEditId.value = index;
-
-        document.getElementById('table-number').value = table.number;
-        document.getElementById('table-capacity').value = table.capacity;
-        document.getElementById('table-status').value = table.status;
-        document.getElementById('table-price-standard').value = table.priceStandard;
-        document.getElementById('table-price-today').value = table.priceToday;
-        document.getElementById('table-location').value = table.location;
-
-        openModal();
-    }
-
-    function saveTable(e) {
-        e.preventDefault();
-        const editIndex = tableEditId.value;
-        const newTable = {
-            number: document.getElementById('table-number').value,
-            capacity: document.getElementById('table-capacity').value,
-            status: document.getElementById('table-status').value,
-            priceStandard: document.getElementById('table-price-standard').value,
-            priceToday: document.getElementById('table-price-today').value,
-            location: document.getElementById('table-location').value,
-            lastUpdated: new Date().toLocaleString()
-        };
-
-        if (confirm('Are you sure you want to save this table?')) {
-            if (editIndex === '') {
-                tables.push(newTable);
-            } else {
-                tables[editIndex] = newTable;
-            }
-            localStorage.setItem('restaurantTables', JSON.stringify(tables));
-            renderTables();
-            closeModal();
-        }
-    }
-
-    function deleteTable(index) {
-        if (confirm('Are you sure you want to delete this table?')) {
-            tables.splice(index, 1);
-            localStorage.setItem('restaurantTables', JSON.stringify(tables));
-            renderTables();
-        }
-    }
-
-    tableAddNewBtn.addEventListener('click', () => {
-        tableModalTitle.textContent = 'Add New Table';
-        tableEditId.value = '';
-        openModal();
-    });
-
-    tableModalClose.addEventListener('click', closeModal);
-    tableModalCancel.addEventListener('click', closeModal);
-    tableForm.addEventListener('submit', saveTable);
-
-    renderTables();
-});
-
-
-/* -----------------------------------Rooms Section ------------------------------- */
-function openModal(type, roomId = null) {
-    const modal = document.getElementById('roomModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const roomNumber = document.getElementById('roomNumber');
-
-    modal.style.display = 'block';
-    modalTitle.textContent = type === 'add' ? 'Add New Room' : 'Edit Room';
-
-    if (type === 'edit') {
-        // In a real application, you would fetch room data here
-        // This is just for demonstration
-        roomNumber.value = '101';
-        roomNumber.disabled = true;
-    } else {
-        roomNumber.value = '';
-        roomNumber.disabled = false;
-    }
-}
-
-function closeModal() {
-    document.getElementById('roomModal').style.display = 'none';
-}
-
-function handleSubmit(event) {
-    event.preventDefault();
-
-    if (confirm('Are you sure you want to save these changes?')) {
-        // Here you would handle the form submission
-        alert('Room details saved successfully!');
-        closeModal();
-    }
-}
-
-function deleteRoom(roomId) {
-    if (confirm('Are you sure you want to delete this room?')) {
-        // Here you would handle the deletion
-        alert('Room deleted successfully!');
-    }
-}
-
-// Close modal when clicking outside
-window.onclick = function (event) {
-    const modal = document.getElementById('roomModal');
-    if (event.target === modal) {
-        closeModal();
-    }
-}
-
-
-/*-----------------------------------Staff section ----------------------------------------------*/
-document.addEventListener('DOMContentLoaded', function () {
-    const adminName = "Admin"; // Default admin name
-    let staffData = JSON.parse(localStorage.getItem('staffData')) || [];
-    let changesCount = JSON.parse(localStorage.getItem('changesCount')) || 0;
-
-    function openStaffModal(isEdit = false, staffId = null) {
-        const modal = document.getElementById('staffModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const staffForm = document.getElementById('staffForm');
-
-        if (isEdit && staffId !== null) {
-            const staff = staffData.find(s => s.id === staffId);
-            if (staff) {
-                modalTitle.textContent = "Edit Staff";
-                fillForm(staff);
-                staffForm.dataset.editing = staffId;
-            }
-        } else {
-            modalTitle.textContent = "Add New Staff";
-            staffForm.reset();
-            delete staffForm.dataset.editing;
-        }
-        modal.style.display = 'flex';
-    }
-
-    function closeStaffModal() {
-        const modal = document.getElementById('staffModal');
-        modal.style.display = 'none';
-    }
-
-    function fillForm(staff) {
-        document.getElementById('fullName').value = staff.fullName;
-        document.getElementById('role').value = staff.role;
-        document.getElementById('shift').value = staff.shift;
-        document.getElementById('contact').value = staff.contact;
-        document.getElementById('email').value = staff.email;
-        document.getElementById('joinedDate').value = staff.joinedDate;
-        document.getElementById('contract').value = staff.contract;
-        document.getElementById('salary').value = staff.salary;
-        document.getElementById('status').checked = staff.status;
-    }
-
-    function handleStaffSubmit(event) {
-        event.preventDefault();
-        const staffForm = event.target;
-
-        const fullName = document.getElementById('fullName').value.trim();
-        if (fullName.length < 3) {
-            alert("Full Name must be at least 3 characters long.");
-            return;
-        }
-
-        const staff = {
-            id: staffForm.dataset.editing ? parseInt(staffForm.dataset.editing) : Date.now(),
-            fullName,
-            role: document.getElementById('role').value,
-            shift: document.getElementById('shift').value,
-            contact: document.getElementById('contact').value,
-            email: document.getElementById('email').value,
-            joinedDate: document.getElementById('joinedDate').value,
-            contract: document.getElementById('contract').value,
-            salary: document.getElementById('salary').value,
-            status: document.getElementById('status').checked,
-            admin: adminName,
-            timestamp: new Date().toISOString()
-        };
-
-        if (staffForm.dataset.editing) {
-            if (confirm("Are you sure you want to update this staff member?")) {
-                updateStaff(staff);
-            }
-        } else {
-            if (confirm("Are you sure you want to add this new staff member?")) {
-                addStaff(staff);
-            }
-        }
-
-        closeStaffModal();
-    }
-
-    function addStaff(staff) {
-        staffData.push(staff);
-        changesCount++;
-        saveData();
-        renderStaffTable();
-        alert("Staff member added successfully.");
-    }
-
-    function updateStaff(updatedStaff) {
-        staffData = staffData.map(staff => staff.id === updatedStaff.id ? updatedStaff : staff);
-        changesCount++;
-        saveData();
-        renderStaffTable();
-        alert("Staff member updated successfully.");
-    }
-
-    function deleteStaff(staffId) {
-        if (confirm("Are you sure you want to delete this staff member?")) {
-            staffData = staffData.filter(staff => staff.id !== staffId);
-            changesCount++;
-            saveData();
-            renderStaffTable();
-            alert("Staff member deleted successfully.");
-        }
-    }
-
-    function saveData() {
-        localStorage.setItem('staffData', JSON.stringify(staffData));
-        localStorage.setItem('changesCount', JSON.stringify(changesCount));
-    }
-
-    function renderStaffTable() {
-        const staffTableBody = document.getElementById('staffTableBody');
-        staffTableBody.innerHTML = staffData.map((staff, index) => `
-            <tr>
-                <td>${index + 1}</td>
-                <td><img src="/api/placeholder/40/40" alt="Staff" class="staff-profile-img"></td>
-                <td>${staff.fullName}</td>
-                <td>${staff.role}</td>
-                <td>${staff.contact}</td>
-                <td>${staff.email}</td>
-                <td>${staff.joinedDate}</td>
-                <td>${staff.contract}</td>
-                <td>${staff.shift}</td>
-                <td>${staff.salary}</td>
-                <td><span class="staff-status ${staff.status ? 'active' : 'inactive'}">${staff.status ? 'Active' : 'Inactive'}</span></td>
-                <td class="staff-actions">
-                    <button class="staff-action-btn edit" onclick="editStaff(${staff.id})">
-                        <ion-icon name="create-outline"></ion-icon>
-                    </button>
-                    <button class="staff-action-btn delete" onclick="deleteStaff(${staff.id})">
-                        <ion-icon name="trash-outline"></ion-icon>
-                    </button>
-                </td>
-            </tr>
-        `).join('');
-    }
-
-    window.openStaffModal = openStaffModal;
-    window.closeStaffModal = closeStaffModal;
-    window.editStaff = (staffId) => openStaffModal(true, staffId);
-    window.deleteStaff = deleteStaff;
-
-    document.getElementById('staffForm').addEventListener('submit', handleStaffSubmit);
-
-    // Initial render
-    renderStaffTable();
-});
-/* ----------------------------- Blogs Page -------------------------------------- */
-function editBlog(blogId) {
-    window.location.href = `blogs/blog.php?ID=${blogId}&mode=edit`;
-}
-
-function deleteBlog(blogId) {
-    if (confirm('Are you sure you want to delete this blog post? This action cannot be undone.')) {
-        // Add your AJAX call here to delete the blog
-        console.log(`Deleting blog ${blogId}`);
-    }
-}
-
-/* -------------------------- Customers Section ------------------------------*/
-let currentPage = 1;
-const customersPerPage = 10;
-
-// Sample data - Replace with actual API calls
-const customers = [
-    {
-        id: 1,
-        name: "John Doe",
-        email: "john@example.com",
-        contact: "+1234567890",
-        status: "active",
-        registered: "2024-01-15",
-        lastLogin: "2024-02-06",
-        orders: 5,
-        image: "/api/placeholder/50/50"
-    }
-    // Add more sample data as needed
-];
-
-function renderCustomers() {
-    const tbody = document.getElementById('customersTableBody');
-    const startIndex = (currentPage - 1) * customersPerPage;
-    const endIndex = startIndex + customersPerPage;
-
-    customers.slice(startIndex, endIndex).forEach((customer, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-                    <td>${startIndex + index + 1}</td>
-                    <td><img src="${customer.image}" alt="${customer.name}" class="customers-avatar"></td>
-                    <td>${customer.name}</td>
-                    <td>${customer.email}</td>
-                    <td>${customer.contact || '-'}</td>
-                    <td><span class="customers-status customers-status-${customer.status}">${customer.status}</span></td>
-                    <td>${customer.registered}</td>
-                    <td>${customer.lastLogin}</td>
-                    <td>${customer.orders}</td>
-                    <td class="customers-actions">
-                        <button class="customers-action-btn" onclick="viewOrders(${customer.id})">
-                            <ion-icon name="eye-outline"></ion-icon>
-                        </button>
-                        <button class="customers-action-btn" onclick="editCustomer(${customer.id})">
-                            <ion-icon name="create-outline"></ion-icon>
-                        </button>
-                        <button class="customers-action-btn" onclick="deleteCustomer(${customer.id})">
-                            <ion-icon name="trash-outline"></ion-icon>
-                        </button>
-                    </td>
-                `;
-        tbody.appendChild(tr);
-    });
-}
-
-function loadMoreCustomers() {
-    currentPage++;
-    renderCustomers();
-}
-
-function editCustomer(id) {
-    const modal = document.getElementById('editModal');
-    modal.style.display = 'flex';
-    // Populate form with customer data
-    const customer = customers.find(c => c.id === id);
-    if (customer) {
-        document.getElementById('editName').value = customer.name;
-        document.getElementById('editContact').value = customer.contact || '';
-        document.getElementById('editStatus').value = customer.status;
-        document.getElementById('editNotes').value = customer.notes || '';
-    }
-}
-
-function closeModal() {
-    document.getElementById('editModal').style.display = 'none';
-}
-
-function deleteCustomer(id) {
-    if (confirm('Are you sure you want to delete this customer?')) {
-        // Update customer status to deleted
-        const customer = customers.find(c => c.id === id);
-        if (customer) {
-            customer.status = 'deleted';
-            renderCustomers();
-        }
-    }
-}
-
-function viewOrders(id) {
-    // Implement view orders functionality
-    window.location.href = `/admin/customers/${id}/orders`;
-}
-
-// Initial render
-renderCustomers();
-
-// Close modal when clicking outside
-window.onclick = function (event) {
-    const modal = document.getElementById('editModal');
-    if (event.target === modal) {
-        closeModal();
-    }
-}
-
-// Handle form submission
-document.getElementById('editCustomerForm').onsubmit = function (e) {
-    e.preventDefault();
-    if (confirm('Save changes to customer details?')) {
-        // Implement save functionality
-        closeModal();
-    }
-}
-
-/* ----------------------------- Reviews Page --------------------------------------------------- */
-// Sample data - Replace with actual API calls
-const reviews = [
-    {
-        id: 1,
-        customerName: "John Doe",
-        customerImage: "/api/placeholder/50/50",
-        service: "Table Booking",
-        date: "2024-02-07",
-        rating: 4,
-        description: "Great experience overall! The food was delicious and service was excellent.",
-        images: ["/api/placeholder/150/150", "/api/placeholder/150/150"]
-    }
-    // Add more sample data as needed
-];
-
-function renderReviews() {
-    const tbody = document.getElementById('reviewsTableBody');
-    tbody.innerHTML = '';
+function initializeDashboard() {
+    const isIndexPage = window.location.pathname.includes('index.php') || 
+                        window.location.pathname.endsWith('/admin/') || 
+                        window.location.pathname.endsWith('/admin');
     
-    reviews.forEach((review, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${index + 1}</td>
-            <td><img src="${review.customerImage}" alt="${review.customerName}" class="reviews-avatar"></td>
-            <td>${review.customerName}</td>
-            <td>${review.service}</td>
-            <td>${review.date}</td>
-            <td>${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}</td>
-            <td class="reviews-actions">
-                <button class="reviews-action-btn" onclick="viewReview(${review.id})">
-                    <ion-icon name="eye-outline"></ion-icon>
-                </button>
-                <button class="reviews-action-btn" onclick="respondToReview(${review.id})">
-                    <ion-icon name="chatbubble-outline"></ion-icon>
-                </button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-
-function viewReview(id) {
-    const review = reviews.find(r => r.id === id);
-    if (review) {
-        document.getElementById('modalCustomerImage').src = review.customerImage;
-        document.getElementById('modalCustomerName').textContent = review.customerName;
-        document.getElementById('modalServiceInfo').textContent = `${review.service} - ${review.date}`;
-        document.getElementById('modalRating').innerHTML = '★'.repeat(review.rating) + '☆'.repeat(5-review.rating);
-        document.getElementById('modalReviewText').textContent = review.description;
+    if (isIndexPage) {
+        const hash = window.location.hash.substring(1) || 'dashboard';
+        showSection(hash);
+        updateActiveNavLink(hash);
         
-        const imageGrid = document.getElementById('modalImages');
-        imageGrid.innerHTML = review.images.map(img => 
-            `<img src="${img}" alt="Review image">`
-        ).join('');
-        
-        document.getElementById('viewModal').style.display = 'flex';
+        window.addEventListener('hashchange', () => {
+            const newSection = window.location.hash.substring(1) || 'dashboard';
+            showSection(newSection);
+            updateActiveNavLink(newSection);
+        });
     }
 }
 
-function respondToReview(id) {
-    const review = reviews.find(r => r.id === id);
-    if (review) {
-        document.getElementById('respondCustomerInfo').textContent = 
-            `Responding to ${review.customerName}'s review of ${review.service}`;
-        document.getElementById('respondModal').style.display = 'flex';
+function updateActiveNavLink(sectionName) {
+    document.querySelectorAll('.navList').forEach(item => item.classList.remove('active'));
+    
+    document.querySelectorAll('.navList a').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && href.includes('#')) {
+            const linkHash = href.split('#')[1];
+            if (linkHash === sectionName) {
+                link.closest('.navList').classList.add('active');
+            }
+        }
+    });
+}
+
+function setupSectionNavigation() {
+    const currentHash = window.location.hash.substring(1) || 'dashboard';
+    
+    document.querySelectorAll('.navList').forEach(item => item.classList.remove('active'));
+    
+    document.querySelectorAll('.navList a').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href && href.includes('#')) {
+            const linkHash = href.split('#')[1];
+            if (linkHash === currentHash) {
+                link.closest('.navList').classList.add('active');
+            }
+        }
+    });
+    
+    document.querySelectorAll(".navList").forEach(element => {
+        element.addEventListener('click', function(e) {
+            document.querySelectorAll('.navList').forEach(item => item.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+}
+
+function showSection(sectionName) {
+    const allSections = {
+        'dashboard': '.dashboard-section',
+        'requests': '.request-data-table',
+        'menu': '.menu-dashboard',
+        'tables': '.table-management-container',
+        'rooms': '.room-section',
+        'staff': '.staff-container',
+        'blogs': '.blogs-data-table',
+        'customers': '.customers-container',
+        'reviews': '.reviews-container',
+        'contacts': '.contacts-data-table',
+        'coupons': '.coupon-section',
+        'profile': '.profile-container'
+    };
+    
+    Object.values(allSections).forEach(selector => {
+        const element = document.querySelector(selector);
+        if (element) element.style.display = 'none';
+    });
+    
+    const targetSelector = allSections[sectionName];
+    if (targetSelector) {
+        const element = document.querySelector(targetSelector);
+        if (element) {
+            element.style.display = 'block';
+            loadSectionData(sectionName);
+        }
+    }
+}
+
+function loadSectionData(section) {
+    switch(section) {
+        case 'menu':
+            break;
+        case 'rooms':
+            loadRooms();
+            break;
+        case 'tables':
+            loadTables();
+            break;
+        case 'staff':
+            break;
+        case 'customers':
+            break;
+        case 'contacts':
+            break;
+        case 'reviews':
+            break;
+        case 'coupons':
+            if(typeof loadCoupons === 'function') {
+                loadCoupons();
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+function setupModalHandlers() {
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal-overlay')) {
+            e.target.classList.remove('active');
+        }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay.active').forEach(modal => {
+                modal.classList.remove('active');
+            });
+        }
+    });
+}
+
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('active');
     }
 }
 
 function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-}
-
-// Handle form submission
-document.getElementById('responseForm').onsubmit = function(e) {
-    e.preventDefault();
-    // Implement response submission logic
-    closeModal('respondModal');
-}
-
-// Close modals when clicking outside
-window.onclick = function(event) {
-    if (event.target.classList.contains('reviews-modal')) {
-        event.target.style.display = 'none';
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('active');
     }
 }
 
-// Initial render
-renderReviews();
-
-
-
-/* ----------------------------- Contact Request Page -------------------------------------- */
-
-class ContactRequestsManager {
-    constructor() {
-        this.requests = [];
-        this.initializeEventListeners();
+function setupProfileHandlers() {
+    const editProfileForm = document.getElementById('editProfileForm');
+    if (editProfileForm) {
+        editProfileForm.addEventListener('submit', updateProfile);
     }
-
-    initializeEventListeners() {
-        // View Modal Close Button
-        document.querySelector('#contacts-view-modal .contacts-close-btn')
-            .addEventListener('click', () => this.closeModal('contacts-view-modal'));
-
-        // Edit Modal Close Button
-        document.querySelector('#contacts-edit-modal .contacts-close-btn')
-            .addEventListener('click', () => this.closeModal('contacts-edit-modal'));
-
-        // Respond Modal Close Button
-        document.querySelector('#contacts-respond-modal .contacts-close-btn')
-            .addEventListener('click', () => this.closeModal('contacts-respond-modal'));
-
-        // Edit Form Submit
-        document.getElementById('contacts-edit-form')
-            .addEventListener('submit', (e) => this.handleEditSubmit(e));
-
-        // Respond Form Submit
-        document.getElementById('contacts-respond-form')
-            .addEventListener('submit', (e) => this.handleResponseSubmit(e));
-
-        // Cancel buttons
-        document.querySelectorAll('.btn-cancel').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const modalId = btn.closest('.contacts-modal').id;
-                this.closeModal(modalId);
-            });
-        });
+    
+    const passwordChangeForm = document.getElementById('passwordChangeForm');
+    if (passwordChangeForm) {
+        passwordChangeForm.addEventListener('submit', changePassword);
     }
-
-    openModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.style.display = 'block';
-        }
+    
+    const profileImageForm = document.getElementById('profileImageForm');
+    if (profileImageForm) {
+        profileImageForm.addEventListener('submit', uploadProfileImage);
     }
-
-    closeModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.style.display = 'none';
-        }
+    
+    const profileImage = document.getElementById('profileImage');
+    if (profileImage) {
+        profileImage.addEventListener('change', previewProfileImage);
     }
-
-    loadRequests() {
-        // Simulate loading requests from backend
-        // In a real scenario, this would be an API call
-        this.requests = [
-            {
-                id: 1,
-                name: 'John Doe',
-                email: 'john@example.com',
-                subject: 'Booking Inquiry',
-                message: 'I would like to book a room for next month.',
-                sentDate: '2024-02-05',
-                status: 'Incomplete'
-            },
-            {
-                id: 2,
-                name: 'Jane Smith',
-                email: 'jane@example.com',
-                subject: 'Restaurant Reservation',
-                message: 'Can I make a reservation for 4 people on Saturday?',
-                sentDate: '2024-02-06',
-                status: 'Important'
-            }
-        ];
-
-        this.renderTable();
-    }
-
-    renderTable() {
-        const tableBody = document.getElementById('contacts-table-body');
-        tableBody.innerHTML = '';
-
-        this.requests.forEach((request, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${request.name}</td>
-                <td>${request.email}</td>
-                <td>${request.subject}</td>
-                <td>${request.sentDate}</td>
-                <td>
-                    <span class="status-badge status-${request.status.toLowerCase()}">
-                        ${request.status}
-                    </span>
-                </td>
-                <td class="action-icons">
-                    <ion-icon name="eye-outline" onclick="contactManager.viewRequest(${request.id})" title="View Details"></ion-icon>
-                    <ion-icon name="pencil-outline" onclick="contactManager.editRequest(${request.id})" title="Edit Status"></ion-icon>
-                    <ion-icon name="return-up-forward-outline" onclick="contactManager.respondRequest(${request.id})" title="Respond"></ion-icon>
-                </td>
-            `;
-            tableBody.appendChild(row);
-        });
-    }
-
-    viewRequest(id) {
-        const request = this.requests.find(r => r.id === id);
-        if (request) {
-            document.getElementById('view-name').textContent = request.name;
-            document.getElementById('view-email').textContent = request.email;
-            document.getElementById('view-subject').textContent = request.subject;
-            document.getElementById('view-message').textContent = request.message;
-            document.getElementById('view-date').textContent = request.sentDate;
-
-            this.openModal('contacts-view-modal');
-        }
-    }
-
-    editRequest(id) {
-        const request = this.requests.find(r => r.id === id);
-        if (request) {
-            document.getElementById('edit-request-id').value = request.id;
-            document.getElementById('edit-status').value = request.status;
-
-            this.openModal('contacts-edit-modal');
-        }
-    }
-
-    respondRequest(id) {
-        const request = this.requests.find(r => r.id === id);
-        if (request) {
-            document.getElementById('respond-request-id').value = request.id;
-            document.getElementById('respond-name').value = request.name;
-            document.getElementById('respond-email').value = request.email;
-            document.getElementById('respond-subject').value = request.subject;
-
-            this.openModal('contacts-respond-modal');
-        }
-    }
-
-    handleEditSubmit(e) {
-        e.preventDefault();
-        const id = parseInt(document.getElementById('edit-request-id').value);
-        const newStatus = document.getElementById('edit-status').value;
-
-        const requestIndex = this.requests.findIndex(r => r.id === id);
-        if (requestIndex !== -1) {
-            // Update request status
-            this.requests[requestIndex].status = newStatus;
-            
-            // Re-render the table to reflect the changes
-            this.renderTable();
-            
-            // Close the modal
-            this.closeModal('contacts-edit-modal');
-
-            // In a real-world scenario, you would send an API call to update the status
-            this.sendStatusUpdateToServer(id, newStatus);
-        }
-    }
-
-    handleResponseSubmit(e) {
-        e.preventDefault();
-        const id = parseInt(document.getElementById('respond-request-id').value);
-        const responseMessage = document.getElementById('respond-message').value;
-        const recipientEmail = document.getElementById('respond-email').value;
-        const subject = document.getElementById('respond-subject').value;
-
-        // In a real-world scenario, you would:
-        // 1. Send the response via an API call
-        // 2. Mark the request as responded
-        this.sendResponseToServer(id, recipientEmail, subject, responseMessage);
-
-        // Update request status to 'Responded'
-        const requestIndex = this.requests.findIndex(r => r.id === id);
-        if (requestIndex !== -1) {
-            this.requests[requestIndex].status = 'Responded';
-            this.renderTable();
-        }
-
-        // Clear response textarea
-        document.getElementById('respond-message').value = '';
-
-        // Close the modal
-        this.closeModal('contacts-respond-modal');
-    }
-
-    sendStatusUpdateToServer(id, status) {
-        // Placeholder for API call to update status
-        console.log(`Updating request ${id} status to ${status}`);
-        // In a real implementation, use fetch or axios to send to backend
-        // fetch('/api/update-request-status', {
-        //     method: 'POST',
-        //     body: JSON.stringify({ id, status }),
-        //     headers: { 'Content-Type': 'application/json' }
-        // });
-    }
-
-    sendResponseToServer(id, email, subject, message) {
-        // Placeholder for API call to send response
-        console.log(`Sending response to request ${id}`, { email, subject, message });
-        // In a real implementation, use fetch or axios to send to backend
-        // fetch('/api/send-contact-response', {
-        //     method: 'POST',
-        //     body: JSON.stringify({ id, email, subject, message }),
-        //     headers: { 'Content-Type': 'application/json' }
-        // });
-    }
-}
-
-// Initialize the contact manager when the page loads
-const contactManager = new ContactRequestsManager();
-document.addEventListener('DOMContentLoaded', () => {
-    contactManager.loadRequests();
-});
-
-
-/* --------------------------------------- Admin Profile ----------------------- */
-document.addEventListener('DOMContentLoaded', function() {
-    // Password Toggle Functionality
+    
     const passwordToggles = document.querySelectorAll('.profile-password-toggle');
     passwordToggles.forEach(toggle => {
         toggle.addEventListener('click', function() {
@@ -1192,88 +188,1368 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-    // Password Strength Indicator
+    
     const newPasswordInput = document.getElementById('newPassword');
-    const strengthIndicator = document.querySelector('.profile-password-strength');
+    if (newPasswordInput) {
+        newPasswordInput.addEventListener('input', function() {
+            const strength = calculatePasswordStrength(this.value);
+            updatePasswordStrength(strength);
+        });
+    }
+}
 
-    newPasswordInput.addEventListener('input', function() {
-        const password = this.value;
-        const strength = calculatePasswordStrength(password);
-        updateStrengthIndicator(strength);
+function openEditProfileModal() {
+    // Get address from data attributes
+    const addressField = document.querySelector('.profile-info-item.full-width p');
+    if (addressField) {
+        document.getElementById('editTole').value = addressField.dataset.addressTole || '';
+        document.getElementById('editWard').value = addressField.dataset.addressWard || '';
+        document.getElementById('editRural').value = addressField.dataset.addressRural || '';
+        document.getElementById('editDistrict').value = addressField.dataset.addressDistrict || '';
+        document.getElementById('editCountry').value = addressField.dataset.addressCountry || '';
+    }
+    openModal('editProfileModal');
+}
+
+function closeEditProfileModal() {
+    closeModal('editProfileModal');
+}
+
+function openProfileImageModal() {
+    openModal('profileImageModal');
+}
+
+function closeProfileImageModal() {
+    closeModal('profileImageModal');
+}
+
+function updateProfile(e) {
+    e.preventDefault();
+    
+    // Get form values with trim
+    const firstName = (document.getElementById('editFirstName')?.value || '').trim();
+    const lastName = (document.getElementById('editLastName')?.value || '').trim();
+    const email = (document.getElementById('editEmail')?.value || '').trim();
+    const contact = (document.getElementById('editContact')?.value || '').trim();
+    
+    // Validate required fields
+    if (!firstName || !lastName || !email) {
+        alert('First name, last name, and email are required!');
+        return;
+    }
+    
+    // Combine address fields
+    const tole = (document.getElementById('editTole')?.value || '').trim();
+    const ward = (document.getElementById('editWard')?.value || '').trim();
+    const rural = (document.getElementById('editRural')?.value || '').trim();
+    const district = (document.getElementById('editDistrict')?.value || '').trim();
+    const country = (document.getElementById('editCountry')?.value || '').trim();
+    const combinedAddress = `${tole}|${ward}|${rural}|${district}|${country}`;
+    
+    const formData = new FormData();
+    formData.append('action', 'update_profile');
+    formData.append('first_name', firstName);
+    formData.append('last_name', lastName);
+    formData.append('email', email);
+    formData.append('contact', contact);
+    formData.append('address', combinedAddress);
+    
+    fetch('../api/profile-handler.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            closeEditProfileModal();
+            location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to update profile');
     });
+}
 
-    function calculatePasswordStrength(password) {
-        let strength = 0;
-        
-        if (password.length >= 8) strength += 25;
-        if (password.match(/[a-z]/)) strength += 25;
-        if (password.match(/[A-Z]/)) strength += 25;
-        if (password.match(/[0-9]/)) strength += 25;
-        
-        return strength;
+function changePassword(e) {
+    e.preventDefault();
+    
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    if (newPassword !== confirmPassword) {
+        alert('New passwords do not match!');
+        return;
     }
-
-    function updateStrengthIndicator(strength) {
-        let color;
-        if (strength <= 25) color = '#ff4444';
-        else if (strength <= 50) color = '#ffbb33';
-        else if (strength <= 75) color = '#00C851';
-        else color = '#007E33';
-
-        strengthIndicator.style.width = strength + '%';
-        strengthIndicator.style.backgroundColor = color;
+    
+    if (calculatePasswordStrength(newPassword) < 75) {
+        alert('Please choose a stronger password!');
+        return;
     }
+    
+    const formData = new FormData();
+    formData.append('action', 'change_password');
+    formData.append('current_password', document.getElementById('currentPassword').value);
+    formData.append('new_password', newPassword);
+    
+    fetch('../api/profile-handler.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            e.target.reset();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to change password');
+    });
+}
 
-    // Password Change Form Submission
-    const passwordForm = document.getElementById('passwordChangeForm');
-    passwordForm.addEventListener('submit', function(e) {
+function uploadProfileImage(e) {
+    e.preventDefault();
+    
+    const formData = new FormData();
+    formData.append('action', 'upload_profile_image');
+    formData.append('image', document.getElementById('profileImage').files[0]);
+    
+    fetch('../api/profile-handler.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            closeProfileImageModal();
+            location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to upload image');
+    });
+}
+
+function previewProfileImage(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('imagePreview').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function calculatePasswordStrength(password) {
+    let strength = 0;
+    
+    if (password.length >= 8) strength += 25;
+    if (password.match(/[a-z]/)) strength += 25;
+    if (password.match(/[A-Z]/)) strength += 25;
+    if (password.match(/[0-9]/)) strength += 25;
+    
+    return strength;
+}
+
+function updatePasswordStrength(strength) {
+    const indicator = document.querySelector('.profile-password-strength');
+    if (!indicator) return;
+    
+    let color;
+    if (strength <= 25) color = '#ff4444';
+    else if (strength <= 50) color = '#ffbb33';
+    else if (strength <= 75) color = '#00C851';
+    else color = '#007E33';
+    
+    indicator.style.width = strength + '%';
+    indicator.style.backgroundColor = color;
+}
+
+function loadDashboardData() {
+    fetch('../api/admin-dashboard.php?action=get_stats')
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                updateDashboardStats(data.stats);
+            }
+        })
+        .catch(error => console.error('Error loading dashboard:', error));
+}
+
+function updateDashboardStats(stats) {
+    const elements = {
+        totalOrders: document.querySelector('.box1 .number'),
+        totalRevenue: document.querySelector('.box2 .number'),
+        totalCustomers: document.querySelector('.box3 .number'),
+        pendingRequests: document.querySelector('.box4 .number')
+    };
+    
+    if (elements.totalOrders && stats.total_orders) {
+        elements.totalOrders.textContent = stats.total_orders;
+    }
+    if (elements.totalRevenue && stats.total_revenue) {
+        elements.totalRevenue.textContent = '₹' + parseFloat(stats.total_revenue).toFixed(2);
+    }
+    if (elements.totalCustomers && stats.total_customers) {
+        elements.totalCustomers.textContent = stats.total_customers;
+    }
+    if (elements.pendingRequests && stats.pending_requests) {
+        elements.pendingRequests.textContent = stats.pending_requests;
+    }
+}
+
+function loadRooms() {
+    fetch('../api/room-handler.php?action=get_all')
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.data) {
+                displayRooms(data.data);
+            }
+        })
+        .catch(error => console.error('Error loading rooms:', error));
+}
+
+function displayRooms(rooms) {
+    const tbody = document.querySelector('.rooms-section table tbody');
+    if (!tbody) return;
+    
+    if (rooms.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">No rooms found</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = rooms.map((room, index) => `
+        <tr>
+            <td>${index + 1}</td>
+            <td><img src="../${room.image_path || 'images/rooms/default.jpg'}" alt="Room" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
+            <td>${room.room_no}</td>
+            <td>${room.room_type}</td>
+            <td>${room.total_beds}</td>
+            <td>${room.bed_size}</td>
+            <td><span class="status-badge status-${room.status}">${room.status}</span></td>
+            <td>₹${parseFloat(room.price).toFixed(2)}</td>
+            <td>${room.price_today ? '₹' + parseFloat(room.price_today).toFixed(2) : 'N/A'}</td>
+            <td>
+                <div class="action-buttons">
+                    <button class="action-btn edit-btn" onclick="openRoomModal('edit', ${room.id})">
+                        <ion-icon name="create-outline"></ion-icon>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deleteRoom(${room.id})">
+                        <ion-icon name="trash-outline"></ion-icon>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function loadTables() {
+    fetch('../api/table-handler.php?action=get_all')
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.data) {
+                displayTables(data.data);
+            }
+        })
+        .catch(error => console.error('Error loading tables:', error));
+}
+
+function displayTables(tables) {
+    const tbody = document.getElementById('table-list-body');
+    if (!tbody) return;
+    
+    if (tables.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;">No tables found</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = tables.map((table, index) => `
+        <tr>
+            <td>${index + 1}</td>
+            <td><img src="../${table.image_path || 'images/tables/default.jpg'}" alt="Table" style="width:50px;height:50px;object-fit:cover;border-radius:5px;"></td>
+            <td>${table.table_no}</td>
+            <td>${table.total_chairs}</td>
+            <td><span class="status-badge status-${table.booking_status}">${table.booking_status}</span></td>
+            <td>₹${parseFloat(table.price_main).toFixed(2)}</td>
+            <td>${table.price_today ? '₹' + parseFloat(table.price_today).toFixed(2) : 'N/A'}</td>
+            <td>${table.location}</td>
+            <td>${new Date(table.updated_at).toLocaleDateString()}</td>
+            <td>
+                <div class="action-buttons">
+                    <button class="action-btn edit-btn" onclick="openTableModal('edit', ${table.id})">
+                        <ion-icon name="create-outline"></ion-icon>
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deleteTable(${table.id})">
+                        <ion-icon name="trash-outline"></ion-icon>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function openRoomModal(type, id) {
+    const modal = document.getElementById('roomModal');
+    if (modal) {
+        if (type === 'add') {
+            document.getElementById('roomForm').reset();
+            document.getElementById('roomEditId').value = '';
+            document.getElementById('modalTitle').textContent = 'Add New Room';
+        } else if (type === 'edit' && id) {
+            fetch(`../api/room-handler.php?action=get_by_id&id=${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const room = data.data;
+                        document.getElementById('roomEditId').value = room.id;
+                        document.getElementById('roomNumber').value = room.room_no;
+                        document.getElementById('roomType').value = room.room_type;
+                        document.getElementById('totalBeds').value = room.total_beds;
+                        document.getElementById('bedSize').value = room.bed_size;
+                        document.getElementById('roomPrice').value = room.price;
+                        document.getElementById('roomStatus').value = room.status;
+                        document.getElementById('todayPrice').value = room.price_today || room.price;
+                        document.getElementById('amenities').value = room.amenities || '';
+                        document.getElementById('shortDescription').value = room.short_description || '';
+                        document.getElementById('modalTitle').textContent = 'Edit Room';
+                    } else {
+                        alert('Failed to load room data: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to load room data');
+                });
+        }
+        modal.style.display = 'block';
+    }
+}
+
+function closeRoomModal() {
+    const modal = document.getElementById('roomModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+const roomForm = document.getElementById('roomForm');
+if (roomForm) {
+    roomForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        const currentPassword = document.getElementById('currentPassword').value;
-        const newPassword = document.getElementById('newPassword').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-
-        if (newPassword !== confirmPassword) {
-            alert('New passwords do not match!');
-            return;
-        }
-
-        if (calculatePasswordStrength(newPassword) < 75) {
-            alert('Please choose a stronger password!');
-            return;
-        }
-
-        if (confirm('Are you sure you want to change your password?')) {
-            // Here you would typically make an API call to update the password
-            alert('Password updated successfully!');
-            this.reset();
-        }
+        saveRoom();
     });
+}
 
-    // Profile Image Upload
-    const imageEditButton = document.querySelector('.profile-image-edit');
-    imageEditButton.addEventListener('click', function() {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
+function saveRoom() {
+    const roomId = document.getElementById('roomEditId').value;
+    const roomNumber = document.getElementById('roomNumber').value;
+    const roomType = document.getElementById('roomType').value;
+    const totalBeds = document.getElementById('totalBeds').value;
+    const bedSize = document.getElementById('bedSize').value;
+    const roomPrice = document.getElementById('roomPrice').value;
+    const roomStatus = document.getElementById('roomStatus').value;
+    const todayPrice = document.getElementById('todayPrice').value;
+    const amenities = document.getElementById('amenities').value;
+    const shortDescription = document.getElementById('shortDescription').value;
+    const imageFile = document.getElementById('roomImage').files[0];
+
+    if (!roomNumber || !roomType || !totalBeds || !bedSize || !roomPrice || !todayPrice) {
+        alert('Please fill all required fields!');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('action', roomId ? 'update' : 'add');
+    formData.append('room_no', roomNumber);
+    formData.append('room_type', roomType.toLowerCase());
+    formData.append('total_beds', totalBeds);
+    formData.append('bed_size', bedSize.toLowerCase());
+    formData.append('price', roomPrice);
+    formData.append('status', roomStatus);
+    formData.append('price_today', todayPrice);
+    formData.append('amenities', amenities);
+    formData.append('short_description', shortDescription);
+
+    if (imageFile) {
+        formData.append('image', imageFile);
+    }
+
+    if (roomId) {
+        formData.append('id', roomId);
+    }
+
+    fetch('../api/room-handler.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message || 'Room saved successfully!');
+            closeRoomModal();
+            location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save room');
+    });
+}
+
+function deleteRoom(id) {
+    if (!confirm('Are you sure you want to delete this room?')) return;
+    
+    const formData = new FormData();
+    formData.append('action', 'delete');
+    formData.append('id', id);
+    
+    fetch('../api/room-handler.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to delete room');
+    });
+}
+
+function viewRoomDetails(id) {
+    fetch(`../api/room-handler.php?action=get_by_id&id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const room = data.data;
+                
+                // Set image
+                document.getElementById('viewRoomImage').src = '../' + (room.image_path || 'assets/images/default-room.jpg');
+                
+                // Set basic info
+                document.getElementById('viewRoomNumber').textContent = room.room_no;
+                document.getElementById('viewRoomType').innerHTML = `<span class="room-type-badge room-type-${room.room_type.toLowerCase()}">${room.room_type.charAt(0).toUpperCase() + room.room_type.slice(1)}</span>`;
+                document.getElementById('viewTotalBeds').textContent = room.total_beds;
+                document.getElementById('viewBedSize').textContent = room.bed_size.charAt(0).toUpperCase() + room.bed_size.slice(1);
+                document.getElementById('viewStatus').innerHTML = `<span class="room-status room-status-${room.status.toLowerCase()}">${room.status.charAt(0).toUpperCase() + room.status.slice(1)}</span>`;
+                
+                // Set prices
+                document.getElementById('viewPrice').textContent = 'RS ' + parseFloat(room.price).toLocaleString();
+                document.getElementById('viewTodayPrice').textContent = room.price_today ? 'RS ' + parseFloat(room.price_today).toLocaleString() : 'RS ' + parseFloat(room.price).toLocaleString();
+                
+                // Set amenities and description
+                document.getElementById('viewAmenities').textContent = room.amenities || 'Not specified';
+                document.getElementById('viewDescription').textContent = room.short_description || 'No description available';
+                
+                // Set timestamps
+                document.getElementById('viewCreatedAt').textContent = new Date(room.created_at).toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                document.getElementById('viewUpdatedAt').textContent = new Date(room.updated_at).toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                // Show modal
+                document.getElementById('roomViewModal').style.display = 'block';
+            } else {
+                alert('Failed to load room details: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to load room details');
+        });
+}
+
+function closeRoomViewModal() {
+    document.getElementById('roomViewModal').style.display = 'none';
+}
+
+function openTableModal(type, id) {
+    const modal = document.getElementById('table-modal');
+    if (modal) {
+        if (type === 'add') {
+            document.getElementById('table-form').reset();
+            document.getElementById('table-edit-id').value = '';
+            document.getElementById('table-modal-title').textContent = 'Add New Table';
+        } else if (type === 'edit' && id) {
+            fetch(`../api/table-handler.php?action=get_by_id&id=${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.data) {
+                        const table = data.data;
+                        document.getElementById('table-edit-id').value = table.id;
+                        document.getElementById('table-number').value = table.table_no;
+                        document.getElementById('table-capacity').value = table.total_chairs;
+                        document.getElementById('table-status').value = table.booking_status;
+                        document.getElementById('table-price-standard').value = table.price_main;
+                        document.getElementById('table-price-today').value = table.price_today || '';
+                        document.getElementById('table-location').value = table.location;
+                        document.getElementById('table-modal-title').textContent = 'Edit Table';
+                    } else {
+                        alert('Failed to load table data: ' + (data.message || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to load table data');
+                });
+        }
+        modal.style.display = 'block';
+    }
+}
+
+function closeTableModal() {
+    const modal = document.getElementById('table-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function deleteTable(id) {
+    if (!confirm('Are you sure you want to delete this table?')) return;
+    
+    const formData = new FormData();
+    formData.append('action', 'delete');
+    formData.append('id', id);
+    
+    fetch('../api/table-handler.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            loadTables();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to delete table');
+    });
+}
+
+function deleteBlog(id) {
+    if (!confirm('Are you sure you want to delete this blog?')) return;
+    
+    fetch('../api/admin-blogs.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', id: id })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert('Blog deleted successfully');
+            location.reload();
+        } else {
+            alert('Error: ' + (data.message || 'Delete failed'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error deleting blog');
+    });
+}
+
+function openAddModal(category) {
+    const modal = document.getElementById('menu-modal');
+    const specialDayGroup = document.getElementById('special-day-group');
+    const itemCategory = document.getElementById('item-category');
+    const modalTitle = document.getElementById('modal-title');
+    
+    if (modal) {
+        modal.style.display = 'block';
+        document.getElementById('menu-item-form').reset();
+        document.getElementById('item-id').value = '';
         
-        input.onchange = function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.querySelector('.profile-image').src = e.target.result;
-                }
-                reader.readAsDataURL(file);
+        if (itemCategory) {
+            if (category === 'vegetarian') {
+                itemCategory.value = 'veg';
+                modalTitle.textContent = 'Add Vegetarian Item';
+            } else if (category === 'non-vegetarian') {
+                itemCategory.value = 'non-veg';
+                modalTitle.textContent = 'Add Non-Vegetarian Item';
+            } else if (category === 'special') {
+                itemCategory.value = 'special';
+                modalTitle.textContent = 'Add Special Item';
             }
         }
         
-        input.click();
-    });
+        if (specialDayGroup) {
+            specialDayGroup.style.display = category === 'special' ? 'block' : 'none';
+        }
+    }
+}
 
-    // Add animation classes on load
-    document.querySelectorAll('.profile-detail-item').forEach((item, index) => {
-        item.style.animation = `fadeInUp 0.3s ease forwards ${index * 0.1}s`;
+function editMenuItem(id) {
+    fetch(`../api/menu-handler.php?action=get_by_id&id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const item = data.data;
+                const modal = document.getElementById('menu-modal');
+                const specialDayGroup = document.getElementById('special-day-group');
+                const modalTitle = document.getElementById('modal-title');
+                
+                document.getElementById('item-id').value = item.id;
+                document.getElementById('food-name').value = item.food_name;
+                document.getElementById('price').value = item.price;
+                document.getElementById('discount-price').value = item.discount_price || '';
+                document.getElementById('item-category').value = item.category;
+                
+                document.querySelectorAll('input[name="available-days[]"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                if (item.category === 'veg') {
+                    modalTitle.textContent = 'Edit Vegetarian Item';
+                    specialDayGroup.style.display = 'none';
+                } else if (item.category === 'non-veg') {
+                    modalTitle.textContent = 'Edit Non-Vegetarian Item';
+                    specialDayGroup.style.display = 'none';
+                } else if (item.category === 'special') {
+                    modalTitle.textContent = 'Edit Special Item';
+                    specialDayGroup.style.display = 'block';
+                    
+                    if (item.available_days && item.available_days !== 'All Day') {
+                        const days = item.available_days.split(',').map(d => d.trim());
+                        document.querySelectorAll('input[name="available-days[]"]').forEach(checkbox => {
+                            if (checkbox.id !== 'all-days-checkbox') {
+                                checkbox.checked = days.includes(checkbox.value);
+                            }
+                        });
+                    }
+                }
+                
+                modal.style.display = 'block';
+            } else {
+                alert('Failed to load menu item: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            alert('Failed to load menu item. Please try again.');
+        });
+}
+
+function saveMenuItem() {
+    const itemId = document.getElementById('item-id').value;
+    const category = document.getElementById('item-category').value;
+    const foodName = document.getElementById('food-name').value;
+    const price = document.getElementById('price').value;
+    const discountPrice = document.getElementById('discount-price').value;
+    const imageFile = document.getElementById('image-upload').files[0];
+    
+    if (!category || !foodName || !price) {
+        alert('Please fill all required fields!');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('action', itemId ? 'update' : 'add');
+    formData.append('category', category);
+    formData.append('food_name', foodName);
+    formData.append('price', price);
+    
+    if (discountPrice) {
+        formData.append('discount_price', discountPrice);
+    }
+    
+    if (imageFile) {
+        formData.append('image', imageFile);
+    }
+    
+    if (itemId) {
+        formData.append('id', itemId);
+    }
+    
+    if (category === 'special') {
+        const allDaysCheckbox = document.getElementById('all-days-checkbox');
+        const checkedDays = [];
+        
+        document.querySelectorAll('input[name="available-days[]"]:checked').forEach(cb => {
+            if (cb.id !== 'all-days-checkbox') {
+                checkedDays.push(cb.value);
+            }
+        });
+        
+        if (allDaysCheckbox && allDaysCheckbox.checked) {
+            formData.append('available_days', 'All Days');
+        } else if (checkedDays.length > 0) {
+            formData.append('available_days', checkedDays.join(','));
+        } else {
+            formData.append('available_days', 'All Days');
+        }
+    } else {
+        formData.append('available_days', 'All Days');
+    }
+    
+    fetch('../api/menu-handler.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message || 'Menu item saved successfully!');
+            closeMenuModal();
+            location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save menu item');
     });
+}
+
+function deleteMenuItem(id) {
+    if (!confirm('Are you sure you want to delete this menu item?')) return;
+    
+    const formData = new FormData();
+    formData.append('action', 'delete');
+    formData.append('id', id);
+    
+    fetch('../api/menu-handler.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to delete menu item');
+    });
+}
+
+function closeMenuModal() {
+    const modal = document.getElementById('menu-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function closeModal() {
+    closeMenuModal();
+}
+
+function clearForm() {
+    const form = document.getElementById('menu-item-form');
+    if (form) {
+        form.reset();
+        document.getElementById('item-id').value = '';
+    }
+}
+
+function toggleAllDays(checkbox) {
+    const dayCheckboxes = document.querySelectorAll('input[name="available-days[]"]:not(#all-days-checkbox)');
+    dayCheckboxes.forEach(cb => {
+        cb.checked = checkbox.checked;
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const menuModal = document.getElementById('menu-modal');
+    const menuClose = document.querySelector('.menu-modal-close');
+    
+    if (menuClose) {
+        menuClose.onclick = function() {
+            closeMenuModal();
+        };
+    }
+    
+    if (menuModal) {
+        window.onclick = function(event) {
+            if (event.target === menuModal) {
+                closeMenuModal();
+            }
+        };
+    }
 });
+
+function toggleAllDays(checkbox) {
+    const dayCheckboxes = document.querySelectorAll('input[name="available-days[]"]');
+    dayCheckboxes.forEach(cb => {
+        if (cb.id !== 'all-days-checkbox') {
+            cb.checked = checkbox.checked;
+        }
+    });
+}
+
+function openStaffModal() {
+    const modal = document.getElementById('staffModal');
+    if (modal) {
+        modal.style.display = 'block';
+        document.getElementById('staffForm').reset();
+        document.getElementById('staffId').value = '';
+        document.getElementById('staffModalTitle').textContent = 'Add New Staff';
+        document.getElementById('passwordGroup').style.display = 'block';
+        document.getElementById('profilePicPreview').style.display = 'none';
+    }
+}
+
+function closeStaffModal() {
+    const modal = document.getElementById('staffModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.getElementById('profilePicPreview').style.display = 'none';
+    }
+}
+
+function previewProfilePic(input) {
+    const previewDiv = document.getElementById('profilePicPreview');
+    const previewImg = document.getElementById('profilePicImg');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            previewDiv.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        previewDiv.style.display = 'none';
+    }
+}
+
+function editStaff(id) {
+    fetch(`../api/admin-users.php?action=get&id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.user) {
+                const user = data.user;
+                
+                // Open modal first without resetting
+                const modal = document.getElementById('staffModal');
+                if (modal) {
+                    modal.style.display = 'block';
+                }
+                
+                // Then fill the form with user data
+                document.getElementById('staffId').value = user.id;
+                document.getElementById('firstName').value = user.first_name || '';
+                document.getElementById('lastName').value = user.last_name || '';
+                document.getElementById('staffEmail').value = user.email || '';
+                document.getElementById('staffContact').value = user.contact || '';
+                document.getElementById('staffAddress').value = user.address || '';
+                document.getElementById('staffStatus').value = user.status || 'verified';
+                document.getElementById('staffSalary').value = user.salary || '';
+                document.getElementById('staffModalTitle').textContent = 'Edit Staff';
+                document.getElementById('passwordGroup').style.display = 'none';
+                
+                // Show existing profile picture
+                if (user.profile_pic) {
+                    const previewDiv = document.getElementById('profilePicPreview');
+                    const previewImg = document.getElementById('profilePicImg');
+                    previewImg.src = '../' + user.profile_pic;
+                    previewDiv.style.display = 'block';
+                } else {
+                    document.getElementById('profilePicPreview').style.display = 'none';
+                }
+            } else {
+                alert('Failed to load staff data: ' + (data.message || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to load staff data');
+        });
+}
+
+function deleteStaff(id) {
+    if (!confirm('Are you sure you want to delete this staff member? This action cannot be undone.')) return;
+    
+    fetch('../api/admin-users.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', id: parseInt(id) })
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return res.json();
+    })
+    .then(data => {
+        if (data.success) {
+            alert('Staff deleted successfully!');
+            location.reload();
+        } else {
+            alert('Error: ' + (data.message || 'Failed to delete staff'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to delete staff. Please try again.');
+    });
+}
+
+let currentViewStaffId = null;
+
+function viewStaffDetails(id) {
+    currentViewStaffId = id;
+    fetch(`../api/admin-users.php?action=get&id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.user) {
+                const user = data.user;
+                
+                // Set profile picture
+                const profilePic = document.getElementById('viewStaffProfilePic');
+                profilePic.src = user.profile_pic ? '../' + user.profile_pic : '../assets/images/default-avatar.png';
+                
+                // Set text fields
+                document.getElementById('viewFirstName').textContent = user.first_name || 'N/A';
+                document.getElementById('viewLastName').textContent = user.last_name || 'N/A';
+                document.getElementById('viewEmail').textContent = user.email || 'N/A';
+                document.getElementById('viewContact').textContent = user.contact || 'N/A';
+                document.getElementById('viewAddress').textContent = user.address || 'N/A';
+                document.getElementById('viewSalary').textContent = user.salary ? 'RS ' + parseFloat(user.salary).toFixed(2) : 'Not Set';
+                document.getElementById('viewRole').textContent = user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'N/A';
+                document.getElementById('viewJoinedDate').textContent = user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A';
+                
+                // Set status with color
+                const statusElem = document.getElementById('viewStatus');
+                statusElem.innerHTML = `<span class="staff-status ${user.status ? user.status.toLowerCase() : ''}">${user.status || 'N/A'}</span>`;
+                
+                // Open modal
+                document.getElementById('staffViewModal').style.display = 'block';
+            } else {
+                alert('Failed to load staff details');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to load staff details');
+        });
+}
+
+function closeStaffViewModal() {
+    document.getElementById('staffViewModal').style.display = 'none';
+    currentViewStaffId = null;
+}
+
+function editFromView() {
+    if (currentViewStaffId) {
+        closeStaffViewModal();
+        editStaff(currentViewStaffId);
+    }
+}
+
+const menuModalClose = document.querySelector('.menu-modal-close');
+if (menuModalClose) {
+    menuModalClose.addEventListener('click', closeMenuModal);
+}
+
+const staffCloseBtn = document.querySelector('.staff-close-btn');
+if (staffCloseBtn) {
+    staffCloseBtn.addEventListener('click', closeStaffModal);
+}
+
+const staffForm = document.getElementById('staffForm');
+if (staffForm) {
+    staffForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveStaff();
+    });
+}
+
+function saveStaff() {
+    const staffId = document.getElementById('staffId').value;
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const email = document.getElementById('staffEmail').value;
+    const contact = document.getElementById('staffContact').value;
+    const address = document.getElementById('staffAddress').value;
+    const status = document.getElementById('staffStatus').value;
+    const salary = document.getElementById('staffSalary').value;
+    const password = document.getElementById('staffPassword') ? document.getElementById('staffPassword').value : '';
+    const profilePicInput = document.getElementById('profilePic');
+    const profilePic = profilePicInput ? profilePicInput.files[0] : null;
+
+    // Validation
+    if (!firstName || !lastName || !email || !contact) {
+        alert('Please fill all required fields!');
+        return;
+    }
+
+    // Password required for new staff only
+    if (!staffId && !password) {
+        alert('Password is required for new staff!');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('action', staffId ? 'update' : 'create');
+    formData.append('first_name', firstName);
+    formData.append('last_name', lastName);
+    formData.append('email', email);
+    formData.append('contact', contact);
+    formData.append('address', address);
+    formData.append('status', status);
+    formData.append('salary', salary || '');
+    formData.append('role', 'staff');
+
+    if (password) {
+        formData.append('password', password);
+    }
+
+    if (profilePic) {
+        formData.append('profile_pic', profilePic);
+    }
+
+    if (staffId) {
+        formData.append('id', staffId);
+    }
+
+    fetch('../api/admin-users.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return res.json();
+    })
+    .then(data => {
+        if (data.success) {
+            alert(staffId ? 'Staff updated successfully!' : 'Staff added successfully!');
+            closeStaffModal();
+            location.reload();
+        } else {
+            alert('Error: ' + (data.message || 'Failed to save staff'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save staff. Please try again.');
+    });
+}
+
+const roomModalClose = document.querySelector('.room-modal-close');
+if (roomModalClose) {
+    roomModalClose.addEventListener('click', closeRoomModal);
+}
+
+const tableModalClose = document.querySelector('.table-modal-close');
+if (tableModalClose) {
+    tableModalClose.addEventListener('click', closeTableModal);
+}
+
+const tableModalCancel = document.getElementById('table-modal-cancel');
+if (tableModalCancel) {
+    tableModalCancel.addEventListener('click', closeTableModal);
+}
+
+const tableAddNewBtn = document.getElementById('table-add-new-btn');
+if (tableAddNewBtn) {
+    tableAddNewBtn.addEventListener('click', function() {
+        openTableModal('add');
+    });
+}
+
+const tableForm = document.getElementById('table-form');
+if (tableForm) {
+    tableForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveTable();
+    });
+}
+
+function saveTable() {
+    const tableId = document.getElementById('table-edit-id').value;
+    const tableNumber = document.getElementById('table-number').value;
+    const tableCapacity = document.getElementById('table-capacity').value;
+    const tableStatus = document.getElementById('table-status').value;
+    const priceStandard = document.getElementById('table-price-standard').value;
+    const priceToday = document.getElementById('table-price-today').value;
+    const tableLocation = document.getElementById('table-location').value;
+    const imageFile = document.getElementById('table-image').files[0];
+
+    if (!tableNumber || !tableCapacity || !priceStandard) {
+        alert('Please fill all required fields!');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('action', tableId ? 'update' : 'add');
+    formData.append('table_no', tableNumber);
+    formData.append('total_chairs', tableCapacity);
+    formData.append('booking_status', tableStatus);
+    formData.append('price_main', priceStandard);
+    
+    if (priceToday) {
+        formData.append('price_today', priceToday);
+    }
+    
+    formData.append('location', tableLocation);
+
+    if (imageFile) {
+        formData.append('image', imageFile);
+    }
+
+    if (tableId) {
+        formData.append('id', tableId);
+    }
+
+    fetch('../api/table-handler.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message || 'Table saved successfully!');
+            closeTableModal();
+            location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to save table');
+    });
+}
+
+let confirmCallback = null;
+
+function closeConfirmModal() {
+    const modal = document.getElementById('confirm-modal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+    confirmCallback = null;
+}
+
+function confirmAction() {
+    if (confirmCallback && typeof confirmCallback === 'function') {
+        confirmCallback();
+    }
+    closeConfirmModal();
+}
+
+function showConfirmModal(message, callback) {
+    const modal = document.getElementById('confirm-modal');
+    const messageElement = document.getElementById('confirm-message');
+    
+    if (modal && messageElement) {
+        messageElement.textContent = message;
+        confirmCallback = callback;
+        modal.style.display = 'block';
+    } else {
+        if (confirm(message)) {
+            callback();
+        }
+    }
+}
+
+window.addEventListener('click', function(e) {
+    const menuModal = document.getElementById('menu-modal');
+    if (e.target === menuModal) {
+        closeMenuModal();
+    }
+    
+    const staffModal = document.getElementById('staffModal');
+    if (e.target === staffModal) {
+        closeStaffModal();
+    }
+    
+    const roomModal = document.getElementById('roomModal');
+    if (e.target === roomModal) {
+        closeRoomModal();
+    }
+    
+    const tableModal = document.getElementById('table-modal');
+    if (e.target === tableModal) {
+        closeTableModal();
+    }
+    
+    const confirmModal = document.getElementById('confirm-modal');
+    if (e.target === confirmModal) {
+        closeConfirmModal();
+    }
+    
+    // Customer modals
+    const addCustomerModal = document.getElementById('addModal');
+    if (e.target === addCustomerModal) {
+        closeAddCustomerModal();
+    }
+    
+    const editCustomerModal = document.getElementById('editModal');
+    if (e.target === editCustomerModal) {
+        closeEditCustomerModal();
+    }
+    
+    const viewCustomerModal = document.getElementById('viewModal');
+    if (e.target === viewCustomerModal) {
+        closeViewCustomerModal();
+    }
+});
+
+// ============================================
+// CUSTOMER MANAGEMENT FUNCTIONS
+// ============================================
+let currentCustomerData = null;
+
+// Add Customer Modal
+function openAddModal() {
+    const modal = document.getElementById('addModal');
+    if (modal) {
+        modal.style.display = 'block';
+        document.getElementById('addCustomerForm').reset();
+    }
+}
+
+function closeAddModal() {
+    const modal = document.getElementById('addModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.getElementById('addCustomerForm').reset();
+    }
+}
+
+function closeAddCustomerModal() {
+    closeAddModal();
+}
+
+// View Customer
+function viewCustomer(id) {
+    fetch(`../api/admin-users.php?action=get&id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                const user = data.user;
+                currentCustomerData = user;
+                
+                const profilePic = document.getElementById('viewProfilePic');
+                profilePic.src = user.profile_pic ? '../' + user.profile_pic : '../assets/images/default-avatar.png';
+                
+                document.getElementById('viewName').textContent = user.first_name + ' ' + user.last_name;
+                document.getElementById('viewEmail').textContent = user.email;
+                
+                const statusBadge = document.getElementById('viewStatusBadge');
+                statusBadge.textContent = user.status;
+                statusBadge.className = `status-badge status-${user.status.toLowerCase()}`;
+                
+                document.getElementById('viewContact').textContent = user.contact || 'N/A';
+                document.getElementById('viewCreatedAt').textContent = new Date(user.created_at).toLocaleDateString();
+                document.getElementById('viewLastLogin').textContent = new Date(user.updated_at).toLocaleString();
+                document.getElementById('viewOrderCount').textContent = user.order_count || '0';
+                document.getElementById('viewAddress').textContent = user.address || 'No address provided';
+                
+                document.getElementById('viewModal').style.display = 'block';
+            }
+        });
+}
+
+function closeViewModal() {
+    const modal = document.getElementById('viewModal');
+    if (modal) {
+        modal.style.display = 'none';
+        currentCustomerData = null;
+    }
+}
+
+function closeViewCustomerModal() {
+    closeViewModal();
+}
+
+function editFromView() {
+    closeViewModal();
+    if(currentCustomerData) {
+        editCustomer(currentCustomerData.id);
+    }
+}
+
+// Edit Customer
+function editCustomer(id) {
+    fetch(`../api/admin-users.php?action=get&id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                document.getElementById('editId').value = data.user.id;
+                document.getElementById('editFirstName').value = data.user.first_name;
+                document.getElementById('editLastName').value = data.user.last_name;
+                document.getElementById('editEmail').value = data.user.email;
+                document.getElementById('editContact').value = data.user.contact;
+                document.getElementById('editAddress').value = data.user.address || '';
+                document.getElementById('editStatus').value = data.user.status;
+                document.getElementById('editModal').style.display = 'block';
+            }
+        });
+}
+
+function closeEditModal() {
+    const modal = document.getElementById('editModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function closeEditCustomerModal() {
+    closeEditModal();
+}
+
+// Delete Customer
+function deleteCustomer(id) {
+    if(!confirm('Are you sure you want to delete this customer? This action cannot be undone.')) return;
+    
+    const formData = new FormData();
+    formData.append('action', 'delete');
+    formData.append('id', id);
+    
+    fetch('../api/admin-users.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success) {
+            alert(data.message || 'Customer deleted successfully!');
+            location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    });
+}

@@ -1,5 +1,16 @@
 <?php
 require_once('includes/header.php');
+require_once('config/db.php');
+
+// Fetch food items (limit to 8 for homepage)
+$stmt_food = $conn->prepare("SELECT * FROM food_items ORDER BY created_at DESC LIMIT 8");
+$stmt_food->execute();
+$food_items = $stmt_food->get_result();
+
+// Fetch staff members (limit to 8 for homepage)
+$stmt_staff = $conn->prepare("SELECT first_name, last_name, role, profile_pic FROM users WHERE role = 'staff' LIMIT 8");
+$stmt_staff->execute();
+$staff_members = $stmt_staff->get_result();
 ?>
 
 <section class="home-images-container">
@@ -83,85 +94,27 @@ require_once('includes/header.php');
     </div>
 
     <div class="menu-grid">
+        <?php 
+        if ($food_items->num_rows > 0) {
+            while($item = $food_items->fetch_assoc()) {
+                $image_url = !empty($item['image_url']) ? $item['image_url'] : 'https://via.placeholder.com/300x200?text=No+Image';
+                $description = !empty($item['description']) ? substr($item['description'], 0, 60) . '...' : 'Delicious food item from our kitchen';
+        ?>
         <div class="menu-item">
             <div class="image-container">
-                <img src="https://www.w3schools.com/html/img_chania.jpg" alt="Pizza">
+                <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($item['food_name']); ?>">
             </div>
-            <h3>Pizza</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing.</p>
-            <p class="price">$55.0</p>
-            <button class="order-now">Order Now</button>
+            <h3><?php echo htmlspecialchars($item['food_name']); ?></h3>
+            <p><?php echo htmlspecialchars($description); ?></p>
+            <p class="price">RS <?php echo number_format($item['price'], 2); ?></p>
+            <button class="order-now" onclick="addToCart('food', <?php echo $item['id']; ?>, {name: '<?php echo addslashes($item['food_name']); ?>', price: <?php echo $item['price']; ?>, image: '<?php echo addslashes($image_url); ?>'})">Order Now</button>
         </div>
-
-        <div class="menu-item">
-            <div class="image-container">
-                <img src="https://www.w3schools.com/html/img_chania.jpg" alt="Rice">
-            </div>
-            <h3>Rice</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing.</p>
-            <p class="price">$50.0</p>
-            <button class="order-now">Order Now</button>
-        </div>
-
-        <div class="menu-item">
-            <div class="image-container">
-                <img src="https://www.w3schools.com/html/img_chania.jpg" alt="Green Salad">
-            </div>
-            <h3>Green Salad</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing.</p>
-            <p class="price">$45.0</p>
-            <button class="order-now">Order Now</button>
-        </div>
-
-        <div class="menu-item">
-            <div class="image-container">
-                <img src="https://www.w3schools.com/html/img_chania.jpg" alt="Pasta">
-            </div>
-            <h3>Pasta</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing.</p>
-            <p class="price">$35.0</p>
-            <button class="order-now">Order Now</button>
-        </div>
-
-        <div class="menu-item">
-            <div class="image-container">
-                <img src="https://www.w3schools.com/html/img_chania.jpg" alt="Pasta">
-            </div>
-            <h3>Pasta</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing.</p>
-            <p class="price">$35.0</p>
-            <button class="order-now">Order Now</button>
-        </div>
-
-        <div class="menu-item">
-            <div class="image-container">
-                <img src="https://www.w3schools.com/html/img_chania.jpg" alt="Pasta">
-            </div>
-            <h3>Pasta</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing.</p>
-            <p class="price">$35.0</p>
-            <button class="order-now">Order Now</button>
-        </div>
-
-        <div class="menu-item">
-            <div class="image-container">
-                <img src="https://www.w3schools.com/html/img_chania.jpg" alt="Pasta">
-            </div>
-            <h3>Pasta</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing.</p>
-            <p class="price">$35.0</p>
-            <button class="order-now">Order Now</button>
-        </div>
-
-        <div class="menu-item">
-            <div class="image-container">
-                <img src="https://www.w3schools.com/html/img_chania.jpg" alt="Pasta">
-            </div>
-            <h3>Pasta</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing.</p>
-            <p class="price">$35.0</p>
-            <button class="order-now">Order Now</button>
-        </div>
+        <?php 
+            }
+        } else {
+            echo '<p style="grid-column: 1/-1; text-align: center;">No food items available at the moment.</p>';
+        }
+        ?>
     </div>
 </section>
 
@@ -243,93 +196,28 @@ require_once('includes/header.php');
         <p>Get to know the dedicated individuals who work tirelessly to ensure your stay exceeds expectations, bringing warmth and expertise to every interaction.</p>
     </div>
     <div class="staff-grid">
-        <!-- Staff Card 1 -->
+        <?php 
+        if ($staff_members->num_rows > 0) {
+            while($staff = $staff_members->fetch_assoc()) {
+                $profile_pic = !empty($staff['profile_pic']) ? $staff['profile_pic'] : 'https://via.placeholder.com/300x300?text=Staff';
+                $full_name = $staff['first_name'] . ' ' . $staff['last_name'];
+                $role = ucfirst($staff['role']);
+        ?>
         <div class="staff-card">
             <div class="image-container">
-                <img src="https://via.placeholder.com/300x300" alt="Staff Name">
+                <img src="<?php echo htmlspecialchars($profile_pic); ?>" alt="<?php echo htmlspecialchars($full_name); ?>">
             </div>
             <div class="staff-info">
-                <h2>John Doe</h2>
-                <p class="role">Executive Chef</p>
+                <h2><?php echo htmlspecialchars($full_name); ?></h2>
+                <p class="role"><?php echo htmlspecialchars($role); ?></p>
             </div>
         </div>
-
-        <!-- Staff Card 2 -->
-        <div class="staff-card">
-            <div class="image-container">
-                <img src="https://via.placeholder.com/300x300" alt="Staff Name">
-            </div>
-            <div class="staff-info">
-                <h2>Jane Smith</h2>
-                <p class="role">Hotel Manager</p>
-            </div>
-        </div>
-
-        <!-- Staff Card 3 -->
-        <div class="staff-card">
-            <div class="image-container">
-                <img src="https://via.placeholder.com/300x300" alt="Staff Name">
-            </div>
-            <div class="staff-info">
-                <h2>Robert Brown</h2>
-                <p class="role">Front Desk Officer</p>
-            </div>
-        </div>
-
-        <!-- Staff Card 3 -->
-        <div class="staff-card">
-            <div class="image-container">
-                <img src="https://via.placeholder.com/300x300" alt="Staff Name">
-            </div>
-            <div class="staff-info">
-                <h2>Robert Brown</h2>
-                <p class="role">Front Desk Officer</p>
-            </div>
-        </div>
-
-        <!-- Staff Card 3 -->
-        <div class="staff-card">
-            <div class="image-container">
-                <img src="https://via.placeholder.com/300x300" alt="Staff Name">
-            </div>
-            <div class="staff-info">
-                <h2>Robert Brown</h2>
-                <p class="role">Front Desk Officer</p>
-            </div>
-        </div>
-
-        <!-- Staff Card 3 -->
-        <div class="staff-card">
-            <div class="image-container">
-                <img src="https://via.placeholder.com/300x300" alt="Staff Name">
-            </div>
-            <div class="staff-info">
-                <h2>Robert Brown</h2>
-                <p class="role">Front Desk Officer</p>
-            </div>
-        </div>
-
-        <!-- Staff Card 3 -->
-        <div class="staff-card">
-            <div class="image-container">
-                <img src="https://via.placeholder.com/300x300" alt="Staff Name">
-            </div>
-            <div class="staff-info">
-                <h2>Robert Brown</h2>
-                <p class="role">Front Desk Officer</p>
-            </div>
-        </div>
-
-        <!-- Staff Card 3 -->
-        <div class="staff-card">
-            <div class="image-container">
-                <img src="https://via.placeholder.com/300x300" alt="Staff Name">
-            </div>
-            <div class="staff-info">
-                <h2>Robert Brown</h2>
-                <p class="role">Front Desk Officer</p>
-            </div>
-        </div>
+        <?php 
+            }
+        } else {
+            echo '<p style="grid-column: 1/-1; text-align: center;">No staff members available to display.</p>';
+        }
+        ?>
     </div>
 </section>
 
@@ -342,5 +230,33 @@ require_once('includes/header.php');
         <!-- Cards will be dynamically generated by JavaScript -->
     </div>
 </section>
+
+<script>
+// Add to cart functionality
+function addToCart(itemType, itemId, itemData) {
+    const STORAGE_KEY = 'hotelCart';
+    let cart = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { food: [], rooms: [], tables: [] };
+    
+    // Check if item already exists in cart
+    const existingItem = cart[itemType].find(item => item.id == itemId);
+    
+    if (existingItem) {
+        existingItem.quantity = (existingItem.quantity || 1) + 1;
+    } else {
+        cart[itemType].push({
+            id: itemId,
+            name: itemData.name,
+            price: itemData.price,
+            image: itemData.image,
+            quantity: 1
+        });
+    }
+    
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+    
+    // Show success message
+    alert('Item added to cart successfully!');
+}
+</script>
 
 <?php require_once('includes/footer.php') ?>

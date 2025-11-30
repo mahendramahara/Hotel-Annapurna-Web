@@ -10,7 +10,7 @@ function cleanupOTPSession()
 cleanupOTPSession();
 
 session_start();
-require_once 'config/connection.php';
+require_once 'config/db.php';
 
 $error = '';
 $success = '';
@@ -89,11 +89,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // If everything is successful, commit the transaction
             $conn->commit();
 
-            // Set success message and redirect
-            $_SESSION['pwd-success'] = "Password has been reset successfully! Please login with your new password.";
-            $_SESSION['pwd-user-email'] = $email;
+            // Get user details for auto-login
+            $user_stmt = $conn->prepare("SELECT id, first_name, last_name, email, role FROM users WHERE id = ?");
+            $user_stmt->bind_param("i", $user_id);
+            $user_stmt->execute();
+            $user_result = $user_stmt->get_result();
+            $user_data = $user_result->fetch_assoc();
 
-            header("Location: login.php");
+            // Set session variables for auto-login
+            $_SESSION['user_id'] = $user_data['id'];
+            $_SESSION['user_email'] = $user_data['email'];
+            $_SESSION['user_first_name'] = $user_data['first_name'];
+            $_SESSION['user_last_name'] = $user_data['last_name'];
+            $_SESSION['user_name'] = $user_data['first_name'] . ' ' . $user_data['last_name'];
+            $_SESSION['user_role'] = $user_data['role'];
+            $_SESSION['logged_in'] = true;
+
+            // Set remember me cookie (7 days)
+            $cookie_value = base64_encode($user_data['id'] . '|' . $user_data['email']);
+            setcookie('user_auth', $cookie_value, time() + (86400 * 7), '/', '', false, true);
+
+            // Set success message
+            $_SESSION['pwd-success'] = "Password has been reset successfully! You are now logged in.";
+
+            header("Location: index.php");
             exit();
         } catch (Exception $e) {
             // If there's an error, rollback the transaction

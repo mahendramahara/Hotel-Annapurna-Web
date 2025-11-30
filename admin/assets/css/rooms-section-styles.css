@@ -1,185 +1,167 @@
+/* Room Section */
 .room-section {
-    padding: 1.5rem;
+    padding: 20px;
     background: var(--white);
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px;
     display: none;
 }
-
 
 .room-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.25rem;
-    gap: 1rem;
+    margin-bottom: 20px;
+    gap: 15px;
 }
 
 .room-title {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 10px;
 }
 
-.room-title-icon {
-    font-size: 1.5rem;
+.room-title ion-icon {
+    font-size: 24px;
     color: var(--primary-color);
-    background: var(--background-color);
-    padding: 0.5rem;
-    border-radius: 8px;
 }
 
-.room-title h1 {
-    color: var(--text-dark);
-    font-size: 1.25rem;
-    font-weight: 600;
+.room-title h2 {
+    margin: 0;
+    font-size: 1.5rem;
 }
 
 .room-add-btn {
     background: var(--primary-color);
     color: var(--white);
     border: none;
-    padding: 0.6rem 1rem;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 5px;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 8px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: 0.3s;
 }
 
 .room-add-btn:hover {
     background: var(--primary-dark);
 }
 
-.room-container {
+/* Table */
+.room-table-container {
     overflow-x: auto;
+    border-radius: 8px;
 }
 
 .room-table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 1000px;
+    min-width: 900px;
 }
 
 .room-table th {
     background: var(--primary-color);
     color: var(--white);
-    padding: 1rem;
+    padding: 15px;
     text-align: left;
-    font-weight: 500;
 }
 
 .room-table tr:nth-child(even) {
     background: var(--table-stripe);
 }
 
+.room-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
 .room-table td {
-    padding: 1rem;
+    padding: 12px 15px;
     vertical-align: middle;
 }
 
+.room-image-wrapper {
+    width: 70px;
+    height: 50px;
+    overflow: hidden;
+    border-radius: 6px;
+}
+
 .room-image {
-    width: 60px;
-    height: 60px;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+}
+
+/* Badges */
+.room-type-badge, .room-status {
+    padding: 0.35rem 0.6rem;
     border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: capitalize;
 }
 
-.room-status {
-    padding: 0.5rem;
-    border-radius: 4px;
-    display: inline-block;
-    font-size: 0.875rem;
-}
+.room-type-single { background: #e3f2fd; color: #1976d2; }
+.room-type-double { background: #f3e5f5; color: #7b1fa2; }
+.room-type-deluxe { background: #fff3e0; color: #e65100; }
+.room-type-suite { background: linear-gradient(135deg, #ffd89b, #19547b); color: var(--white); }
 
-.room-status-free {
-    background: var(--color-confirmed-bg);
-    color: var(--color-confirmed-text);
-}
+.room-status-available, .room-status-free { background: var(--color-confirmed-bg); color: var(--color-confirmed-text); }
+.room-status-booked { background: var(--color-pending-bg); color: var(--color-pending-text); }
 
-.room-status-booked {
-    background: var(--color-pending-bg);
-    color: var(--color-pending-text);
-}
-
+/* Action Buttons */
 .room-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: 5px;
+    justify-content: center;
 }
 
-.room-btn {
-    padding: 0.5rem 1rem;
+.action-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-    transition: opacity 0.2s;
+    justify-content: center;
+    transition: 0.2s;
 }
 
-.room-btn:hover {
-    opacity: 0.9;
+.action-btn ion-icon {
+    font-size: 18px;
 }
 
-.room-btn-primary {
-    background: var(--primary-color);
-    color: var(--white);
+.action-btn:hover {
+    transform: translateY(-2px);
 }
 
-.room-btn-edit {
-    background: var(--color-button-success);
-    color: var(--white);
-}
+.view-btn { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #fff; }
+.edit-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+.delete-btn { background: linear-gradient(135deg, #f093fb, #f5576c); color: #fff; }
 
-.room-btn-delete {
-    background: var(--color-button-danger);
-    color: var(--white);
-}
-
+/* Modals */
 .room-modal {
     display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
     z-index: 1000;
+    overflow: auto;
 }
 
 .room-modal-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     background: var(--white);
-    padding: 2rem;
-    border-radius: 8px;
+    padding: 30px;
+    border-radius: 12px;
     width: 90%;
     max-width: 600px;
-    max-height: 90vh;
+    max-height: 85vh;
     overflow-y: auto;
-}
-
-.room-form-group {
-    margin-bottom: 1rem;
-}
-
-.room-form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--text-dark);
-}
-
-.room-form-control {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    margin: 50px auto;
+    position: relative;
 }
 
 .room-modal-close {
@@ -190,16 +172,153 @@
     border: none;
     font-size: 1.5rem;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.room-modal-close:hover {
+    transform: rotate(90deg);
+    color: #e74c3c;
+}
+
+/* Form */
+.room-form-group {
+    margin-bottom: 1rem;
+}
+
+.room-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.room-form-control {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+}
+
+.room-form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.room-form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.room-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.room-btn-primary {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.room-btn-secondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+/* View Modal */
+.room-view-modal-content {
+    max-width: 700px;
+}
+
+.modal-title-view {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.room-view-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.room-view-image-wrapper {
+    width: 100%;
+    height: 300px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.room-view-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.room-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.room-info-item, .room-info-description {
+    background: #f8f9fa;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-color);
+}
+
+.info-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #6c757d;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+}
+
+.info-value {
+    font-size: 0.95rem;
+    font-weight: 600;
     color: var(--text-dark);
 }
 
-@media (max-width: 768px) {
-    .room-section {
-        padding: 1rem;
-    }
+.room-info-timestamps {
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
 
-    .room-container {
-        margin: 0 -1rem;
-    }
+.timestamp-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .room-section { padding: 15px; margin: 10px; }
+    .room-header { flex-direction: column; }
+    .room-add-btn { width: 100%; justify-content: center; }
+    .room-table { font-size: 0.85rem; }
+    .room-table th, .room-table td { padding: 10px 8px; }
+    .action-btn { width: 30px; height: 30px; }
+    .action-btn ion-icon { font-size: 16px; }
+    .room-view-image-wrapper { height: 200px; }
+    .room-info-grid { grid-template-columns: 1fr; }
+    .room-view-modal-content { width: 95%; padding: 1rem; }
+    .room-info-timestamps { flex-direction: column; gap: 0.5rem; }
 }
 

@@ -59,16 +59,19 @@ nav {
 }
 
 nav .logo {
-    height: 60px;
-    padding: 10px;
+    height: 80px;
+    padding: 15px;
     background-color: var(--white);
     margin: 0 10px;
     border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 nav .logo-image {
-    width: 150px;
-    height: 30px;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -78,6 +81,8 @@ nav .logo-image img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
+    width: auto;
+    height: auto;
 }
 
 nav .menu-items {
@@ -176,7 +181,7 @@ nav .menu-items li.active a ion-icon {
 
 .bottom-link {
     margin-top: 30px;
-    padding: 10px;
+    padding: 10px 0 10px 10px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -507,31 +512,63 @@ nav .menu-items li.active a ion-icon {
 /* Action Buttons */
 .action-buttons {
     display: flex;
-    gap: 12px;
-    justify-content: flex-end;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
 }
 
 .btn-action {
-    background: none;
-    border: none;
+    background: #f0f2f5;
+    border: 2px solid transparent;
     cursor: pointer;
-    padding: 8px;
+    padding: 10px 12px;
     border-radius: 8px;
     transition: all 0.3s ease;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
 }
 
 .btn-action.view {
-    color: var(--primary-color);
+    color: #3b82f6;
+    background: #dbeafe;
+    border-color: #3b82f6;
+}
+
+.btn-action.edit {
+    color: #10b981;
+    background: #d1fae5;
+    border-color: #10b981;
 }
 
 .btn-action.delete {
-    color: var(--color-button-danger);
+    color: #ef4444;
+    background: #fee2e2;
+    border-color: #ef4444;
 }
 
 .btn-action:hover {
-    transform: scale(1.15);
-    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-action.view:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-action.edit:hover {
+    background: #10b981;
+    color: white;
+}
+
+.btn-action.delete:hover {
+    background: #ef4444;
+    color: white;
 }
 
 /* Activity Log Styles */

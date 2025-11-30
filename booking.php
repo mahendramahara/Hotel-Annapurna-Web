@@ -1,4 +1,23 @@
-<?php require_once('includes/header.php'); ?>
+<?php 
+require_once('includes/header.php');
+require_once('config/db.php');
+
+$is_logged_in = isset($_SESSION['logged_in']) && $_SESSION['logged_in'];
+
+$rooms_result = $conn->query("SELECT * FROM rooms WHERE status IN ('available', 'booked') ORDER BY price ASC LIMIT 2");
+$tables_result = $conn->query("SELECT * FROM tables WHERE booking_status IN ('available', 'booked') ORDER BY price_main ASC LIMIT 2");
+
+$rooms = [];
+$tables = [];
+
+while($row = mysqli_fetch_assoc($rooms_result)) {
+    $rooms[] = $row;
+}
+
+while($row = mysqli_fetch_assoc($tables_result)) {
+    $tables[] = $row;
+}
+?>
 <main class="booking-main">
     <!-- Hero Section -->
     <header class="booking-hero">
@@ -22,7 +41,7 @@
                 <p class="booking-option-description">Indulge in our meticulously designed rooms offering panoramic
                     mountain views, premium amenities, and unparalleled comfort for an unforgettable stay.</p>
                 <nav class="booking-option-nav">
-                    <a href="#rooms" class="booking-option-button" aria-label="Explore Available Rooms">Explore
+                    <a href="rooms.php" class="booking-option-button" aria-label="Explore Available Rooms">Explore
                         Rooms</a>
                 </nav>
             </div>
@@ -38,7 +57,7 @@
                 <p class="booking-option-description">Savor extraordinary culinary experiences in our acclaimed
                     restaurant, featuring both authentic local delicacies and international cuisine.</p>
                 <nav class="booking-option-nav">
-                    <a href="#tables" class="booking-option-button" aria-label="Reserve Dining Table">Reserve
+                    <a href="tables.php" class="booking-option-button" aria-label="Reserve Dining Table">Reserve
                         Table</a>
                 </nav>
             </div>
@@ -53,51 +72,30 @@
         <section class="booking-preview-section" aria-label="Luxury Rooms and Suites">
             <h3 class="booking-preview-section-title">Luxury Rooms & Suites</h3>
             <div class="booking-preview-container">
+                <?php foreach($rooms as $room): 
+                    $price_today = $room['price_today'] ? $room['price_today'] : $room['price'];
+                    $image_url = !empty($room['image_path']) ? $room['image_path'] : 'https://via.placeholder.com/400x300?text=Room';
+                ?>
                 <article class="booking-preview-item">
                     <figure class="booking-preview-figure">
-                        <img src="/assets/deluxe-room-square.jpg" alt="Deluxe Mountain View Room Interior"
-                            class="booking-preview-image">
+                        <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($room['room_type']); ?> Room - <?php echo htmlspecialchars($room['room_no']); ?>" class="booking-preview-image">
                     </figure>
                     <div class="booking-preview-content">
                         <header>
-                            <h3 class="booking-preview-name">Deluxe Mountain View</h3>
-                            <p class="booking-preview-description">Spacious 45m² room with private balcony, stunning
-                                mountain views, and modern luxury amenities</p>
+                            <h3 class="booking-preview-name"><?php echo htmlspecialchars($room['room_type']); ?> - Room <?php echo htmlspecialchars($room['room_no']); ?></h3>
+                            <p class="booking-preview-description"><?php echo htmlspecialchars($room['short_description']); ?></p>
                         </header>
                         <div class="booking-preview-price" aria-label="Room Price">
-                            <span class="booking-preview-original" aria-label="Original Price">$250</span>
-                            <span class="booking-preview-discounted" aria-label="Discounted Price">$199</span>
+                            <span class="booking-preview-original" aria-label="Original Price">RS <?php echo number_format($room['price'], 2); ?></span>
+                            <span class="booking-preview-discounted" aria-label="Discounted Price">RS <?php echo number_format($price_today, 2); ?></span>
                         </div>
-                        <p class="booking-preview-availability">Available Now</p>
+                        <p class="booking-preview-availability"><?php echo ucfirst($room['status']); ?></p>
                         <footer class="booking-preview-footer">
-                            <a href="#book-room" class="booking-preview-button"
-                                aria-label="Book Deluxe Mountain View Room">Book Now</a>
+                            <button onclick="reserveRoom(<?php echo htmlspecialchars(json_encode($room)); ?>)" class="booking-preview-button" aria-label="Book <?php echo htmlspecialchars($room['room_type']); ?> Room">Reserve Now</button>
                         </footer>
                     </div>
                 </article>
-
-                <article class="booking-preview-item">
-                    <figure class="booking-preview-figure">
-                        <img src="/assets/suite-square.jpg" alt="Executive Suite Interior"
-                            class="booking-preview-image">
-                    </figure>
-                    <div class="booking-preview-content">
-                        <header>
-                            <h3 class="booking-preview-name">Executive Suite</h3>
-                            <p class="booking-preview-description">Luxurious 75m² suite with separate living area,
-                                premium amenities, and panoramic views</p>
-                        </header>
-                        <div class="booking-preview-price" aria-label="Suite Price">
-                            <span class="booking-preview-original" aria-label="Original Price">$400</span>
-                            <span class="booking-preview-discounted" aria-label="Discounted Price">$340</span>
-                        </div>
-                        <p class="booking-preview-availability">2 Suites Left</p>
-                        <footer class="booking-preview-footer">
-                            <a href="#book-room" class="booking-preview-button"
-                                aria-label="Book Executive Suite">Book Now</a>
-                        </footer>
-                    </div>
-                </article>
+                <?php endforeach; ?>
             </div>
         </section>
 
@@ -105,51 +103,30 @@
         <section class="booking-preview-section" id="tables" aria-label="Dining Experiences">
             <h3 class="booking-preview-section-title">Dining Experiences</h3>
             <div class="booking-preview-container">
+                <?php foreach($tables as $table): 
+                    $price_today = $table['price_today'] ? $table['price_today'] : $table['price_main'];
+                    $image_url = !empty($table['image_path']) ? $table['image_path'] : 'https://via.placeholder.com/400x300?text=Table';
+                ?>
                 <article class="booking-preview-item">
                     <figure class="booking-preview-figure">
-                        <img src="/assets/window-dining-square.jpg" alt="Window Side Dining Area"
-                            class="booking-preview-image">
+                        <img src="<?php echo htmlspecialchars($image_url); ?>" alt="<?php echo htmlspecialchars($table['location']); ?> Dining Table - <?php echo htmlspecialchars($table['table_no']); ?>" class="booking-preview-image">
                     </figure>
                     <div class="booking-preview-content">
                         <header>
-                            <h3 class="booking-preview-name">Premium Window Side</h3>
-                            <p class="booking-preview-description">Intimate dining space with panoramic valley
-                                views, perfect for romantic dinners</p>
+                            <h3 class="booking-preview-name"><?php echo htmlspecialchars($table['location']); ?> - Table <?php echo htmlspecialchars($table['table_no']); ?></h3>
+                            <p class="booking-preview-description"><?php echo htmlspecialchars($table['short_description']); ?></p>
                         </header>
-                        <div class="booking-preview-price" aria-label="Dining Price">
-                            <span class="booking-preview-original" aria-label="Original Price">$100</span>
-                            <span class="booking-preview-discounted" aria-label="Discounted Price">$75</span>
+                        <div class="booking-preview-price" aria-label="Table Price">
+                            <span class="booking-preview-original" aria-label="Original Price">RS <?php echo number_format($table['price_main'], 2); ?></span>
+                            <span class="booking-preview-discounted" aria-label="Discounted Price">RS <?php echo number_format($price_today, 2); ?></span>
                         </div>
-                        <p class="booking-preview-availability">Limited Tables Available</p>
+                        <p class="booking-preview-availability">Seats: <?php echo $table['total_chairs']; ?> | <?php echo ucfirst($table['booking_status']); ?></p>
                         <footer class="booking-preview-footer">
-                            <a href="#book-table" class="booking-preview-button"
-                                aria-label="Reserve Window Side Table">Reserve Now</a>
+                            <button onclick="reserveTable(<?php echo htmlspecialchars(json_encode($table)); ?>)" class="booking-preview-button" aria-label="Reserve Table <?php echo htmlspecialchars($table['table_no']); ?>">Reserve Now</button>
                         </footer>
                     </div>
                 </article>
-
-                <article class="booking-preview-item">
-                    <figure class="booking-preview-figure">
-                        <img src="/assets/private-dining-square.jpg" alt="Private Dining Room"
-                            class="booking-preview-image">
-                    </figure>
-                    <div class="booking-preview-content">
-                        <header>
-                            <h3 class="booking-preview-name">Private Dining Suite</h3>
-                            <p class="booking-preview-description">Exclusive private dining room with personalized
-                                service and customizable menu</p>
-                        </header>
-                        <div class="booking-preview-price" aria-label="Suite Dining Price">
-                            <span class="booking-preview-original" aria-label="Original Price">$200</span>
-                            <span class="booking-preview-discounted" aria-label="Discounted Price">$150</span>
-                        </div>
-                        <p class="booking-preview-availability">Booking Available</p>
-                        <footer class="booking-preview-footer">
-                            <a href="#book-table" class="booking-preview-button"
-                                aria-label="Reserve Private Dining Suite">Reserve Now</a>
-                        </footer>
-                    </div>
-                </article>
+                <?php endforeach; ?>
             </div>
         </section>
     </section>
@@ -171,4 +148,81 @@
         </div>
     </aside>
 </main>
+
+<script>
+const isLoggedIn = <?php echo $is_logged_in ? 'true' : 'false'; ?>;
+
+function reserveRoom(room) {
+    if (!isLoggedIn) {
+        alert('Please login to continue with your reservation');
+        window.location.href = 'login.php';
+        return;
+    }
+    
+    const price = room.price_today || room.price;
+    const message = `Are you sure you want to reserve ${room.room_type} - Room ${room.room_no} for RS ${parseFloat(price).toFixed(2)}?`;
+    
+    if (confirm(message)) {
+        const formData = new FormData();
+        formData.append('item_type', 'room');
+        formData.append('item_id', room.id);
+        formData.append('item_data', JSON.stringify(room));
+        formData.append('price', price);
+        
+        fetch('api/create-booking.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = 'payment.php?booking_id=' + data.booking_id;
+            } else {
+                alert(data.message || 'Failed to create reservation');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
+}
+
+function reserveTable(table) {
+    if (!isLoggedIn) {
+        alert('Please login to continue with your reservation');
+        window.location.href = 'login.php';
+        return;
+    }
+    
+    const price = table.price_today || table.price_main;
+    const message = `Are you sure you want to reserve ${table.location} - Table ${table.table_no} (${table.total_chairs} seats) for RS ${parseFloat(price).toFixed(2)}?`;
+    
+    if (confirm(message)) {
+        const formData = new FormData();
+        formData.append('item_type', 'table');
+        formData.append('item_id', table.id);
+        formData.append('item_data', JSON.stringify(table));
+        formData.append('price', price);
+        
+        fetch('api/create-booking.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = 'payment.php?booking_id=' + data.booking_id;
+            } else {
+                alert(data.message || 'Failed to create reservation');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        });
+    }
+}
+</script>
+
 <?php require_once('includes/footer.php'); ?>

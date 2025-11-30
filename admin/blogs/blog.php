@@ -51,6 +51,17 @@
             </div>
 
             <div class="form-group">
+                <label for="blogStatus">
+                    <i class="fas fa-info-circle"></i> Status
+                </label>
+                <select id="blogStatus" required>
+                    <option value="draft">Draft</option>
+                    <option value="published">Published</option>
+                    <option value="archived">Archived</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
                 <label for="blogContent">
                     <i class="fas fa-paragraph"></i> Content
                 </label>
@@ -62,8 +73,8 @@
                     <i class="fas fa-image"></i> Featured Image
                 </label>
                 <div class="image-upload-container">
+                    <input type="file" id="blogImage" accept="image/*" style="display: none;">
                     <div id="imagePreview" class="image-preview">
-                        <input type="file" id="blogImage" accept="image/*">
                         <label for="blogImage" class="upload-label">
                             <i class="fas fa-cloud-upload-alt"></i>
                             <span>Click to upload image</span>

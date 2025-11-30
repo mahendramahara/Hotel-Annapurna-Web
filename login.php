@@ -1,3 +1,8 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -347,13 +352,36 @@
                 <p>Sign in to your account</p>
             </div>
 
-            <form class="login-form" id="loginForm">
+            <?php
+            // Display success message from password reset
+            if (isset($_SESSION['pwd-success'])): ?>
+                <div style="background: var(--color-confirmed-bg); color: var(--color-confirmed-text); padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;">
+                    <?php echo htmlspecialchars($_SESSION['pwd-success']); ?>
+                </div>
+            <?php 
+                unset($_SESSION['pwd-success']);
+            endif;
+            
+            // Display error messages
+            if (isset($_SESSION['login_error'])): ?>
+                <div style="background: var(--color-cancelled-bg); color: var(--color-cancelled-text); padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center;">
+                    <?php echo htmlspecialchars($_SESSION['login_error']); ?>
+                </div>
+            <?php 
+                unset($_SESSION['login_error']);
+            endif;
+            
+            $savedEmail = isset($_SESSION['pwd-user-email']) ? $_SESSION['pwd-user-email'] : '';
+            unset($_SESSION['pwd-user-email']);
+            ?>
+
+            <form class="login-form" id="loginForm" method="POST" action="login-handler.php">
                 <div class="login-input-group">
-                    <label for="email">Email / Username</label>
+                    <label for="email">Email</label>
                     <div class="login-input-wrapper">
                         <ion-icon name="person-outline" class="login-input-icon"></ion-icon>
-                        <input type="email" id="email" required 
-                               placeholder="Enter your email or username">
+                        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($savedEmail); ?>" required 
+                               placeholder="Enter your email">
                     </div>
                 </div>
 
@@ -361,7 +389,7 @@
                     <label for="password">Password</label>
                     <div class="login-input-wrapper">
                         <ion-icon name="lock-closed-outline" class="login-input-icon"></ion-icon>
-                        <input type="password" id="password" required 
+                        <input type="password" id="password" name="password" required 
                                placeholder="Enter your password">
                         <ion-icon name="eye-off-outline" class="login-toggle-password" id="togglePassword"></ion-icon>
                     </div>
@@ -369,10 +397,10 @@
 
                 <div class="login-options">
                     <label class="login-remember">
-                        <input type="checkbox" id="remember">
+                        <input type="checkbox" id="remember" name="remember" value="1">
                         <span>Remember me</span>
                     </label>
-                    <a href="forgot-password.php" class="login-forgot">Forgot Password?</a>
+                    <a href="forget-password.php" class="login-forgot">Forgot Password?</a>
                 </div>
 
                 <button type="submit" class="login-button">
@@ -406,23 +434,7 @@
             }
         });
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            if (!email || !password) {
-                alert('Please fill in all fields');
-                return;
-            }
-
-            if (password.length < 6) {
-                alert('Password must be at least 6 characters long');
-                return;
-            }
-
-            console.log('Form submitted:', { email, password });
-        });
+        // Form will submit normally to login-handler.php
     </script>
 </body>
 </html>

@@ -1,7 +1,29 @@
-<?php require_once("includes/sidebar.php"); ?>
+<?php 
+require_once("includes/sidebar.php"); 
+require_once('../config/db.php');
+
+$customers_count = $conn->query("SELECT COUNT(*) as total FROM users WHERE role = 'customer'")->fetch_assoc()['total'];
+$services_count = $conn->query("SELECT COUNT(*) as total FROM food_items")->fetch_assoc()['total'] + 
+                  $conn->query("SELECT COUNT(*) as total FROM rooms")->fetch_assoc()['total'] + 
+                  $conn->query("SELECT COUNT(*) as total FROM tables")->fetch_assoc()['total'];
+$staff_count = $conn->query("SELECT COUNT(*) as total FROM users WHERE role = 'staff'")->fetch_assoc()['total'];
+$blogs_count = $conn->query("SELECT COUNT(*) as total FROM blogs")->fetch_assoc()['total'];
+
+$recent_orders = $conn->query("SELECT o.*, CONCAT(u.first_name, ' ', u.last_name) as customer_name 
+                               FROM orders o 
+                               LEFT JOIN users u ON o.user_id = u.id 
+                               ORDER BY o.created_at DESC LIMIT 5")->fetch_all(MYSQLI_ASSOC);
+
+$recent_activities = $conn->query("SELECT al.*, CONCAT(u.first_name, ' ', u.last_name) as user_name 
+                                   FROM activity_logs al 
+                                   LEFT JOIN users u ON al.user_id = u.id 
+                                   ORDER BY al.created_at DESC LIMIT 10")->fetch_all(MYSQLI_ASSOC);
+?>
 
 <section class="dashboard">
     <div class="container">
+        <!-- Dashboard Section Wrapper -->
+        <div class="dashboard-section">
         <div class="overview">
             <div class="title">
                 <ion-icon name="speedometer"></ion-icon>
@@ -11,22 +33,22 @@
                 <div class="box box1">
                     <ion-icon name="people-outline"></ion-icon>
                     <span class="text">Total Customers</span>
-                    <span class="number">2845</span>
+                    <span class="number"><?= $customers_count ?></span>
                 </div>
                 <div class="box box2">
                     <ion-icon name="restaurant-outline"></ion-icon>
                     <span class="text">Total Services</span>
-                    <span class="number">156</span>
+                    <span class="number"><?= $services_count ?></span>
                 </div>
                 <div class="box box3">
                     <ion-icon name="people-circle-outline"></ion-icon>
                     <span class="text">Total Staff</span>
-                    <span class="number">45</span>
+                    <span class="number"><?= $staff_count ?></span>
                 </div>
                 <div class="box box4">
                     <ion-icon name="newspaper-outline"></ion-icon>
                     <span class="text">Total Blogs</span>
-                    <span class="number">28</span>
+                    <span class="number"><?= $blogs_count ?></span>
                 </div>
             </div>
         </div>
@@ -50,25 +72,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>#REQ001</td>
-                            <td>John Doe</td>
-                            <td>Table Booking</td>
-                            <td>Feb 04, 2025</td>
-                            <td><span class="status-badge status-pending">
-                                    <ion-icon name="time-outline"></ion-icon>Pending
-                                </span></td>
-                            <td>
-                                <div class="action-buttons">
-                                    <button class="btn-action view" title="View Details">
-                                        <ion-icon name="eye-outline"></ion-icon>
-                                    </button>
-                                    <button class="btn-action delete" title="Delete">
-                                        <ion-icon name="trash-outline"></ion-icon>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        <?php if(!empty($recent_orders)): ?>
+                            <?php foreach($recent_orders as $order): ?>
+                            <tr>
+                                <td>#ORD<?= str_pad($order['id'], 3, '0', STR_PAD_LEFT) ?></td>
+                                <td><?= htmlspecialchars($order['customer_name'] ?? 'Guest') ?></td>
+                                <td><?= htmlspecialchars(ucfirst($order['order_type'])) ?></td>
+                                <td><?= date('M d, Y', strtotime($order['created_at'])) ?></td>
+                                <td><span class="status-badge status-<?= strtolower($order['status']) ?>">
+                                        <ion-icon name="<?= $order['status'] == 'pending' ? 'time-outline' : ($order['status'] == 'confirmed' ? 'checkmark-circle-outline' : 'checkbox-outline') ?>"></ion-icon><?= htmlspecialchars(ucfirst($order['status'])) ?>
+                                    </span></td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn-action view" title="View Details" onclick="viewOrder(<?= $order['id'] ?>)">
+                                            <ion-icon name="eye-outline"></ion-icon>
+                                        </button>
+                                        <button class="btn-action delete" title="Delete" onclick="deleteOrder(<?= $order['id'] ?>)">
+                                            <ion-icon name="trash-outline"></ion-icon>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="6" style="text-align:center;">No recent service requests</td>
+                            </tr>
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -82,31 +112,31 @@
             </div>
             <div class="table-design">
                 <div class="log-entries">
-                    <div class="log-entry">
-                        <div class="log-time">
-                            <span>10:45 AM</span>
-                            <span class="date">Feb 04, 2025</span>
+                    <?php if(!empty($recent_activities)): ?>
+                        <?php foreach($recent_activities as $activity): ?>
+                        <div class="log-entry">
+                            <div class="log-time">
+                                <span><?= date('h:i A', strtotime($activity['created_at'])) ?></span>
+                                <span class="date"><?= date('M d, Y', strtotime($activity['created_at'])) ?></span>
+                            </div>
+                            <div class="log-message">
+                                <span class="highlight"><?= htmlspecialchars($activity['user_name'] ?? 'System') ?></span> 
+                                <?= htmlspecialchars($activity['description']) ?>
+                            </div>
                         </div>
-                        <div class="log-message">
-                            <span class="highlight">John Doe</span> created a new table booking request <span class="highlight">#REQ001</span>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="log-entry">
+                            <div class="log-message" style="text-align:center;width:100%;">
+                                No recent activities
+                            </div>
                         </div>
-                    </div>
-                    <div class="log-entry">
-                        <div class="log-time">
-                            <span>10:30 AM</span>
-                            <span class="date">Feb 04, 2025</span>
-                        </div>
-                        <div class="log-message">
-                            <span class="highlight">Admin</span> confirmed room booking request <span class="highlight">#REQ002</span>
-                        </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
-                <button class="view-more-btn">
-                    View More Activities
-                    <ion-icon name="arrow-forward-outline"></ion-icon>
-                </button>
             </div>
         </div>
+        </div>
+        <!-- End Dashboard Section Wrapper -->
 
         <!-- Additional sections can be added following the same pattern -->
          <!-- Request Section -->
@@ -119,6 +149,8 @@
             <?php require_once("sections/customers.php"); ?>
             <?php require_once("sections/reviews.php"); ?>
             <?php require_once("sections/contacts.php"); ?>
+            <?php require_once("sections/coupons.php"); ?>
+            <?php require_once("sections/profile.php"); ?>
     </div>
 </section>
 

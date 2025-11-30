@@ -1,0 +1,77 @@
+
+
+/* -------------------- Media Query for HOME PAGE ----------------------- */
+@media (max-width: 768px) {
+    .slider {
+        height: 300px;
+    }
+
+    .slider-arrow {
+        font-size: 1.5rem;
+    }
+
+    .indicator {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* Service-Option-Container */
+/* Responsive Design */
+@media (max-width: 768px) {
+    .image-container {
+        height: 200px;
+    }
+
+    .content h3 {
+        font-size: 20px;
+    }
+
+    .content p {
+        font-size: 14px;
+    }
+
+    .button {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .image-container {
+        height: 150px;
+    }
+
+    .content h3 {
+        font-size: 18px;
+    }
+
+    .content p {
+        font-size: 12px;
+    }
+
+    .button {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+}
+
+/* -------------------- Media Query for MENU PAGE ----------------------- */
+
+/* -------------------- Media Query for BOOKING PAGE ----------------------- */
+
+@media only screen and (max-width: 1340px) {
+    .booking-form-container .booking-form .inner-fset {
+        grid-template-columns: 1fr;
+    }
+
+    .booking-form-container .booking-form .inner-fset #content-sets input,
+    .booking-form-container .booking-form .inner-fset #content-sets select,
+    .booking-form-container .booking-form .inner-fset #content-sets textarea {
+        width: 100%;
+    }
+
+}
+/* -------------------- Media Query for BLOGS PAGE ----------------------- */
+
+/* -------------------- Media Query for CONTACT PAGE ----------------------- */

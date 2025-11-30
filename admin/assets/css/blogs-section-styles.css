@@ -59,51 +59,88 @@
 }
 
 .blog-status {
-    padding: 0.25rem 0.75rem;
+    padding: 0.4rem 0.9rem;
     border-radius: 20px;
-    font-size: 0.875rem;
+    font-size: 0.85rem;
+    font-weight: 500;
     display: inline-block;
+    text-transform: capitalize;
 }
 
-.status-public {
-    background: var(--color-confirmed-bg);
-    color: var(--color-confirmed-text);
+.blog-status.published {
+    background: #d4edda;
+    color: #155724;
 }
 
-.status-hidden {
-    background: var(--color-pending-bg);
-    color: var(--color-pending-text);
+.blog-status.draft {
+    background: #fff3cd;
+    color: #856404;
 }
 
-.status-draft {
-    background: var(--color-completed-bg);
-    color: var(--color-completed-text);
+.blog-status.archived {
+    background: #d6d8db;
+    color: #383d41;
+}
+
+.blog-category {
+    padding: 0.3rem 0.7rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    background: #e7f3ff;
+    color: #0066cc;
+    text-transform: capitalize;
 }
 
 .blogs-actions {
     display: flex;
     gap: 0.5rem;
+    justify-content: center;
 }
 
 .action-btn {
-    background: none;
+    width: 34px;
+    height: 34px;
     border: none;
-    padding: 0.5rem;
+    border-radius: 6px;
     cursor: pointer;
-    border-radius: 4px;
-    transition: background 0.2s;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.action-btn:hover {
-    background: var(--table-stripe);
+.action-btn ion-icon {
+    font-size: 18px;
+}
+
+.action-btn.view {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+}
+
+.action-btn.view:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
 }
 
 .action-btn.edit {
-    color: var(--primary-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.action-btn.edit:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .action-btn.delete {
-    color: var(--color-button-danger);
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.action-btn.delete:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
 }
 
 .add-blog-btn {

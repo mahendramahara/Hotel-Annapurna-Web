@@ -1,4 +1,12 @@
-<!DOCTYPE html>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: login.php");
+    exit();
+}?><!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -15,7 +23,10 @@
     <link rel="stylesheet" href="assets/css/customers-section-styles.css">
     <link rel="stylesheet" href="assets/css/reviews-section-styles.css">
     <link rel="stylesheet" href="assets/css/contacts-section-styles.css">
+    <link rel="stylesheet" href="assets/css/coupons-section-styles.css">
     <link rel="stylesheet" href="assets/css/profile-section-styles.css">
+    <link rel="stylesheet" href="assets/css/modal-system.css">
+    <link rel="stylesheet" href="assets/css/unified-modals.css">
     <title>Annapurna's Dashboard</title>
 </head>
 
@@ -29,75 +40,81 @@
         <div class="menu-items">
             <ul class="navLinks">
                 <li class="navList active">
-                    <a href="#dashboard">
+                    <a href="index.php#dashboard">
                         <ion-icon name="home-outline"></ion-icon>
                         <span class="links">Dashboard</span>
                     </a>
                 </li>
                 <li class="navList">
-                    <a href="#requests">
+                    <a href="index.php#requests">
                         <ion-icon name="calendar-outline"></ion-icon>
                         <span class="links">Service Requests</span>
                     </a>
                 </li>
                 <li class="navList">
-                    <a href="#menu">
+                    <a href="index.php#menu">
                         <ion-icon name="restaurant-outline"></ion-icon>
                         <span class="links">Menu Management</span>
                     </a>
                 </li>
                 <li class="navList">
-                    <a href="#tables">
+                    <a href="index.php#tables">
                         <ion-icon name="grid-outline"></ion-icon>
                         <span class="links">Table Management</span>
                     </a>
                 </li>
                 <li class="navList">
-                    <a href="#rooms">
+                    <a href="index.php#rooms">
                         <ion-icon name="bed-outline"></ion-icon>
                         <span class="links">Room Management</span>
                     </a>
                 </li>
                 <li class="navList">
-                    <a href="#staff">
+                    <a href="index.php#staff">
                         <ion-icon name="people-outline"></ion-icon>
                         <span class="links">Staff Management</span>
                     </a>
                 </li>
                 <li class="navList">
-                    <a href="#blogs">
+                    <a href="index.php#blogs">
                         <ion-icon name="newspaper-outline"></ion-icon>
                         <span class="links">Blog Management</span>
                     </a>
                 </li>
                 <li class="navList">
-                    <a href="#customers">
+                    <a href="index.php#customers">
                         <ion-icon name="person-outline"></ion-icon>
                         <span class="links">Our Customers</span>
                     </a>
                 </li>
                 <li class="navList">
-                    <a href="#reviews">
+                    <a href="index.php#reviews">
                         <ion-icon name="star-outline"></ion-icon>
                         <span class="links">Customer Reviews</span>
                     </a>
                 </li>
                 <li class="navList">
-                    <a href="#contacts">
+                    <a href="index.php#contacts">
                         <ion-icon name="mail-outline"></ion-icon>
                         <span class="links">Contact Requests</span>
                     </a>
                 </li>
+                <li class="navList">
+                    <a href="index.php#coupons">
+                        <ion-icon name="pricetag-outline"></ion-icon>
+                        <span class="links">Coupons</span>
+                    </a>
+                </li>
             </ul>
             <ul class="bottom-link">
-                <li>
-                    <a href="#profile">
+                <li class="navList">
+                    <a href="index.php#profile">
                         <ion-icon name="person-circle-outline"></ion-icon>
                         <span class="links">Profile</span>
                     </a>
                 </li>
-                <li>
-                    <a href="../index.php">
+                <li class="navList">
+                    <a href="logout.php">
                         <ion-icon name="log-out-outline"></ion-icon>
                         <span class="links">Logout</span>
                     </a>

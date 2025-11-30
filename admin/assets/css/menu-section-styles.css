@@ -48,32 +48,107 @@
     vertical-align: middle;
 }
 
-.menu-table img {
-    max-width: 80px;
-    height: auto;
-    border-radius: 5px;
+.menu-table td:nth-child(2) {
+    width: 140px;
+    min-width: 140px;
+    max-width: 140px;
+}
+
+.menu-table td:nth-child(6) {
+    max-width: 200px;
+}
+
+.menu-image-wrapper {
+    width: 120px;
+    height: 67.5px;
+    overflow: hidden;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin: 0 auto;
+}
+
+.menu-image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .menu-action-icons {
     display: flex;
     gap: 10px;
+    align-items: center;
+    justify-content: center;
 }
 
-.menu-action-icons i {
+.action-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 20px;
 }
 
-.menu-action-icons i.edit {
-    color: var(--primary-color);
+.edit-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.menu-action-icons i.delete {
-    color: var(--color-button-danger);
+.edit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
 }
 
-.menu-action-icons i:hover {
-    opacity: 0.7;
+.delete-btn {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);
+}
+
+.delete-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(240, 147, 251, 0.5);
+}
+
+.action-btn ion-icon {
+    pointer-events: none;
+}
+
+.available-days-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.day-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.day-badge.all-days {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    padding: 4px 14px;
 }
 
 .menu-add-button {
@@ -92,102 +167,46 @@
     background-color: #218838;
 }
 
-/* Modal Styles */
-.menu-modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.5);
-    justify-content: center;
-    align-items: center;
-}
-
-.menu-modal-content {
-    background-color: var(--white);
-    padding: 30px;
-    border-radius: 10px;
-    width: 500px;
-    max-width: 90%;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    position: relative;
-}
-
-.menu-modal-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    cursor: pointer;
-    color: var(--color-button-danger);
-}
-
-.menu-form-group {
-    margin-bottom: 15px;
-}
-
-.menu-form-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: var(--text-dark);
-}
-
-.menu-form-group input,
-.menu-form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.menu-modal-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-.menu-modal-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-}
-
-.menu-modal-button.save {
-    background-color: var(--color-button-success);
-    color: var(--white);
-}
-
-.menu-modal-button.clear {
-    background-color: var(--color-pending-bg);
-    color: var(--color-pending-text);
-}
-
-.menu-modal-button.delete {
-    background-color: var(--color-button-danger);
-    color: var(--white);
-}
-
-.menu-modal-button:hover {
-    opacity: 0.8;
+.menu-table tbody tr:hover {
+    background-color: rgba(102, 126, 234, 0.05);
+    transition: background-color 0.2s ease;
 }
 
 @media screen and (max-width: 768px) {
     .menu-table {
-        font-size: 14px;
+        font-size: 13px;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    .menu-table td:nth-child(2) {
+        width: 100px;
+        min-width: 100px;
+        max-width: 100px;
     }
 
-    .menu-table img {
-        max-width: 50px;
+    .menu-image-wrapper {
+        width: 80px;
+        height: 45px;
     }
-
-    .menu-modal-content {
-        width: 95%;
-        padding: 20px;
+    
+    .action-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 18px;
+    }
+    
+    .menu-action-icons {
+        gap: 6px;
+    }
+    
+    .day-badge {
+        font-size: 9px;
+        padding: 3px 6px;
+    }
+    
+    .available-days-display {
+        gap: 4px;
     }
 }

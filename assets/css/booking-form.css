@@ -1,0 +1,131 @@
+/* __________________________________________ BOOKING FORM ______________________________________ */
+
+
+.booking-BookingText-container #booking-h1txt {
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.booking-ViewRooms-container {
+    background-color: #FFF;
+    text-align: center;
+    padding: 20px;
+}
+
+.booking-ViewRooms-container .view-click-btn {
+    display: inline-block;
+    margin: 1%;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
+}
+
+.booking-ViewRooms-container .view-click-btn:hover {
+    background-color: #04df46;
+}
+
+.booking-form-container {
+    background-color: #FFF;
+    padding: 0 30px 30px 30px;
+    border-radius: 10px;
+}
+
+.booking-form-container #booking-h1txt {
+    color: red;
+    text-align: center;
+}
+
+.booking-form-container .booking-form {
+    display: grid;
+    gap: 20px;
+}
+
+.booking-form-container #top-info {
+    border-bottom: 1px dotted #000000;
+    padding-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.booking-form-container .booking-form .inner-fset {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.booking-form-container .booking-form .inner-fset #content-sets {
+    display: grid;
+    gap: 10px;
+}
+
+.booking-form-container .booking-form .inner-fset #content-sets label {
+    color: #333;
+    font-weight: bold;
+}
+
+.booking-form-container .booking-form .inner-fset #content-sets input,
+.booking-form-container .booking-form .inner-fset #content-sets select {
+    width: 400px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease-in-out;
+    box-sizing: border-box;
+}
+
+.booking-form-container .booking-form .inner-fset #content-sets textarea {
+    width: 1250px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: border-color 0.3s ease-in-out;
+    box-sizing: border-box;
+}
+
+.booking-form-container .booking-form .inner-fset #content-sets input[type="number"] {
+    height: 38px;
+}
+
+.booking-form-container .booking-form .inner-fset #content-sets input,
+.booking-form-container .booking-form .inner-fset #content-sets select {
+    flex: 1;
+}
+
+.booking-form-container .booking-form .inner-fset #content-sets .name-container {
+    display: flex;
+    gap: 20px;
+}
+
+.booking-form-container .booking-form .inner-fset #content-sets .name-container label {
+    flex: 1;
+}
+
+.booking-form-container .booking-form .inner-fset #content-sets input:focus,
+.booking-form-container .booking-form .inner-fset #content-sets select:focus,
+.booking-form-container .booking-form .inner-fset #content-sets textarea:focus {
+    border-color: #007bff;
+}
+
+.booking-form-container .booking-form button {
+    background-color: #2a8cc5;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 15px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.booking-form-container .booking-form button:hover {
+    background-color: #197aae;
+}
