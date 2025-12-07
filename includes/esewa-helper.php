@@ -19,8 +19,11 @@ function prepareEsewaPayment($booking_id, $amount, $tax_amount, $total_amount) {
     
     $transaction_uuid = $booking_id . '-' . date('Ymd-His');
     
+    // Ensure consistent decimal formatting for signature
+    $formatted_total = number_format($total_amount, 2, '.', '');
+    
     $signed_field_names = "total_amount,transaction_uuid,product_code";
-    $message = "total_amount=" . number_format($total_amount, 2, '.', '') . ",transaction_uuid=" . $transaction_uuid . ",product_code=" . $product_code;
+    $message = "total_amount=" . $formatted_total . ",transaction_uuid=" . $transaction_uuid . ",product_code=" . $product_code;
     $signature = generateEsewaSignature($message, $esewa_secret);
     
     return [

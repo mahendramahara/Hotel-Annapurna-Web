@@ -47,6 +47,41 @@ try {
         throw new Exception('Invalid item data format');
     }
 
+    // Validate room/table availability BEFORE creating booking
+    if ($item_type === 'room') {
+        $check_stmt = $conn->prepare("SELECT id, status FROM rooms WHERE id = ?");
+        $check_stmt->bind_param("i", $item_id);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+        
+        if ($check_result->num_rows === 0) {
+            throw new Exception('Room not found');
+        }
+        
+        $room = $check_result->fetch_assoc();
+        if ($room['status'] !== 'available') {
+            throw new Exception('This room is not available for booking. Current status: ' . ucfirst($room['status']));
+        }
+        
+        $check_stmt->close();
+    } else {
+        $check_stmt = $conn->prepare("SELECT id, booking_status FROM tables WHERE id = ?");
+        $check_stmt->bind_param("i", $item_id);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+        
+        if ($check_result->num_rows === 0) {
+            throw new Exception('Table not found');
+        }
+        
+        $table = $check_result->fetch_assoc();
+        if ($table['booking_status'] !== 'available') {
+            throw new Exception('This table is not available for booking. Current status: ' . ucfirst($table['booking_status']));
+        }
+        
+        $check_stmt->close();
+    }
+
     $check_in_date = new DateTime($check_in);
     $check_out_date = new DateTime($check_out);
     $duration = max(1, $check_in_date->diff($check_out_date)->days);
@@ -54,7 +89,6 @@ try {
     $total_price = $price * $duration;
 
     $booking_ref = strtoupper(substr($item_type, 0, 1)) . date('Ymd') . str_pad($user_id, 4, '0', STR_PAD_LEFT) . rand(1000, 9999);
-
 
     if ($item_type === 'room') {
         $item_name = $decoded_data['room_type'] . ' - Room ' . $decoded_data['room_no'];

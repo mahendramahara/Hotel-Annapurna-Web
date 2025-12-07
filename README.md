@@ -662,6 +662,48 @@ After running `seed_database.php`, use these codes:
 
 ---
 
+## 💳 Payment Gateway Test Credentials
+
+### eSewa Test Account
+
+Use these credentials for testing eSewa payments:
+
+| Field | Value |
+|-------|-------|
+| **Mobile Number** | 9806800001 (or 9806800002, 9806800003, 9806800004, 9806800005) |
+| **Password** | Nepal@123 |
+| **OTP** | 123456 |
+| **Test URL** | https://developer.esewa.com.np/pages/Epay#credentials&urls |
+
+**How to Test:**
+1. Go to checkout and select eSewa payment
+2. You'll be redirected to eSewa sandbox
+3. Login with phone: `9806800001` and password: `Nepal@123`
+4. Enter OTP: `123456`
+5. Confirm payment
+
+---
+
+### Stripe Test Cards
+
+Use these test card numbers for testing Stripe payments:
+
+| Card Type | Card Number | Expiry | CVC |
+|-----------|------------|--------|-----|
+| **Visa** | 4242 4242 4242 4242 | 12/27 | 123 |
+| **Test Success** | 4242 4242 4242 4242 | Any future date | Any 3 digits |
+| **Test Declined** | 4000 0000 0000 0002 | Any future date | Any 3 digits |
+| **Test Documentation** | https://docs.stripe.com/testing?testing-method=card-numbers | - | - |
+
+**How to Test:**
+1. Go to checkout and select Stripe (Credit/Debit Card)
+2. Enter card number: `4242 4242 4242 4242`
+3. Expiry: `12/27` (or any future date)
+4. CVC: `123` (or any 3 digits)
+5. Complete payment
+
+---
+
 ## 📚 Database Schema
 
 ### Core Tables:
@@ -820,7 +862,7 @@ This project is **open-source** and free for educational use.
 
 ---
 
-**Version:** 1.0.0  
+**Version:** 2.1.2  
 **Last Updated:** December 2025  
 **Status:** ✅ Production Ready
 

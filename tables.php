@@ -108,6 +108,12 @@ while($row = mysqli_fetch_assoc($tables_result)) {
     const isLoggedIn = <?php echo $is_logged_in ? 'true' : 'false'; ?>;
 
     function addTableToCart(table) {
+        // Check table availability
+        if (table.booking_status !== 'available') {
+            alert('⚠️ This table is not available for cart.\n\nCurrent Status: ' + table.booking_status.toUpperCase());
+            return;
+        }
+
         const cartManager = {
             loadCart: function() {
                 const stored = localStorage.getItem('hotelCart');
@@ -147,6 +153,12 @@ while($row = mysqli_fetch_assoc($tables_result)) {
             return;
         }
         
+        // Check table availability
+        if (table.booking_status !== 'available') {
+            alert('⚠️ This table is not available for booking.\n\nCurrent Status: ' + table.booking_status.toUpperCase());
+            return;
+        }
+        
         const price = table.price_today || table.price_main;
         const message = `Are you sure you want to reserve ${table.location} - Table ${table.table_no} (${table.total_chairs} seats) for RS ${parseFloat(price).toFixed(2)}?`;
         
@@ -166,12 +178,12 @@ while($row = mysqli_fetch_assoc($tables_result)) {
                 if (data.success) {
                     window.location.href = 'payment.php?booking_id=' + data.booking_id;
                 } else {
-                    alert(data.message || 'Failed to create reservation');
+                    alert('❌ ' + (data.message || 'Failed to create reservation'));
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('An error occurred. Please try again.');
+                alert('❌ An error occurred. Please try again.');
             });
         }
     }

@@ -55,6 +55,24 @@ try {
     
     foreach ($rooms as $room) {
         $item_id = intval($room['id']);
+        
+        // Validate room availability
+        $room_check = $conn->prepare("SELECT id, status FROM rooms WHERE id = ?");
+        $room_check->bind_param("i", $item_id);
+        $room_check->execute();
+        $room_result = $room_check->get_result();
+        
+        if ($room_result->num_rows === 0) {
+            throw new Exception('Room ID ' . $item_id . ' not found');
+        }
+        
+        $room_data = $room_result->fetch_assoc();
+        if ($room_data['status'] !== 'available') {
+            throw new Exception('Room is not available for booking. Current status: ' . ucfirst($room_data['status']));
+        }
+        
+        $room_check->close();
+        
         $nights = intval($room['nights'] ?? 1);
         $price = floatval($room['price_today'] ?? $room['price'] ?? 0);
         $item_total = $price * $nights;
@@ -75,6 +93,24 @@ try {
     
     foreach ($tables as $table) {
         $item_id = intval($table['id']);
+        
+        // Validate table availability
+        $table_check = $conn->prepare("SELECT id, booking_status FROM tables WHERE id = ?");
+        $table_check->bind_param("i", $item_id);
+        $table_check->execute();
+        $table_result = $table_check->get_result();
+        
+        if ($table_result->num_rows === 0) {
+            throw new Exception('Table ID ' . $item_id . ' not found');
+        }
+        
+        $table_data = $table_result->fetch_assoc();
+        if ($table_data['booking_status'] !== 'available') {
+            throw new Exception('Table is not available for booking. Current status: ' . ucfirst($table_data['booking_status']));
+        }
+        
+        $table_check->close();
+        
         $quantity = intval($table['quantity'] ?? 1);
         $price = floatval($table['price_today'] ?? $table['price_main'] ?? 0);
         $item_total = $price * $quantity;
