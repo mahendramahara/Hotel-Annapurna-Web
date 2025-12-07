@@ -56,7 +56,6 @@ try {
     foreach ($rooms as $room) {
         $item_id = intval($room['id']);
         
-        // Validate room availability
         $room_check = $conn->prepare("SELECT id, status FROM rooms WHERE id = ?");
         $room_check->bind_param("i", $item_id);
         $room_check->execute();
@@ -88,13 +87,19 @@ try {
         if (!$stmt->execute()) {
             throw new Exception('Failed to create room order: ' . $stmt->error);
         }
-        $order_ids[] = $conn->insert_id;
+        
+        $room_order_id = $conn->insert_id;
+        $order_ids[] = $room_order_id;
+        
+        $room_update = $conn->prepare("UPDATE rooms SET status = 'reserved' WHERE id = ?");
+        $room_update->bind_param("i", $item_id);
+        $room_update->execute();
+        $room_update->close();
     }
     
     foreach ($tables as $table) {
         $item_id = intval($table['id']);
         
-        // Validate table availability
         $table_check = $conn->prepare("SELECT id, booking_status FROM tables WHERE id = ?");
         $table_check->bind_param("i", $item_id);
         $table_check->execute();
@@ -123,7 +128,14 @@ try {
         if (!$stmt->execute()) {
             throw new Exception('Failed to create table order: ' . $stmt->error);
         }
-        $order_ids[] = $conn->insert_id;
+        
+        $table_order_id = $conn->insert_id;
+        $order_ids[] = $table_order_id;
+        
+        $table_update = $conn->prepare("UPDATE tables SET booking_status = 'reserved' WHERE id = ?");
+        $table_update->bind_param("i", $item_id);
+        $table_update->execute();
+        $table_update->close();
     }
     
     if ($coupon) {

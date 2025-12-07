@@ -51,15 +51,22 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-  document.querySelector('.slider-arrow-left').addEventListener('click', () => {
-      currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-      updateSlider();
-  });
+  const leftArrow = document.querySelector('.slider-arrow-left');
+  const rightArrow = document.querySelector('.slider-arrow-right');
 
-  document.querySelector('.slider-arrow-right').addEventListener('click', () => {
-      currentSlide = (currentSlide + 1) % totalSlides;
-      updateSlider();
-  });
+  if (leftArrow) {
+      leftArrow.addEventListener('click', () => {
+          currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+          updateSlider();
+      });
+  }
+
+  if (rightArrow) {
+      rightArrow.addEventListener('click', () => {
+          currentSlide = (currentSlide + 1) % totalSlides;
+          updateSlider();
+      });
+  }
 
   // Auto slide every 5 seconds
   setInterval(() => {

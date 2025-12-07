@@ -79,6 +79,45 @@ include 'includes/header.php';
         <p>View and manage all your room and table reservations</p>
     </div>
     
+    <?php 
+    $success = isset($_GET['success']) ? $_GET['success'] : null;
+    $error = isset($_GET['error']) ? $_GET['error'] : null;
+    
+    if ($success): ?>
+    <div class="alert alert-success" style="margin: 20px 0; padding: 15px; background-color: #d4edda; border: 1px solid #c3e6cb; border-radius: 5px; color: #155724;">
+        <strong>✓ Success!</strong>
+        <?php 
+        $success_messages = [
+            'payment_complete' => 'Payment completed successfully! Your booking has been confirmed.',
+            'booking_confirmed' => 'Booking confirmed successfully!'
+        ];
+        echo isset($success_messages[$success]) ? $success_messages[$success] : 'Operation completed successfully!';
+        ?>
+    </div>
+    <?php endif; ?>
+    
+    <?php if ($error): ?>
+    <div class="alert alert-danger" style="margin: 20px 0; padding: 15px; background-color: #f8d7da; border: 1px solid #f5c6cb; border-radius: 5px; color: #721c24;">
+        <strong>✗ Error!</strong>
+        <?php 
+        $error_messages = [
+            'no_payment_data' => 'Payment response could not be processed. Please try again.',
+            'invalid_data_format' => 'Invalid payment data received.',
+            'invalid_json' => 'Payment data format is invalid.',
+            'incomplete_response' => 'Incomplete payment response received.',
+            'signature_invalid' => 'Payment signature verification failed.',
+            'payment_not_completed' => 'Payment was not completed successfully.',
+            'payment_processing_failed' => 'An error occurred while processing your payment.',
+            'order_not_found' => 'Order could not be found.',
+            'invalid_order_format' => 'Invalid order format.',
+            'invalid_booking_id' => 'Invalid booking ID.',
+            'payment_confirmation_failed' => 'Failed to confirm payment.'
+        ];
+        echo isset($error_messages[$error]) ? $error_messages[$error] : 'An error occurred: ' . htmlspecialchars($error);
+        ?>
+    </div>
+    <?php endif; ?>
+    
     <?php if (!empty($bookings)): ?>
     <div class="view-toggle">
         <button class="view-btn active" onclick="switchView('card')" id="cardViewBtn">

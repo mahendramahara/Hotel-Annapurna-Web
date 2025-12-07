@@ -1,5 +1,4 @@
 <?php
-// eSewa Configuration Constants
 define('ESEWA_PAYMENT_URL', 'https://rc-epay.esewa.com.np/api/epay/main/v2/form');
 define('ESEWA_MERCHANT_CODE', 'EPAYTEST');
 define('ESEWA_SECRET_KEY', '8gBm/:&EnhH.1/q');
@@ -19,8 +18,9 @@ function prepareEsewaPayment($booking_id, $amount, $tax_amount, $total_amount) {
     
     $transaction_uuid = $booking_id . '-' . date('Ymd-His');
     
-    // Ensure consistent decimal formatting for signature
-    $formatted_total = number_format($total_amount, 2, '.', '');
+    $formatted_amount = floatval($amount);
+    $formatted_tax = floatval($tax_amount);
+    $formatted_total = floatval($total_amount);
     
     $signed_field_names = "total_amount,transaction_uuid,product_code";
     $message = "total_amount=" . $formatted_total . ",transaction_uuid=" . $transaction_uuid . ",product_code=" . $product_code;
@@ -28,9 +28,9 @@ function prepareEsewaPayment($booking_id, $amount, $tax_amount, $total_amount) {
     
     return [
         'action_url' => 'https://rc-epay.esewa.com.np/api/epay/main/v2/form',
-        'amount' => $amount,
-        'tax_amount' => $tax_amount,
-        'total_amount' => $total_amount,
+        'amount' => $formatted_amount,
+        'tax_amount' => $formatted_tax,
+        'total_amount' => $formatted_total,
         'transaction_uuid' => $transaction_uuid,
         'product_code' => $product_code,
         'product_service_charge' => 0,

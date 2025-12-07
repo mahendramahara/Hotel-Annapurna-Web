@@ -303,7 +303,6 @@ include 'includes/header.php';
     
     async function processEsewaPayment() {
         if (fromCart) {
-            // Create cart order first with pending payment
             if (!cartCheckoutData) {
                 alert('Cart data not found');
                 return;
@@ -328,7 +327,6 @@ include 'includes/header.php';
                 const data = await response.json();
                 
                 if (data.success && data.order_id) {
-                    // Now initiate eSewa payment with the order ID
                     initiateCartEsewaPayment(data.order_id, parseFloat(cartCheckoutData.total));
                 } else {
                     alert('Error: ' + (data.message || 'Failed to create order'));
@@ -354,23 +352,24 @@ include 'includes/header.php';
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const seconds = String(now.getSeconds()).padStart(2, '0');
-        const transactionUuid = year + month + day + '-' + hours + minutes + seconds;
+        const transactionUuid = 'cart_' + orderId + '_' + year + month + day + hours + minutes + seconds;
         
         const taxAmount = 0;
         const productServiceCharge = 0;
         const productDeliveryCharge = 0;
-        const totalAmount = parseFloat(amount);
+        const totalAmount = parseFloat(amount).toFixed(2);
+        const amountValue = parseFloat(amount).toFixed(2);
         
         const fields = {
-            amount: parseFloat(amount).toFixed(2),
+            amount: amountValue,
             tax_amount: taxAmount,
-            total_amount: totalAmount.toFixed(2),
+            total_amount: totalAmount,
             transaction_uuid: transactionUuid,
             product_code: 'EPAYTEST',
             product_service_charge: productServiceCharge,
             product_delivery_charge: productDeliveryCharge,
-            success_url: window.location.origin + '/Hotel-Annapurna-Web/esewa-success.php?order_id=' + orderId,
-            failure_url: window.location.origin + '/Hotel-Annapurna-Web/esewa-failure.php?order_id=' + orderId,
+            success_url: window.location.origin + '/Hotel-Annapurna-Web/esewa-success.php',
+            failure_url: window.location.origin + '/Hotel-Annapurna-Web/esewa-failure.php',
             signed_field_names: 'total_amount,transaction_uuid,product_code'
         };
         
@@ -378,7 +377,7 @@ include 'includes/header.php';
         
         fetch('api/esewa-status-check.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: message })
         })
         .then(response => response.json())
