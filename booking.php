@@ -33,7 +33,7 @@ while($row = mysqli_fetch_assoc($tables_result)) {
     <section class="booking-options" aria-label="Main Booking Options">
         <article class="booking-option">
             <figure class="booking-option-figure">
-                <img src="/assets/luxury-room-wide.jpg" alt="Luxury Room Interior with Mountain View"
+                <img src="./assets/images/booking_images/Luxury-Rooms.jpg" alt="Luxury Room Interior with Mountain View"
                     class="booking-option-image">
             </figure>
             <div class="booking-option-content">
@@ -49,7 +49,7 @@ while($row = mysqli_fetch_assoc($tables_result)) {
 
         <article class="booking-option">
             <figure class="booking-option-figure">
-                <img src="/assets/restaurant-wide.jpg" alt="Fine Dining Restaurant Interior"
+                <img src="./assets/images/booking_images/Fine-Dining.jpg" alt="Fine Dining Restaurant Interior"
                     class="booking-option-image">
             </figure>
             <div class="booking-option-content">
@@ -134,7 +134,7 @@ while($row = mysqli_fetch_assoc($tables_result)) {
     <!-- Appreciation Section -->
     <aside class="booking-appreciation" aria-label="Thank You Message">
         <figure class="booking-appreciation-figure">
-            <img src="/assets/luxury-experience.jpg" alt="Luxury Hotel Experience"
+            <img src="./assets/images/booking_images/Attachment.jpg" alt="Luxury Hotel Experience"
                 class="booking-appreciation-image">
         </figure>
         <div class="booking-appreciation-content">

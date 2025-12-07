@@ -30,6 +30,8 @@
     --color-button-danger: #dc3545;
 }
 
+/* Import unified action buttons styling */
+@import url('action-buttons.css');
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
@@ -709,4 +711,41 @@ nav .menu-items li.active a ion-icon {
     .container .boxes {
         grid-template-columns: 1fr;
     }
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+    padding: 20px 0;
+}
+
+.page-btn {
+    padding: 10px 16px;
+    background: var(--white);
+    color: var(--text-dark);
+    text-decoration: none;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.page-btn:hover {
+    background: var(--primary-color);
+    color: var(--white);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(24, 145, 209, 0.3);
+}
+
+.page-btn.active {
+    background: linear-gradient(135deg, #1891d1 0%, #1d64c2 100%);
+    color: var(--white);
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(24, 145, 209, 0.4);
 }

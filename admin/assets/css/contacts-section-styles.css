@@ -64,58 +64,69 @@
 
 .action-btn {
     padding: 8px 10px;
-    border: none;
+    border: 2px solid transparent;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 40px;
+    height: 40px;
 }
 
 .action-btn ion-icon {
-    font-size: 18px;
+    font-size: 20px;
     pointer-events: none;
 }
 
 .action-btn.view {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     color: white;
+    border-color: #00f2fe;
 }
 
 .action-btn.view:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(79, 172, 254, 0.5);
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
 }
 
 .action-btn.edit {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
+    border-color: #764ba2;
 }
 
 .action-btn.edit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
 }
 
 .action-btn.reply {
     background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
     color: white;
+    border-color: #38f9d7;
 }
 
 .action-btn.reply:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(67, 233, 123, 0.3);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(67, 233, 123, 0.5);
+    background: linear-gradient(135deg, #38f9d7 0%, #43e97b 100%);
 }
 
 .action-btn.delete {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     color: white;
+    border-color: #f5576c;
 }
 
 .action-btn.delete:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(250, 112, 154, 0.3);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(245, 87, 108, 0.5);
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
 }
 
 .action-icons ion-icon {

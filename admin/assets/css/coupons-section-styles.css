@@ -159,63 +159,74 @@
 
 .coupon-actions {
     display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    gap: 8px;
+    flex-wrap: nowrap;
+    align-items: center;
+    flex-direction: row;
 }
 
 .action-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: none;
-    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid transparent;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .action-btn ion-icon {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
+    pointer-events: none;
 }
 
 .view-btn {
-    background: #e3f2fd;
-    color: #1976d2;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    border-color: #00f2fe;
 }
 
 .view-btn:hover {
-    background: #1976d2;
-    color: var(--white);
-    transform: scale(1.1);
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    color: white;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(79, 172, 254, 0.5);
 }
 
 .edit-btn {
-    background: #fff3e0;
-    color: #ef6c00;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #764ba2;
 }
 
 .edit-btn:hover {
-    background: #ef6c00;
-    color: var(--white);
-    transform: scale(1.1);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: white;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.5);
 }
 
 .delete-btn {
-    background: #ffebee;
-    color: #c62828;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border-color: #f5576c;
 }
 
 .delete-btn:hover {
-    background: #c62828;
-    color: var(--white);
-    transform: scale(1.1);
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    color: white;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(245, 87, 108, 0.5);
 }
 
 .disable-btn {
-    background: #fff3cd;
-    color: #856404;
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+    border-color: #f59e0b;
 }
 
 .disable-btn:hover {

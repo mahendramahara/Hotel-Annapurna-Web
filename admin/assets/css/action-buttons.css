@@ -1,0 +1,253 @@
+/* ========================================================
+   UNIFIED ACTION BUTTONS STYLING
+   ======================================================== 
+   This file provides consistent, vibrant action button 
+   styling across all admin sections
+*/
+
+/* ========== ACTION BUTTONS CONTAINER ========== */
+.action-buttons,
+.action-buttons-wrapper,
+.customers-actions,
+.menu-action-icons,
+.blogs-actions,
+.room-actions,
+.staff-actions,
+.service-actions,
+.table-list-actions,
+.contacts-table .action-icons,
+.reviews-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
+/* ========== BASE ACTION BUTTON STYLES ========== */
+.action-btn,
+.staff-action-btn,
+.reviews-action-btn,
+.action-icons ion-icon,
+.service-actions ion-icon,
+.table-list-actions ion-icon {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+}
+
+.action-btn ion-icon,
+.staff-action-btn ion-icon,
+.reviews-action-btn ion-icon {
+    font-size: 20px;
+    pointer-events: none;
+}
+
+/* ========== VIEW / INSPECT BUTTONS ========== */
+.action-btn.view,
+.action-btn.view-btn,
+.view-btn,
+.staff-action-btn.view,
+.reviews-action-btn.view,
+.action-icons ion-icon[name="eye-outline"],
+.service-actions ion-icon[name="eye-outline"] {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    border: 2px solid #00f2fe;
+}
+
+.action-btn.view:hover,
+.action-btn.view-btn:hover,
+.view-btn:hover,
+.staff-action-btn.view:hover,
+.reviews-action-btn.view:hover,
+.action-icons ion-icon[name="eye-outline"]:hover,
+.service-actions ion-icon[name="eye-outline"]:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(79, 172, 254, 0.5);
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+}
+
+/* ========== EDIT / UPDATE BUTTONS ========== */
+.action-btn.edit,
+.action-btn.edit-btn,
+.edit-btn,
+.staff-action-btn.edit,
+.action-icons ion-icon[name="create-outline"],
+.service-actions ion-icon[name="create-outline"] {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: 2px solid #764ba2;
+}
+
+.action-btn.edit:hover,
+.action-btn.edit-btn:hover,
+.edit-btn:hover,
+.staff-action-btn.edit:hover,
+.action-icons ion-icon[name="create-outline"]:hover,
+.service-actions ion-icon[name="create-outline"]:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ========== DELETE BUTTONS ========== */
+.action-btn.delete,
+.action-btn.delete-btn,
+.delete-btn,
+.staff-action-btn.delete,
+.action-icons ion-icon[name="trash-outline"],
+.service-actions ion-icon[name="trash-outline"] {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border: 2px solid #f5576c;
+}
+
+.action-btn.delete:hover,
+.action-btn.delete-btn:hover,
+.delete-btn:hover,
+.staff-action-btn.delete:hover,
+.action-icons ion-icon[name="trash-outline"]:hover,
+.service-actions ion-icon[name="trash-outline"]:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(245, 87, 108, 0.5);
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+}
+
+/* ========== REPLY / RESPOND BUTTONS ========== */
+.action-btn.reply {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: white;
+    border: 2px solid #38f9d7;
+}
+
+.action-btn.reply:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(67, 233, 123, 0.5);
+    background: linear-gradient(135deg, #38f9d7 0%, #43e97b 100%);
+}
+
+/* ========== CONTACTS SECTION ICONS ========== */
+.action-icons ion-icon {
+    cursor: pointer;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    padding: 8px;
+    border-radius: 8px;
+    background: #f0f2f5;
+    border: 2px solid transparent;
+}
+
+.action-icons ion-icon:hover {
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ========== SERVICE/REQUEST ACTIONS ========== */
+.service-actions ion-icon {
+    cursor: pointer;
+    font-size: 1.4em;
+    padding: 8px;
+    border-radius: 8px;
+    background: #f0f2f5;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.service-actions ion-icon:hover {
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ========== TABLE MANAGEMENT ACTIONS ========== */
+.table-list-actions ion-icon {
+    cursor: pointer;
+    font-size: 22px;
+    color: white;
+    padding: 8px 10px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+.table-list-actions ion-icon:hover {
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+/* ========== REVIEWS SECTION ========== */
+.reviews-action-btn {
+    padding: 8px 10px;
+    border: 2px solid transparent;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.reviews-action-btn:hover {
+    transform: translateY(-2px) scale(1.1);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* ========== RESPONSIVE ADJUSTMENTS ========== */
+@media screen and (max-width: 768px) {
+    .action-btn,
+    .staff-action-btn,
+    .reviews-action-btn,
+    .action-icons ion-icon,
+    .service-actions ion-icon,
+    .table-list-actions ion-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+    }
+
+    .action-btn ion-icon,
+    .staff-action-btn ion-icon,
+    .reviews-action-btn ion-icon {
+        font-size: 18px;
+    }
+
+    .action-buttons,
+    .action-buttons-wrapper,
+    .customers-actions,
+    .menu-action-icons,
+    .blogs-actions,
+    .room-actions,
+    .staff-actions,
+    .service-actions,
+    .table-list-actions {
+        gap: 6px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .action-btn,
+    .staff-action-btn,
+    .reviews-action-btn,
+    .action-icons ion-icon,
+    .service-actions ion-icon,
+    .table-list-actions ion-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .action-btn ion-icon,
+    .staff-action-btn ion-icon,
+    .reviews-action-btn ion-icon {
+        font-size: 16px;
+    }
+}

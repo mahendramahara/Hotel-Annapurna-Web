@@ -16,14 +16,18 @@ $sql = "SELECT
     o.id as booking_id,
     o.order_type as booking_type,
     o.item_id,
-    o.item_name,
+    CASE 
+        WHEN o.order_type = 'room' THEN CONCAT(COALESCE(r.room_type, 'Room'), ' - Room ', COALESCE(r.room_no, o.item_id))
+        WHEN o.order_type = 'table' THEN CONCAT(COALESCE(t.location, 'Table'), ' - Table ', COALESCE(t.table_no, o.item_id))
+        ELSE o.item_name
+    END as item_name,
     o.price,
     o.status,
     COALESCE(o.created_at, NOW()) as booking_date,
     o.notes,
     CASE 
-        WHEN o.order_type = 'room' THEN r.image_path
-        WHEN o.order_type = 'table' THEN t.image_path
+        WHEN o.order_type = 'room' THEN COALESCE(r.image_path, 'images/rooms/demoRoom.jpg')
+        WHEN o.order_type = 'table' THEN COALESCE(t.image_path, 'images/tables/demoTable.jpg')
         ELSE NULL
     END as image_url
 FROM orders o

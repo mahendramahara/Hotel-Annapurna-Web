@@ -32,7 +32,7 @@ try {
     $booking_reference = 'ORD' . date('Ymd') . $user_id . rand(1000, 9999);
     $order_ids = [];
     
-    $foods = $cart['foods'] ?? [];
+    $foods = $cart['food'] ?? $cart['foods'] ?? [];
     $rooms = $cart['rooms'] ?? [];
     $tables = $cart['tables'] ?? [];
     
@@ -45,7 +45,7 @@ try {
         $item_name = $food['food_name'] ?? $food['name'] ?? $food['item_name'] ?? 'Food Item';
         
         $stmt = $conn->prepare("INSERT INTO orders (user_id, order_type, item_id, item_name, quantity, price, payment_method, payment_status, booking_reference, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')");
-        $stmt->bind_param("isiidssss", $user_id, $order_type, $item_id, $item_name, $quantity, $item_total, $payment_method, $payment_status, $booking_reference);
+        $stmt->bind_param("isissdsss", $user_id, $order_type, $item_id, $item_name, $quantity, $item_total, $payment_method, $payment_status, $booking_reference);
         
         if (!$stmt->execute()) {
             throw new Exception('Failed to create food order: ' . $stmt->error);
@@ -65,7 +65,7 @@ try {
         $check_out = $room['check_out'] ?? date('Y-m-d', strtotime('+1 day'));
         
         $stmt = $conn->prepare("INSERT INTO orders (user_id, order_type, item_id, item_name, quantity, price, payment_method, payment_status, booking_reference, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')");
-        $stmt->bind_param("isiidssss", $user_id, $order_type, $item_id, $item_name, $nights, $item_total, $payment_method, $payment_status, $booking_reference);
+        $stmt->bind_param("isissdsss", $user_id, $order_type, $item_id, $item_name, $nights, $item_total, $payment_method, $payment_status, $booking_reference);
         
         if (!$stmt->execute()) {
             throw new Exception('Failed to create room order: ' . $stmt->error);
@@ -82,7 +82,7 @@ try {
         $item_name = $table['table_name'] ?? $table['name'] ?? $table['item_name'] ?? 'Table Booking';
         
         $stmt = $conn->prepare("INSERT INTO orders (user_id, order_type, item_id, item_name, quantity, price, payment_method, payment_status, booking_reference, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')");
-        $stmt->bind_param("isiidssss", $user_id, $order_type, $item_id, $item_name, $quantity, $item_total, $payment_method, $payment_status, $booking_reference);
+        $stmt->bind_param("isissdsss", $user_id, $order_type, $item_id, $item_name, $quantity, $item_total, $payment_method, $payment_status, $booking_reference);
         
         if (!$stmt->execute()) {
             throw new Exception('Failed to create table order: ' . $stmt->error);

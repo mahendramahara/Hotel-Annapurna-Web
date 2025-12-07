@@ -256,9 +256,10 @@ $special_total = $special_count_result->fetch_assoc()['total'];
             const price = parseFloat(item.price) || 0;
             const discount = parseFloat(item.discount_price) || price;
             const savings = (price - discount).toFixed(2);
+            const imageUrl = item.image_url || item.image || 'images/menu/demoFood.jpg';
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><img src="${item.image_url || 'https://via.placeholder.com/50x50?text=No+Image'}" alt="${item.food_name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
+                <td><img src="${imageUrl}" alt="${item.food_name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"></td>
                 <td class="menu-item-name">${item.food_name || 'Unknown Item'}</td>
                 <td class="price-column">RS ${price.toFixed(2)}</td>
                 <td class="discount-column">RS ${discount.toFixed(2)}</td>
@@ -296,22 +297,27 @@ $special_total = $special_count_result->fetch_assoc()['total'];
             return;
         }
 
-        const cart = JSON.parse(localStorage.getItem('hotelCart') || '{"foods":[],"rooms":[],"tables":[]}');
+        const cart = JSON.parse(localStorage.getItem('hotelCart') || '{"food":[],"rooms":[],"tables":[]}');
         
         menuSelectedItems.forEach(item => {
-            const existing = cart.foods.find(f => f.id === item.id);
+            const existing = cart.food.find(f => f.id === item.id);
             if (existing) {
                 existing.quantity = (existing.quantity || 1) + 1;
             } else {
-                cart.foods.push({ ...item, quantity: 1, type: 'food' });
+                cart.food.push({ 
+                    id: item.id,
+                    name: item.food_name, 
+                    price: item.price,
+                    image: item.image_url || 'images/menu/demoFood.jpg',
+                    quantity: 1, 
+                    type: 'food' 
+                });
             }
         });
 
         localStorage.setItem('hotelCart', JSON.stringify(cart));
         alert(`✓ ${menuSelectedItems.length} item(s) added to cart!`);
-        menuCheckboxes.forEach(cb => cb.checked = false);
-        menuSelectedItems = [];
-        updateMenuSelectedTable();
+        window.location.href = 'cart.php';
     });
 
     document.getElementById('menu-buy-now').addEventListener('click', () => {

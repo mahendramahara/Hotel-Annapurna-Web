@@ -136,6 +136,8 @@ while($row = mysqli_fetch_assoc($tables_result)) {
 
         cartManager.saveCart(cart);
         alert(`✓ Table ${table.table_no} added to cart!`);
+        window.location.href = 'cart.php';
+        window.location.href = 'cart.php';
     }
 
     function reserveTable(table) {

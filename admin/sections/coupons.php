@@ -1,4 +1,5 @@
 <?php
+require_once('includes/auth-guard.php');
 require_once('../config/db.php');
 
 $stmt = $conn->prepare("SELECT * FROM coupons ORDER BY created_at DESC");

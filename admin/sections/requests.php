@@ -1,4 +1,5 @@
 <?php
+require_once('includes/auth-guard.php');
 require_once('../config/db.php');
 
 $page = isset($_GET['p']) ? (int)$_GET['p'] : 1;
@@ -115,6 +116,10 @@ $room_orders = array_filter($orders, fn($o) => $o['order_type'] === 'room');
                 </thead>
                 <tbody>
                     <?php foreach($table_orders as $order): ?>
+                    <?php 
+                        $notes_data = json_decode($order['notes'], true) ?? [];
+                        $booking_date = $notes_data['check_in'] ?? 'Same Day';
+                    ?>
                     <tr>
                         <td>TB-<?= str_pad($order['id'], 4, '0', STR_PAD_LEFT) ?></td>
                         <td>
@@ -131,7 +136,7 @@ $room_orders = array_filter($orders, fn($o) => $o['order_type'] === 'room');
                         <td><?= htmlspecialchars($order['contact']) ?></td>
                         <td><?= htmlspecialchars($order['item_name']) ?></td>
                         <td>RS <?= number_format($order['price'], 2) ?></td>
-                        <td><?= $order['delivery_date'] ? date('M d, Y', strtotime($order['delivery_date'])) : 'Same Day' ?></td>
+                        <td><?= $booking_date !== 'Same Day' ? date('M d, Y', strtotime($booking_date)) : 'Same Day' ?></td>
                         <td><?= date('M d, Y H:i', strtotime($order['created_at'])) ?></td>
                         <td><span class="service-status service-status-<?= strtolower($order['status']) ?>"><?= ucfirst($order['status']) ?></span></td>
                         <td class="service-actions">
@@ -167,6 +172,10 @@ $room_orders = array_filter($orders, fn($o) => $o['order_type'] === 'room');
                 </thead>
                 <tbody>
                     <?php foreach($room_orders as $order): ?>
+                    <?php 
+                        $notes_data = json_decode($order['notes'], true) ?? [];
+                        $check_in_date = $notes_data['check_in'] ?? 'Today';
+                    ?>
                     <tr>
                         <td>RB-<?= str_pad($order['id'], 4, '0', STR_PAD_LEFT) ?></td>
                         <td>
@@ -183,7 +192,7 @@ $room_orders = array_filter($orders, fn($o) => $o['order_type'] === 'room');
                         <td><?= htmlspecialchars($order['contact']) ?></td>
                         <td><?= htmlspecialchars($order['item_name']) ?></td>
                         <td>RS <?= number_format($order['price'], 2) ?></td>
-                        <td><?= $order['delivery_date'] ? date('M d, Y', strtotime($order['delivery_date'])) : 'Today' ?></td>
+                        <td><?= $check_in_date !== 'Today' ? date('M d, Y', strtotime($check_in_date)) : 'Today' ?></td>
                         <td><?= date('M d, Y H:i', strtotime($order['created_at'])) ?></td>
                         <td><span class="service-status service-status-<?= strtolower($order['status']) ?>"><?= ucfirst($order['status']) ?></span></td>
                         <td class="service-actions">

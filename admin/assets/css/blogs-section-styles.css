@@ -98,49 +98,57 @@
 }
 
 .action-btn {
-    width: 34px;
-    height: 34px;
-    border: none;
-    border-radius: 6px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid transparent;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .action-btn ion-icon {
-    font-size: 18px;
+    font-size: 20px;
+    pointer-events: none;
 }
 
 .action-btn.view {
     background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
     color: white;
+    border-color: #00f2fe;
 }
 
 .action-btn.view:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(79, 172, 254, 0.5);
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
 }
 
 .action-btn.edit {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
+    border-color: #764ba2;
 }
 
 .action-btn.edit:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
 }
 
 .action-btn.delete {
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     color: white;
+    border-color: #f5576c;
 }
 
 .action-btn.delete:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(245, 87, 108, 0.5);
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
 }
 
 .add-blog-btn {

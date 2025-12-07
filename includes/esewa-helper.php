@@ -14,13 +14,13 @@ function prepareEsewaPayment($booking_id, $amount, $tax_amount, $total_amount) {
     $product_code = 'EPAYTEST';
     
     $base_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
-    $success_url = $base_url . "/github/Hotel-Annapurna-Web/esewa-success.php";
-    $failure_url = $base_url . "/github/Hotel-Annapurna-Web/esewa-failure.php";
+    $success_url = $base_url . "/Hotel-Annapurna-Web/esewa-success.php";
+    $failure_url = $base_url . "/Hotel-Annapurna-Web/esewa-failure.php";
     
-    $transaction_uuid = $booking_id . '-' . date('ymd-His');
+    $transaction_uuid = $booking_id . '-' . date('Ymd-His');
     
     $signed_field_names = "total_amount,transaction_uuid,product_code";
-    $message = "total_amount={$total_amount},transaction_uuid={$transaction_uuid},product_code={$product_code}";
+    $message = "total_amount=" . number_format($total_amount, 2, '.', '') . ",transaction_uuid=" . $transaction_uuid . ",product_code=" . $product_code;
     $signature = generateEsewaSignature($message, $esewa_secret);
     
     return [

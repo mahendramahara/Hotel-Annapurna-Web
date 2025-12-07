@@ -38,16 +38,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // OTP is valid, create user account
             $reg_data = $_SESSION['reg_data'];
             
+            // Use default demo image for new customers
+            $default_profile_pic = 'images/profiles/demoUser.jpg';
+            
             $stmt = $conn->prepare("
-                INSERT INTO users (first_name, last_name, email, contact, password, status) 
-                VALUES (?, ?, ?, ?, ?, 'verified')
+                INSERT INTO users (first_name, last_name, email, contact, password, profile_pic, status) 
+                VALUES (?, ?, ?, ?, ?, ?, 'verified')
             ");
-            $stmt->bind_param("sssss", 
+            $stmt->bind_param("ssssss", 
                 $reg_data['first_name'], 
                 $reg_data['last_name'], 
                 $reg_data['email'], 
                 $reg_data['contact'], 
-                $reg_data['password']
+                $reg_data['password'],
+                $default_profile_pic
             );
             
             if ($stmt->execute()) {

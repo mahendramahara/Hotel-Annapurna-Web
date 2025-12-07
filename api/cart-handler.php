@@ -18,14 +18,14 @@ function getCartItems($conn, $user_id) {
     $stmt->execute();
     $result = $stmt->get_result();
     
-    $cart = ['foods' => [], 'rooms' => [], 'tables' => []];
+    $cart = ['food' => [], 'rooms' => [], 'tables' => []];
     while ($row = $result->fetch_assoc()) {
         $item_data = json_decode($row['item_data'], true);
         $item_data['cart_id'] = $row['id'];
         
         if ($row['item_type'] === 'food') {
             $item_data['quantity'] = $row['quantity'];
-            $cart['foods'][] = $item_data;
+            $cart['food'][] = $item_data;
         } elseif ($row['item_type'] === 'room') {
             $item_data['nights'] = $row['quantity'];
             $cart['rooms'][] = $item_data;
@@ -50,8 +50,10 @@ if ($action === 'sync') {
     $synced = 0;
     $errors = [];
     
-    if (isset($localStorage['foods']) && is_array($localStorage['foods'])) {
-        foreach ($localStorage['foods'] as $food) {
+    // Handle both 'food' and 'foods' keys for backward compatibility
+    $foodItems = $localStorage['food'] ?? $localStorage['foods'] ?? [];
+    if (is_array($foodItems)) {
+        foreach ($foodItems as $food) {
             $item_data = json_encode($food);
             $quantity = $food['quantity'] ?? 1;
             $item_id = $food['id'];

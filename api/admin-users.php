@@ -4,6 +4,13 @@ ini_set('display_errors', 0);
 
 session_start();
 
+// Admin authorization check
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true || $_SESSION['admin_role'] !== 'admin') {
+    header('Content-Type: application/json');
+    echo json_encode(['success' => false, 'message' => 'Unauthorized access. Admin login required.']);
+    exit();
+}
+
 ob_start();
 require_once __DIR__ . '/../config/db.php';
 ob_end_clean();
@@ -242,6 +249,17 @@ if ($action === 'create') {
         }
     }
     
+    // Use default demo image if no image uploaded
+    if ($profile_pic === null) {
+        if ($role === 'staff') {
+            $profile_pic = 'images/profiles/demoStaff.jpg';
+        } elseif ($role === 'admin') {
+            $profile_pic = 'images/profiles/demoAdmin.jpg';
+        } else {
+            $profile_pic = 'images/profiles/demoUser.jpg';
+        }
+    }
+    
     if ($salary === null) {
         $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, contact, address, password, profile_pic, role, status, salary) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)");
         $stmt->bind_param("sssssssss", $first_name, $last_name, $email, $contact, $address, $hashed_password, $profile_pic, $role, $status);
@@ -300,7 +318,9 @@ if ($action === 'update') {
             mkdir($upload_dir, 0755, true);
         }
         
-        if ($profile_pic && file_exists(__DIR__ . '/../' . $profile_pic)) {
+        // Only delete old image if it's not a demo image
+        if ($profile_pic && file_exists(__DIR__ . '/../' . $profile_pic) && 
+            strpos($profile_pic, 'demo') === false) {
             unlink(__DIR__ . '/../' . $profile_pic);
         }
         
@@ -310,6 +330,24 @@ if ($action === 'update') {
         
         if (move_uploaded_file($_FILES['profile_pic']['tmp_name'], $filepath)) {
             $profile_pic = 'images/profiles/' . $filename;
+        }
+    }
+    
+    // If still NULL or empty, set default demo image based on role
+    if (!$profile_pic || empty($profile_pic)) {
+        // Get user's role to determine which demo image to use
+        $stmt_role = $conn->prepare("SELECT role FROM users WHERE id = ?");
+        $stmt_role->bind_param("i", $id);
+        $stmt_role->execute();
+        $role_result = $stmt_role->get_result()->fetch_assoc();
+        $user_role = $role_result['role'] ?? 'customer';
+        
+        if ($user_role === 'staff') {
+            $profile_pic = 'images/profiles/demoStaff.jpg';
+        } elseif ($user_role === 'admin') {
+            $profile_pic = 'images/profiles/demoAdmin.jpg';
+        } else {
+            $profile_pic = 'images/profiles/demoUser.jpg';
         }
     }
     

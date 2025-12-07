@@ -46,7 +46,7 @@ try {
         throw new Exception('Invalid payment status');
     }
     
-    $check_stmt = $conn->prepare("SELECT id, COALESCE(booking_status, status) as current_status FROM orders WHERE id = ? AND user_id = ?");
+    $check_stmt = $conn->prepare("SELECT id, status as current_status FROM orders WHERE id = ? AND user_id = ?");
     $check_stmt->bind_param("ii", $booking_id, $user_id);
     $check_stmt->execute();
     $result = $check_stmt->get_result();
@@ -73,7 +73,6 @@ try {
             UPDATE orders 
             SET payment_method = ?, 
                 payment_status = ?,
-                booking_status = 'confirmed',
                 status = 'confirmed',
                 updated_at = NOW()
             WHERE id = ? AND user_id = ?

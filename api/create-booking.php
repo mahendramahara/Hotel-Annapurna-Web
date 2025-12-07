@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', '0');
 session_start();
 require_once('../config/db.php');
 header('Content-Type: application/json');
@@ -32,7 +34,6 @@ try {
     $guests = intval($_POST['guests'] ?? 1);
     $special_requests = trim($_POST['special_requests'] ?? '');
 
-
     if (empty($item_type) || $item_id <= 0 || $price <= 0) {
         throw new Exception('Missing required booking information');
     }
@@ -50,10 +51,7 @@ try {
     $check_out_date = new DateTime($check_out);
     $duration = max(1, $check_in_date->diff($check_out_date)->days);
     
-    $subtotal = $price * $duration;
-    $tax_rate = 0.13;
-    $tax_amount = round($subtotal * $tax_rate, 2);
-    $total_amount = round($subtotal + $tax_amount, 2);
+    $total_price = $price * $duration;
 
     $booking_ref = strtoupper(substr($item_type, 0, 1)) . date('Ymd') . str_pad($user_id, 4, '0', STR_PAD_LEFT) . rand(1000, 9999);
 
@@ -66,21 +64,30 @@ try {
 
     $conn->begin_transaction();
 
+    $notes = json_encode([
+        'check_in' => $check_in,
+        'check_out' => $check_out,
+        'guests' => $guests,
+        'requests' => $special_requests
+    ]);
 
     $stmt = $conn->prepare("
         INSERT INTO orders (
-            user_id, order_type, item_id, item_name, 
-            price, quantity, subtotal, tax_amount, total_amount,
-            booking_reference, check_in_date, check_out_date, guests,
-            status, payment_status, notes, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', 'unpaid', ?, NOW())
+            user_id, order_type, item_id, item_name,
+            quantity, price, payment_method, payment_status,
+            booking_reference, status, notes
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
-    
+
+    $payment_method = 'pending';
+    $payment_status = 'pending';
+    $status = 'pending';
+
     $stmt->bind_param(
-        "isisdiiddssiis",
+        "isissdsssss",
         $user_id, $item_type, $item_id, $item_name,
-        $price, $duration, $subtotal, $tax_amount, $total_amount,
-        $booking_ref, $check_in, $check_out, $guests, $special_requests
+        $duration, $total_price, $payment_method, $payment_status, 
+        $booking_ref, $status, $notes
     );
 
     if (!$stmt->execute()) {
@@ -105,7 +112,7 @@ try {
         'message' => 'Booking created successfully!',
         'booking_id' => $booking_id,
         'booking_reference' => $booking_ref,
-        'total_amount' => $total_amount
+        'total_amount' => $total_price
     ]);
 
 } catch (Exception $e) {

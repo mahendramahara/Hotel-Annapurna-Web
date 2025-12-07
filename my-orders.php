@@ -11,30 +11,23 @@ require_once 'config/db.php';
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch user's orders from orders table (all types: food, room, table)
+// Fetch user's food orders from orders table
 $sql = "SELECT 
     o.id as order_id,
     o.order_type,
     o.item_id,
-    o.item_name,
-    o.price,
-    o.quantity,
+    COALESCE(f.food_name, o.item_name) as item_name,
+    COALESCE(o.price, f.discount_price, f.price, 0) as price,
+    COALESCE(o.quantity, 1) as quantity,
     o.status,
     o.payment_method,
     o.payment_status,
     o.booking_reference,
     COALESCE(o.created_at, NOW()) as order_date,
     o.notes,
-    CASE 
-        WHEN o.order_type = 'food' THEN f.image_path
-        WHEN o.order_type = 'room' THEN r.image_path
-        WHEN o.order_type = 'table' THEN t.image_path
-        ELSE NULL
-    END as image_url
+    COALESCE(f.image_path, 'images/menu/demoFood.jpg') as image_url
 FROM orders o
 LEFT JOIN food_items f ON o.item_id = f.id AND o.order_type = 'food'
-LEFT JOIN rooms r ON o.item_id = r.id AND o.order_type = 'room'
-LEFT JOIN tables t ON o.item_id = t.id AND o.order_type = 'table'
 WHERE o.user_id = ? AND o.order_type = 'food'
 ORDER BY o.id DESC";
 
@@ -73,7 +66,7 @@ include 'includes/header.php';
 <div class="orders-container">
     <div class="page-header">
         <h1><ion-icon name="cart"></ion-icon> My Orders</h1>
-        <p>View all your food, room, and table orders</p>
+        <p>View all your food orders</p>
     </div>
     
     <?php if (!empty($orders)): ?>

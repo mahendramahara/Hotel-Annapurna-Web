@@ -7,6 +7,13 @@ ini_set('error_log', __DIR__ . '/blog_errors.log');
 
 session_start();
 
+// Admin authorization check
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true || $_SESSION['admin_role'] !== 'admin') {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode(['success' => false, 'message' => 'Unauthorized access. Admin login required.']);
+    exit();
+}
+
 // Start output buffering to capture any unwanted output
 ob_start();
 
@@ -138,6 +145,11 @@ if ($action === 'add') {
             }
         }
         
+        // Use default demo image if no image uploaded
+        if ($featured_image === null) {
+            $featured_image = 'images/blogs/demoBlog.jpg';
+        }
+        
         // Prepare and execute insert query
         if ($author_id === null) {
             $stmt = $conn->prepare("INSERT INTO blogs (title, category, tags, content, featured_image, status) VALUES (?, ?, ?, ?, ?, ?)");
@@ -206,7 +218,9 @@ if ($action === 'update') {
             mkdir($upload_dir, 0755, true);
         }
         
-        if ($featured_image && file_exists(__DIR__ . '/../' . $featured_image)) {
+        // Only delete old image if it's not a demo image
+        if ($featured_image && file_exists(__DIR__ . '/../' . $featured_image) && 
+            strpos($featured_image, 'demo') === false) {
             unlink(__DIR__ . '/../' . $featured_image);
         }
         
@@ -217,6 +231,11 @@ if ($action === 'update') {
         if (move_uploaded_file($_FILES['featured_image']['tmp_name'], $filepath)) {
             $featured_image = 'images/blogs/' . $filename;
         }
+    }
+    
+    // Use default demo image if still NULL or empty
+    if (!$featured_image || empty($featured_image)) {
+        $featured_image = 'images/blogs/demoBlog.jpg';
     }
     
     $stmt = $conn->prepare("UPDATE blogs SET title = ?, category = ?, tags = ?, content = ?, featured_image = ?, status = ? WHERE id = ?");

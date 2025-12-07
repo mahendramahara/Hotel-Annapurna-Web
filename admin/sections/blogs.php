@@ -1,7 +1,10 @@
 <?php
+require_once('includes/auth-guard.php');
 require_once('../config/db.php');
 
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+parse_str(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_QUERY) ?? '', $query_params);
+$page = isset($query_params['p']) ? (int)$query_params['p'] : 1;
+if(isset($_GET['p'])) $page = (int)$_GET['p'];
 $limit = 10;
 $offset = ($page - 1) * $limit;
 
@@ -86,15 +89,15 @@ $blogs = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         <?php if($total_pages > 1): ?>
         <div class="pagination">
             <?php if($page > 1): ?>
-                <a href="?page=blogs&p=<?= $page-1 ?>" class="page-btn">Previous</a>
+                <a href="?p=<?= $page-1 ?>#blogs" class="page-btn">Previous</a>
             <?php endif; ?>
             
             <?php for($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?page=blogs&p=<?= $i ?>" class="page-btn <?= $i == $page ? 'active' : '' ?>"><?= $i ?></a>
+                <a href="?p=<?= $i ?>#blogs" class="page-btn <?= $i == $page ? 'active' : '' ?>"><?= $i ?></a>
             <?php endfor; ?>
             
             <?php if($page < $total_pages): ?>
-                <a href="?page=blogs&p=<?= $page+1 ?>" class="page-btn">Next</a>
+                <a href="?p=<?= $page+1 ?>#blogs" class="page-btn">Next</a>
             <?php endif; ?>
         </div>
         <?php endif; ?>

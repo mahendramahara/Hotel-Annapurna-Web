@@ -3,8 +3,9 @@ session_start();
 header('Content-Type: application/json');
 require_once __DIR__ . '/../config/db.php';
 
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    echo json_encode(['success' => false, 'message' => 'Unauthorized access - Please login as admin']);
+// Admin authorization check
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true || $_SESSION['admin_role'] !== 'admin') {
+    echo json_encode(['success' => false, 'message' => 'Unauthorized access. Admin login required.']);
     exit();
 }
 
@@ -84,6 +85,11 @@ if ($action === 'add') {
         }
     }
     
+    // Use default demo image if no image uploaded
+    if ($image_path === null) {
+        $image_path = 'images/tables/demoTable.jpg';
+    }
+    
     $stmt = $conn->prepare("INSERT INTO tables (image_path, table_no, total_chairs, booking_status, price_main, price_today, location, short_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssissdds", $image_path, $table_no, $total_chairs, $booking_status, $price_main, $price_today, $location, $short_description);
     
@@ -137,7 +143,9 @@ if ($action === 'update') {
             mkdir($upload_dir, 0755, true);
         }
         
-        if ($image_path && file_exists(__DIR__ . '/../' . $image_path)) {
+        // Only delete old image if it's not a demo image
+        if ($image_path && file_exists(__DIR__ . '/../' . $image_path) && 
+            strpos($image_path, 'demo') === false) {
             unlink(__DIR__ . '/../' . $image_path);
         }
         
@@ -148,6 +156,11 @@ if ($action === 'update') {
         if (move_uploaded_file($_FILES['image']['tmp_name'], $filepath)) {
             $image_path = 'images/tables/' . $filename;
         }
+    }
+    
+    // Use default demo image if still NULL or empty
+    if (!$image_path || empty($image_path)) {
+        $image_path = 'images/tables/demoTable.jpg';
     }
     
     $stmt = $conn->prepare("UPDATE tables SET image_path = ?, table_no = ?, total_chairs = ?, booking_status = ?, price_main = ?, price_today = ?, location = ?, short_description = ? WHERE id = ?");

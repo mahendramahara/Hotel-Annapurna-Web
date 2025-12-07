@@ -97,8 +97,8 @@ $staff_members = $stmt_staff->get_result();
         <?php 
         if ($food_items->num_rows > 0) {
             while($item = $food_items->fetch_assoc()) {
-                $image_url = !empty($item['image_url']) ? $item['image_url'] : 'https://via.placeholder.com/300x200?text=No+Image';
-                $description = !empty($item['description']) ? substr($item['description'], 0, 60) . '...' : 'Delicious food item from our kitchen';
+                $image_url = !empty($item['image_path']) ? $item['image_path'] : 'images/menu/demoFood.jpg';
+                $description = !empty($item['short_description']) ? substr($item['short_description'], 0, 60) . '...' : 'Delicious food item from our kitchen';
         ?>
         <div class="menu-item">
             <div class="image-container">
@@ -125,11 +125,11 @@ $staff_members = $stmt_staff->get_result();
         </div>
         <div class="offer-images">
             <div class="offer-images-collection">
-                <div class="offerSlide"><img src="Images/Offer_Images/special1.jpg" alt="Image 1"></div>
-                <div class="offerSlide"><img src="Images/Offer_Images/special2.jpg" alt="Image 2"></div>
-                <div class="offerSlide"><img src="Images/Offer_Images/special3.jpg" alt="Image 3"></div>
-                <div class="offerSlide"><img src="Images/Offer_Images/special4.jpg" alt="Image 4"></div>
-                <div class="offerSlide"><img src="Images/Offer_Images/special5.jpg" alt="Image 5"></div>
+                <div class="offerSlide"><img src="assets/images/offer_images/special1.jpg" alt="Image 1"></div>
+                <div class="offerSlide"><img src="assets/images/offer_images/special2.jpg" alt="Image 2"></div>
+                <div class="offerSlide"><img src="assets/images/offer_images/special3.jpg" alt="Image 3"></div>
+                <div class="offerSlide"><img src="assets/images/offer_images/special4.jpg" alt="Image 4"></div>
+                <div class="offerSlide"><img src="assets/images/offer_images/special5.jpg" alt="Image 5"></div>
             </div>
             <button class="offerSlider-arrow left" onclick="prevOfferSlide()">
                 <ion-icon name="chevron-back-outline"></ion-icon>
@@ -151,41 +151,41 @@ $staff_members = $stmt_staff->get_result();
         <!-- Room Section -->
         <div class="feature-card">
             <div class="image-container">
-                <img src="https://via.placeholder.com/400x300" alt="Luxurious Rooms">
+                <img src="./assets/images/featured_images/Featured1.jpg" alt="Luxurious Rooms">
             </div>
             <h2>Luxurious Rooms</h2>
             <p>Relax in our elegantly designed rooms featuring breathtaking views and all modern conveniences.</p>
-            <button class="explore-btn">Explore Rooms</button>
+            <button class="explore-btn" onclick="goToRooms()">Explore Rooms</button>
         </div>
 
         <!-- Dining Section -->
         <div class="feature-card">
             <div class="image-container">
-                <img src="https://via.placeholder.com/400x300" alt="Exquisite Dining">
+                <img src="./assets/images/featured_images/Featured2.jpg" alt="Exquisite Dining">
             </div>
             <h2>Exquisite Dining</h2>
             <p>Savor culinary delights crafted by our master chefs, from local flavors to international cuisines.</p>
-            <button class="explore-btn">View Menu</button>
+            <button class="explore-btn" onclick="goToMenu()">View Menu</button>
         </div>
 
         <!-- Amenities Section -->
         <div class="feature-card">
             <div class="image-container">
-                <img src="https://via.placeholder.com/400x300" alt="World-Class Amenities">
+                <img src="./assets/images/featured_images/Featured3.jpg" alt="World-Class Amenities">
             </div>
             <h2>World-Class Amenities</h2>
             <p>Enjoy our spa, fitness center, infinity pool, and more for a truly indulgent stay.</p>
-            <button class="explore-btn">See Amenities</button>
+            <button class="explore-btn" onclick="goToAmenities()">See Amenities</button>
         </div>
 
         <!-- Testimonials Section -->
         <div class="feature-card">
             <div class="image-container">
-                <img src="https://via.placeholder.com/400x300" alt="Guest Testimonials">
+                <img src="./assets/images/featured_images/Featured4.jpg" alt="Guest Testimonials">
             </div>
             <h2>Guest Testimonials</h2>
             <p>Hear from our happy guests and see why Hotel Annapurna is the top choice for travelers.</p>
-            <button class="explore-btn">Read Reviews</button>
+            <button class="explore-btn" onclick="goToReviews()">Read Reviews</button>
         </div>
     </div>
 </section>
@@ -226,10 +226,62 @@ $staff_members = $stmt_staff->get_result();
         <h2>Guest Experiences & Reviews</h2>
         <p>Read what our valued guests have to say about their time with us, and see why Hotel Annapurna is the preferred choice for discerning travelers.</p>
     </div>
-    <div class="reviews-grid" id="reviews-grid">
-        <!-- Cards will be dynamically generated by JavaScript -->
+
+    <?php 
+        $reviews = [
+            [
+                "name" => "Sita Sharma",
+                "image" => "./assets/images/guest_images/Guest1.jpeg",
+                "rating" => 5,
+                "review" => "Amazing hospitality and delicious food. Felt like home."
+            ],
+            [
+                "name" => "Aarav Thapa",
+                "image" => "./assets/images/guest_images/Guest2.jpg",
+                "rating" => 4,
+                "review" => "Calm environment, friendly staff, and clean rooms. Great stay overall."
+            ],
+            [
+                "name" => "Prasant Adhikari",
+                "image" => "./assets/images/guest_images/Guest3.jpg",
+                "rating" => 5,
+                "review" => "Loved the ambiance and the service was exceptional."
+            ],
+            [
+                "name" => "Rohit Bista",
+                "image" => "./assets/images/guest_images/Guest4.jpg",
+                "rating" => 3,
+                "review" => "Good experience but check-in could have been faster."
+            ]
+        ];
+    ?>
+
+    <div class="reviews-grid">
+        <?php foreach ($reviews as $r): ?>
+            <div class="review-card">
+                <div class="reviewer-image">
+                    <img src="<?= $r['image']; ?>" alt="<?= $r['name']; ?>">
+                </div>
+
+                <div class="review-content">
+                    <div class="review-stars">
+                        <?php 
+                            for ($i = 1; $i <= 5; $i++) {
+                                echo $i <= $r['rating'] 
+                                    ? '<i class="fa-solid fa-star"></i>' 
+                                    : '<i class="fa-regular fa-star"></i>';
+                            }
+                        ?>
+                    </div>
+
+                    <p class="review-text">"<?= $r['review']; ?>"</p>
+                    <h3 class="reviewer-name"><?= $r['name']; ?></h3>
+                </div>
+            </div>
+        <?php endforeach; ?>
     </div>
 </section>
+
 
 <script>
 // Add to cart functionality
@@ -254,8 +306,25 @@ function addToCart(itemType, itemId, itemData) {
     
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
     
-    // Show success message
+    // Show success message and redirect to cart
     alert('Item added to cart successfully!');
+    window.location.href = 'cart.php';
+}
+
+function goToRooms() {
+    window.location.href = 'rooms.php';
+}
+
+function goToMenu() {
+    window.location.href = 'menu.php';
+}
+
+function goToAmenities() {
+    window.location.href = 'contact.php';
+}
+
+function goToReviews() {
+    window.location.href = 'blogs.php';
 }
 </script>
 

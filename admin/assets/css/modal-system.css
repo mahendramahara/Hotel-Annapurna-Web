@@ -351,56 +351,67 @@
     color: var(--color-completed-text);
 }
 
+/* Action buttons styling moved to action-buttons.css */
 .action-buttons {
     display: flex;
     gap: 0.5rem;
 }
 
 .action-btn {
-    width: 36px;
-    height: 36px;
-    border: none;
+    width: 40px;
+    height: 40px;
+    border: 2px solid transparent;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
-    background: var(--background-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .action-btn ion-icon {
     font-size: 20px;
+    pointer-events: none;
 }
 
 .action-btn.edit-btn {
-    color: var(--primary-color);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-color: #764ba2;
 }
 
 .action-btn.edit-btn:hover {
-    background: var(--primary-color);
-    color: var(--white);
-    transform: scale(1.1);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    color: white;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.5);
 }
 
 .action-btn.delete-btn {
-    color: var(--color-button-danger);
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    border-color: #f5576c;
 }
 
 .action-btn.delete-btn:hover {
-    background: var(--color-button-danger);
-    color: var(--white);
-    transform: scale(1.1);
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+    color: white;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(245, 87, 108, 0.5);
 }
 
 .action-btn.view-btn {
-    color: var(--color-button-success);
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    border-color: #00f2fe;
 }
 
 .action-btn.view-btn:hover {
-    background: var(--color-button-success);
-    color: var(--white);
-    transform: scale(1.1);
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    color: white;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(79, 172, 254, 0.5);
 }
 
 @keyframes fadeIn {

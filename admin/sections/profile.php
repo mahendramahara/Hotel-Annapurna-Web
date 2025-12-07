@@ -1,4 +1,6 @@
 <?php
+require_once('includes/auth-guard.php');
+require_once('../config/db.php');
 $admin_id = $_SESSION['admin_id'];
 $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->bind_param("i", $admin_id);

@@ -1,4 +1,5 @@
 <?php
+require_once('includes/auth-guard.php');
 require_once('../config/db.php');
 
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;

@@ -1,7 +1,20 @@
 <?php
+require_once('includes/auth-guard.php');
 require_once('../config/db.php');
 
-$stmt = $conn->prepare("SELECT * FROM rooms ORDER BY created_at DESC");
+parse_str(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_QUERY) ?? '', $query_params);
+$page = isset($query_params['p']) ? (int)$query_params['p'] : 1;
+if(isset($_GET['p'])) $page = (int)$_GET['p'];
+$limit = 10;
+$offset = ($page - 1) * $limit;
+
+$count_stmt = $conn->prepare("SELECT COUNT(*) as total FROM rooms");
+$count_stmt->execute();
+$total_records = $count_stmt->get_result()->fetch_assoc()['total'];
+$total_pages = ceil($total_records / $limit);
+
+$stmt = $conn->prepare("SELECT * FROM rooms ORDER BY created_at DESC LIMIT ? OFFSET ?");
+$stmt->bind_param("ii", $limit, $offset);
 $stmt->execute();
 $rooms = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -35,7 +48,7 @@ $rooms = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             </thead>
             <tbody>
                 <?php 
-                $sn = 1;
+                $sn = $offset + 1;
                 foreach($rooms as $room): 
                 ?>
                 <tr>
@@ -72,6 +85,22 @@ $rooms = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             </tbody>
         </table>
     </div>
+
+    <?php if($total_pages > 1): ?>
+    <div class="pagination">
+        <?php if($page > 1): ?>
+            <a href="?p=<?= $page-1 ?>#rooms" class="page-btn">Previous</a>
+        <?php endif; ?>
+        
+        <?php for($i = 1; $i <= $total_pages; $i++): ?>
+            <a href="?p=<?= $i ?>#rooms" class="page-btn <?= $i == $page ? 'active' : '' ?>"><?= $i ?></a>
+        <?php endfor; ?>
+        
+        <?php if($page < $total_pages): ?>
+            <a href="?p=<?= $page+1 ?>#rooms" class="page-btn">Next</a>
+        <?php endif; ?>
+    </div>
+    <?php endif; ?>
 </div>
 
 <!-- Modal for Add/Edit Room -->

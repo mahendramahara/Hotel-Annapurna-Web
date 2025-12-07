@@ -36,9 +36,9 @@ if ($from_cart) {
     }
 
     $booking = $result->fetch_assoc();
-    $amount = floatval($booking['subtotal'] ?? $booking['price']);
-    $tax_amount = floatval($booking['tax_amount'] ?? 0);
-    $total_amount = floatval($booking['total_amount'] ?? $booking['price']);
+    $amount = floatval($booking['price'] ?? 0);
+    $tax_amount = 0;
+    $total_amount = floatval($booking['price'] ?? 0);
     $esewa_data = prepareEsewaPayment($booking_id, $amount, $tax_amount, $total_amount);
 }
 
@@ -186,7 +186,7 @@ include 'includes/header.php';
         let html = '';
         
         const allItems = [
-            ...(cartCheckoutData.cart.foods || []).map(f => ({...f, type: 'Food'})),
+            ...(cartCheckoutData.cart.food || cartCheckoutData.cart.foods || []).map(f => ({...f, type: 'Food'})),
             ...(cartCheckoutData.cart.rooms || []).map(r => ({...r, type: 'Room'})),
             ...(cartCheckoutData.cart.tables || []).map(t => ({...t, type: 'Table'}))
         ];
@@ -343,65 +343,77 @@ include 'includes/header.php';
     }
     
     function initiateCartEsewaPayment(orderId, amount) {
-        // Create eSewa form dynamically for cart orders
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = '<?php echo ESEWA_PAYMENT_URL; ?>';
+        form.action = 'https://rc-epay.esewa.com.np/api/epay/main/v2/form';
         
-        const transactionUuid = 'cart_' + orderId + '_' + Date.now();
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const transactionUuid = year + month + day + '-' + hours + minutes + seconds;
+        
         const taxAmount = 0;
         const productServiceCharge = 0;
         const productDeliveryCharge = 0;
-        const totalAmount = amount;
+        const totalAmount = parseFloat(amount);
         
         const fields = {
-            amount: amount.toFixed(2),
+            amount: parseFloat(amount).toFixed(2),
             tax_amount: taxAmount,
             total_amount: totalAmount.toFixed(2),
             transaction_uuid: transactionUuid,
-            product_code: '<?php echo ESEWA_MERCHANT_CODE; ?>',
+            product_code: 'EPAYTEST',
             product_service_charge: productServiceCharge,
             product_delivery_charge: productDeliveryCharge,
             success_url: window.location.origin + '/Hotel-Annapurna-Web/esewa-success.php?order_id=' + orderId,
             failure_url: window.location.origin + '/Hotel-Annapurna-Web/esewa-failure.php?order_id=' + orderId,
-            signed_field_names: 'total_amount,transaction_uuid,product_code',
-            signature: ''
+            signed_field_names: 'total_amount,transaction_uuid,product_code'
         };
         
-        // Create signature (in production, this should be done server-side)
-        const signedFieldNames = fields.signed_field_names.split(',');
-        let signatureString = '';
-        signedFieldNames.forEach(field => {
-            signatureString += fields[field];
-        });
+        const message = 'total_amount=' + fields.total_amount + ',transaction_uuid=' + fields.transaction_uuid + ',product_code=' + fields.product_code;
         
-        // Add hidden fields to form
-        Object.keys(fields).forEach(key => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = key;
-            input.value = fields[key];
-            form.appendChild(input);
+        fetch('api/esewa-status-check.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ message: message })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.signature) {
+                fields.signature = data.signature;
+                
+                Object.keys(fields).forEach(key => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = fields[key];
+                    form.appendChild(input);
+                });
+                
+                document.body.appendChild(form);
+                form.submit();
+            } else {
+                alert('Error generating signature');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error processing payment');
         });
-        
-        document.body.appendChild(form);
-        form.submit();
     }
     
     function processStripePayment() {
         const cardNumber = document.getElementById('card-number').value;
         
-        alert('Stripe Payment Processing (Demo Mode)\n\nCard: ' + cardNumber + '\n\nIn production, this would process through Stripe API.');
-        
-        setTimeout(() => {
-            if (confirm('Simulate Stripe payment success?')) {
-                if (fromCart) {
-                    createCartOrder('stripe', 'paid');
-                } else {
-                    confirmBooking('stripe', 'paid');
-                }
-            }
-        }, 500);
+        if (fromCart) {
+            createCartOrder('stripe', 'paid');
+        } else {
+            confirmBooking('stripe', 'paid');
+        }
     }
     
     function createCartOrder(method, paymentStatus) {
@@ -431,7 +443,12 @@ include 'includes/header.php';
                 sessionStorage.removeItem('checkoutData');
                 localStorage.removeItem('hotelCart');
                 alert('✓ Order placed successfully!');
-                window.location.href = 'my-orders.php';
+                
+                const hasFoodOnly = (cartCheckoutData.cart.food?.length > 0 || cartCheckoutData.cart.foods?.length > 0) && 
+                                    (!cartCheckoutData.cart.rooms || cartCheckoutData.cart.rooms.length === 0) && 
+                                    (!cartCheckoutData.cart.tables || cartCheckoutData.cart.tables.length === 0);
+                
+                window.location.href = hasFoodOnly ? 'my-orders.php' : 'my-bookings.php';
             } else {
                 alert('Error: ' + (data.message || 'Failed to create order'));
             }

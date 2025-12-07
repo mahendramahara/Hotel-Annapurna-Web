@@ -79,6 +79,7 @@ const offerIndicatorsContainer = document.querySelector('.offerSlider-indicators
 let offerCurrentIndex = 0;
 
 function updateOfferSlider() {
+  if (!offerSlider || offerSlides.length === 0 || !offerIndicatorsContainer) return;
   offerSlider.style.transform = `translateX(${-offerCurrentIndex * 100}%)`;
 
   const offerIndicators = Array.from(offerIndicatorsContainer.children);
@@ -98,6 +99,7 @@ function prevOfferSlide() {
 }
 
 function createOfferIndicators() {
+  if (!offerIndicatorsContainer || offerSlides.length === 0) return;
   offerSlides.forEach((_, index) => {
     const indicator = document.createElement('div');
     indicator.classList.add('offerSlider-indicator');
@@ -110,7 +112,9 @@ function createOfferIndicators() {
 }
 
 createOfferIndicators();
-setInterval(nextOfferSlide, 3000); // Auto slide every 3 seconds
+if (offerSlides.length > 0) {
+  setInterval(nextOfferSlide, 3000);
+}
 
 /* ---------------------------------------- Staff card ----------------------------------------- */
 const staffCards = document.querySelectorAll('.staff-card');
@@ -124,65 +128,6 @@ staffCards.forEach((card) => {
         // You can replace this with a modal or detailed page navigation
     });
 });
-
-/* ---------------------------------------- Reviews ----------------------------------------- */
-// Review data
-const reviews = [
-  {
-      name: "John",
-      image: "https://via.placeholder.com/100x100",
-      rating: 5,
-      review: "The food was absolutely amazing, and the service was top-notch. Highly recommend!"
-  },
-  {
-      name: "Emily",
-      image: "https://via.placeholder.com/100x100",
-      rating: 4,
-      review: "A beautiful ambiance and delicious menu. Great place for a family dinner."
-  },
-  {
-      name: "Michael",
-      image: "https://via.placeholder.com/100x100",
-      rating: 5,
-      review: "Excellent service and the rooms were luxurious and comfortable. Will visit again!"
-  },
-  {
-      name: "Sarah",
-      image: "https://via.placeholder.com/100x100",
-      rating: 3,
-      review: "Good experience overall, but the wait time could be improved."
-  }
-];
-
-// Generate review cards
-const reviewsGrid = document.getElementById("reviews-grid");
-
-reviews.forEach(({ name, image, rating, review }) => {
-  // Create star rating dynamically
-  const stars = Array(5)
-      .fill('<i class="fa-regular fa-star"></i>')
-      .map((star, index) =>
-          index < rating ? '<i class="fa-solid fa-star"></i>' : star
-      )
-      .join("");
-
-  // Create review card
-  const reviewCard = `
-      <div class="review-card">
-          <div class="reviewer-image">
-              <img src="${image}" alt="${name}">
-          </div>
-          <div class="review-content">
-              <div class="review-stars">${stars}</div>
-              <p class="review-text">"${review}"</p>
-              <h3 class="reviewer-name">${name}</h3>
-          </div>
-      </div>
-  `;
-
-  reviewsGrid.insertAdjacentHTML("beforeend", reviewCard);
-});
-
 
 /* -------------------------------- GO UP BUTTON ----------------------------------- */
 function scrollToTop() {

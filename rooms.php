@@ -112,7 +112,7 @@ while($row = mysqli_fetch_assoc($rooms_result)) {
         const cartManager = {
             loadCart: function() {
                 const stored = localStorage.getItem('hotelCart');
-                return stored ? JSON.parse(stored) : { foods: [], rooms: [], tables: [] };
+                return stored ? JSON.parse(stored) : { food: [], rooms: [], tables: [] };
             },
             saveCart: function(cart) {
                 localStorage.setItem('hotelCart', JSON.stringify(cart));
@@ -124,7 +124,10 @@ while($row = mysqli_fetch_assoc($rooms_result)) {
         const checkOutDate = new Date(Date.now() + 86400000).toISOString().split('T')[0];
         
         const roomData = {
-            ...room,
+            id: room.id,
+            name: room.room_type + ' - Room ' + room.room_no,
+            price: room.price_today || room.price,
+            image: room.image_path || 'images/rooms/demoRoom.jpg',
             checkIn: checkInDate,
             checkOut: checkOutDate,
             nights: 1
@@ -139,6 +142,7 @@ while($row = mysqli_fetch_assoc($rooms_result)) {
 
         cartManager.saveCart(cart);
         alert(`✓ ${room.room_type} added to cart!`);
+        window.location.href = 'cart.php';
     }
 
     function reserveRoom(room) {

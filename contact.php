@@ -74,9 +74,9 @@
     <section class="contact-team">
         <article class="contact-team-member">
             <div class="contact-team-image">
-                <img src="/api/placeholder/120/120" alt="John Doe - General Manager">
+                <img src="./assets/images/contact_images/Staff-Manager.jpg" alt="Hari Bahadur Thapa - General Manager">
             </div>
-            <h3 class="contact-team-name">John Doe</h3>
+            <h3 class="contact-team-name">Hari Bahadur Thapa</h3>
             <p class="contact-team-position">General Manager</p>
             <p class="contact-team-phone">
                 <ion-icon name="call"></ion-icon>
@@ -86,9 +86,9 @@
 
         <article class="contact-team-member">
             <div class="contact-team-image">
-                <img src="/api/placeholder/120/120" alt="Jane Smith - Customer Relations">
+                <img src="./assets/images/contact_images/Customer-Relations.jpg" alt="Sujata Karki - Customer Relations">
             </div>
-            <h3 class="contact-team-name">Jane Smith</h3>
+            <h3 class="contact-team-name">Sujata Karki</h3>
             <p class="contact-team-position">Customer Relations</p>
             <p class="contact-team-phone">
                 <ion-icon name="call"></ion-icon>
@@ -98,16 +98,17 @@
 
         <article class="contact-team-member">
             <div class="contact-team-image">
-                <img src="/api/placeholder/120/120" alt="Mike Johnson - Events Manager">
+                <img src="./assets/images/contact_images/Events-Manager.jpg" alt="Ramesh Adhikari - Events Manager">
             </div>
-            <h3 class="contact-team-name">Mike Johnson</h3>
+            <h3 class="contact-team-name">Ramesh Adhikari</h3>
             <p class="contact-team-position">Events Manager</p>
             <p class="contact-team-phone">
                 <ion-icon name="call"></ion-icon>
                 <a href="tel:+977-98-1122334">+977 98-1122334</a>
             </p>
         </article>
-    </section>
+</section>
+
 </main>
 
 <script>

@@ -5,15 +5,36 @@ require_once('../includes/esewa-helper.php');
 
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Authentication required']);
-    exit();
-}
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+    exit();
+}
+
+$raw = file_get_contents('php://input');
+$input = json_decode($raw, true);
+
+if (isset($input['message']) || isset($_POST['message'])) {
+    $message = $input['message'] ?? ($_POST['message'] ?? '');
+    
+    if (empty($message)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Message is required']);
+        exit;
+    }
+    
+    $signature = generateEsewaSignature($message, ESEWA_SECRET_KEY);
+    
+    echo json_encode([
+        'success' => true,
+        'signature' => $signature
+    ]);
+    exit;
+}
+
+if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Authentication required']);
     exit();
 }
 
@@ -26,7 +47,7 @@ if ($booking_id <= 0 || empty($transaction_uuid)) {
     exit();
 }
 
-$stmt = $conn->prepare("SELECT total_amount FROM orders WHERE id = ? AND user_id = ?");
+$stmt = $conn->prepare("SELECT price FROM orders WHERE id = ? AND user_id = ?");
 $stmt->bind_param("ii", $booking_id, $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -37,7 +58,7 @@ if ($result->num_rows === 0) {
 }
 
 $booking = $result->fetch_assoc();
-$total_amount = floatval($booking['total_amount']);
+$total_amount = floatval($booking['price']);
 $product_code = 'EPAYTEST';
 
 $status_response = checkEsewaTransactionStatus($product_code, $total_amount, $transaction_uuid);

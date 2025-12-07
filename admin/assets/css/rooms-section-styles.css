@@ -114,33 +114,64 @@
 /* Action Buttons */
 .room-actions {
     display: flex;
-    gap: 5px;
+    gap: 8px;
     justify-content: center;
 }
 
 .action-btn {
-    width: 34px;
-    height: 34px;
-    border-radius: 6px;
-    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 2px solid transparent;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .action-btn ion-icon {
-    font-size: 18px;
+    font-size: 20px;
+    pointer-events: none;
 }
 
 .action-btn:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.05);
 }
 
-.view-btn { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #fff; }
-.edit-btn { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
-.delete-btn { background: linear-gradient(135deg, #f093fb, #f5576c); color: #fff; }
+.view-btn { 
+    background: linear-gradient(135deg, #4facfe, #00f2fe); 
+    color: white; 
+    border-color: #00f2fe;
+}
+
+.view-btn:hover { 
+    box-shadow: 0 8px 16px rgba(79, 172, 254, 0.5);
+    background: linear-gradient(135deg, #00f2fe, #4facfe);
+}
+
+.edit-btn { 
+    background: linear-gradient(135deg, #667eea, #764ba2); 
+    color: white; 
+    border-color: #764ba2;
+}
+
+.edit-btn:hover { 
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #764ba2, #667eea);
+}
+
+.delete-btn { 
+    background: linear-gradient(135deg, #f093fb, #f5576c); 
+    color: white; 
+    border-color: #f5576c;
+}
+
+.delete-btn:hover { 
+    box-shadow: 0 8px 16px rgba(245, 87, 108, 0.5);
+    background: linear-gradient(135deg, #f5576c, #f093fb);
+}
 
 /* Modals */
 .room-modal {

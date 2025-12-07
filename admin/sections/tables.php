@@ -1,3 +1,7 @@
+<?php
+require_once('includes/auth-guard.php');
+require_once('../config/db.php');
+?>
 <main class="table-management-container">
     <section class="table-management-section">
         <header class="table-management-header">

@@ -88,36 +88,39 @@
 .action-btn {
     width: 40px;
     height: 40px;
-    border: none;
-    border-radius: 10px;
+    border: 2px solid transparent;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-size: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .edit-btn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    border-color: #764ba2;
 }
 
 .edit-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
 }
 
 .delete-btn {
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     color: white;
-    box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);
+    border-color: #f5576c;
 }
 
 .delete-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(240, 147, 251, 0.5);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 16px rgba(245, 87, 108, 0.5);
+    background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
 }
 
 .action-btn ion-icon {
