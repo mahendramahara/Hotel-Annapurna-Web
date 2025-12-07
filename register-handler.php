@@ -145,9 +145,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['reg_otp_expiry'] = strtotime($expiry);
             $_SESSION['reg_resend_timer'] = time() + 60; // 60 seconds cooldown
             
-            // For testing purposes - remove in production
-            $_SESSION['test_otp'] = $otp;
-            
             // Log registration activity
             logActivity($conn, null, 'registration', "$firstName $lastName registered with email: $email");
             

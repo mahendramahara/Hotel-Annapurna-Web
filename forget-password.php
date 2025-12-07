@@ -40,9 +40,6 @@ function generateAndStoreOTP($conn, $email)
         $_SESSION['pwd-resend-timer'] = time() + 60;
         $_SESSION['pwd-otp-expiry'] = strtotime($expiry);
         $_SESSION['pwd-timer-start'] = time();
-
-        // For development/testing - remove in production
-        $_SESSION['pwd-current-otp'] = $otp; // This is just for testing
         return true;
     }
     return false;
@@ -200,13 +197,6 @@ $otpExpiryRemaining = isset($_SESSION['otp_expiry']) ? max(0, $_SESSION['otp_exp
                 <div class="pwd-alert pwd-alert-success">
                     <ion-icon name="checkmark-circle"></ion-icon>
                     <?php echo $success; ?>
-                </div>
-            <?php endif; ?>
-
-            <!-- For development/testing - remove in production -->
-            <?php if (isset($_SESSION['pwd-current-otp'])): ?>
-                <div class="pwd-alert pwd-alert-info">
-                    <strong>Test OTP:</strong> <?php echo $_SESSION['pwd-current-otp']; ?>
                 </div>
             <?php endif; ?>
 

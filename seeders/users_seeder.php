@@ -17,6 +17,7 @@ function seedUsers($conn) {
         // Admin Users
         ['Ramesh', 'Sharma', 'admin@hotelannapurna.com', '9841234567', 'admin', 'verified', 50000.00],
         ['Sita', 'Rai', 'sita.manager@hotelannapurna.com', '9841234568', 'admin', 'verified', 45000.00],
+        ['Mahendra', 'Mahara', 'mahendra.manager@hotelannapurna.com', '9841234569', 'admin', 'verified', 48000.00],
         
         // Staff Members
         ['Krishna', 'Thapa', 'krishna.chef@hotelannapurna.com', '9841234569', 'staff', 'verified', 35000.00],
@@ -25,6 +26,11 @@ function seedUsers($conn) {
         ['Laxmi', 'Tamang', 'laxmi.housekeeping@hotelannapurna.com', '9841234572', 'staff', 'verified', 24000.00],
         ['Bikash', 'Shrestha', 'bikash.kitchen@hotelannapurna.com', '9841234573', 'staff', 'verified', 30000.00],
         ['Sunita', 'Poudel', 'sunita.bartender@hotelannapurna.com', '9841234574', 'staff', 'verified', 27000.00],
+        ['Sanjay', 'Lama', 'sanjay.security@hotelannapurna.com', '9841234587', 'staff', 'verified', 26000.00],
+        ['Bishnu', 'Rai', 'bishnu.assistant@hotelannapurna.com', '9841234588', 'staff', 'verified', 29000.00],
+        ['Rama', 'Bhattarai', 'rama.cleaner@hotelannapurna.com', '9841234589', 'staff', 'verified', 22000.00],
+        ['Tej', 'Gurung', 'tej.cook@hotelannapurna.com', '9841234590', 'staff', 'verified', 32000.00],
+   
         
         // Customer Accounts
         ['Rajesh', 'Kumar', 'rajesh.kumar@gmail.com', '9841234575', 'customer', 'verified', null],
@@ -39,14 +45,6 @@ function seedUsers($conn) {
         ['Ritu', 'Chaudhary', 'ritu.chaudhary@gmail.com', '9841234584', 'customer', 'pending', null],
         ['Nabin', 'Bhandari', 'nabin.bhandari@yahoo.com', '9841234585', 'customer', 'verified', null],
         ['Pooja', 'Thakur', 'pooja.thakur@outlook.com', '9841234586', 'customer', 'verified', null],
-        
-        // Additional Staff Members
-        ['Sanjay', 'Lama', 'sanjay.security@hotelannapurna.com', '9841234587', 'staff', 'verified', 26000.00],
-        ['Bishnu', 'Rai', 'bishnu.assistant@hotelannapurna.com', '9841234588', 'staff', 'verified', 29000.00],
-        ['Rama', 'Bhattarai', 'rama.cleaner@hotelannapurna.com', '9841234589', 'staff', 'verified', 22000.00],
-        ['Tej', 'Gurung', 'tej.cook@hotelannapurna.com', '9841234590', 'staff', 'verified', 32000.00],
-        
-        // More Customer Accounts
         ['Anita', 'Shrestha', 'anita.shrestha@gmail.com', '9841234591', 'customer', 'verified', null],
         ['Ramesh', 'KC', 'ramesh.kc@yahoo.com', '9841234592', 'customer', 'verified', null],
         ['Sabina', 'Maharjan', 'sabina.maharjan@gmail.com', '9841234593', 'customer', 'verified', null],

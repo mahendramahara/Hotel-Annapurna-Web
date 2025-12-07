@@ -80,7 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 unset($_SESSION['reg_email']);
                 unset($_SESSION['reg_otp_expiry']);
                 unset($_SESSION['reg_resend_timer']);
-                unset($_SESSION['test_otp']);
                 
                 $success = "Registration successful! Redirecting...";
                 header("refresh:2;url=index.php");
@@ -190,7 +189,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (sendOTPEmail($email, $reg_data['first_name'], $otp)) {
                     $_SESSION['reg_otp_expiry'] = strtotime($expiry);
                     $_SESSION['reg_resend_timer'] = time() + 60; // 60 seconds cooldown
-                    $_SESSION['test_otp'] = $otp; // For testing
                     
                     $success = "New OTP has been sent to your email!";
                 } else {
@@ -461,12 +459,6 @@ $resendTimeRemaining = isset($_SESSION['reg_resend_timer']) ? max(0, $_SESSION['
             <div class="alert alert-success">
                 <ion-icon name="checkmark-circle"></ion-icon>
                 <?php echo $success; ?>
-            </div>
-        <?php endif; ?>
-
-        <?php if (isset($_SESSION['test_otp'])): ?>
-            <div class="alert alert-info">
-                <strong>Test OTP:</strong> <?php echo $_SESSION['test_otp']; ?>
             </div>
         <?php endif; ?>
 
