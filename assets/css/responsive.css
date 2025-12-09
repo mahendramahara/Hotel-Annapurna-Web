@@ -75,3 +75,75 @@
 /* -------------------- Media Query for BLOGS PAGE ----------------------- */
 
 /* -------------------- Media Query for CONTACT PAGE ----------------------- */
+
+@media (max-width: 900px) {
+    .top-navbar {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+        padding: 0.75rem 1.25rem;
+    }
+
+    .top-center {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .top-right {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .top-menubar {
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 0.75rem 1.25rem;
+        gap: 0.5rem;
+    }
+
+    .top-logo {
+        flex: 1 1 auto;
+    }
+
+    .menu-toggle {
+        display: flex;
+        margin-left: auto;
+    }
+
+    .top-menuitems {
+        width: 100%;
+        display: none;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .top-menuitems.open {
+        display: flex;
+    }
+
+    .top-menuitems ul {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    .top-menuitems ul li {
+        margin: 0;
+        width: 100%;
+    }
+
+    .top-menuitems ul li a {
+        display: block;
+        width: 100%;
+        padding: 0.6rem 0;
+    }
+
+    .top-menuitems .search-icon {
+        display: none;
+    }
+
+    .search-container {
+        display: none;
+    }
+}

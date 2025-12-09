@@ -121,7 +121,7 @@ $staff_members = $stmt_staff->get_result();
 <section class="offer-container">
         <div class="section-title">
             <h2>Special Offers & Promotions</h2>
-            <p>Take advantage of our exclusive deals and seasonal promotions designed to give you the best value for an unforgettable experience.</p>
+            <p style="color:blanchedalmond">Take advantage of our exclusive deals and seasonal promotions designed to give you the best value for an unforgettable experience.</p>
         </div>
         <div class="offer-images">
             <div class="offer-images-collection">

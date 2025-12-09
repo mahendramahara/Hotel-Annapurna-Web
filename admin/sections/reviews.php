@@ -116,6 +116,7 @@ function viewReview(id) {
     fetch(`../api/blog-interactions.php?action=get&id=${id}`)
         .then(res => res.json())
         .then(data => {
+            console.log('Review data:', data);
             if(data.success) {
                 const review = data.interaction;
                 document.getElementById('modalCustomerImage').src = '../' + (review.profile_pic || 'assets/images/default-avatar.png');
@@ -129,8 +130,19 @@ function viewReview(id) {
                 document.getElementById('modalRating').innerHTML = ratingHTML;
                 document.getElementById('modalReviewText').textContent = review.comment_text || 'No comment';
                 
-                document.getElementById('viewModal').style.display = 'block';
+                const modal = document.getElementById('viewModal');
+                console.log('Modal element:', modal);
+                if(modal) {
+                    modal.style.display = 'flex';
+                }
+            } else {
+                console.error('API error:', data.message);
+                alert('Error loading review: ' + (data.message || 'Unknown error'));
             }
+        })
+        .catch(err => {
+            console.error('Fetch error:', err);
+            alert('Failed to load review details');
         });
 }
 

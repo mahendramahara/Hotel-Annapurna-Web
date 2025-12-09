@@ -2,30 +2,15 @@
 require_once('includes/auth-guard.php');
 require_once('../config/db.php');
 
-parse_str(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_QUERY) ?? '', $query_params);
-$page = isset($query_params['p']) ? (int)$query_params['p'] : 1;
-if(isset($_GET['p'])) $page = (int)$_GET['p'];
-$limit = 10;
-$offset = ($page - 1) * $limit;
-
-$veg_count = $conn->query("SELECT COUNT(*) as total FROM food_items WHERE category = 'veg'")->fetch_assoc()['total'];
-$veg_pages = ceil($veg_count / $limit);
-$veg_stmt = $conn->prepare("SELECT * FROM food_items WHERE category = 'veg' ORDER BY created_at DESC LIMIT ? OFFSET ?");
-$veg_stmt->bind_param("ii", $limit, $offset);
+$veg_stmt = $conn->prepare("SELECT * FROM food_items WHERE category = 'veg' ORDER BY created_at DESC");
 $veg_stmt->execute();
 $veg_items = $veg_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$nonveg_count = $conn->query("SELECT COUNT(*) as total FROM food_items WHERE category = 'non-veg'")->fetch_assoc()['total'];
-$nonveg_pages = ceil($nonveg_count / $limit);
-$nonveg_stmt = $conn->prepare("SELECT * FROM food_items WHERE category = 'non-veg' ORDER BY created_at DESC LIMIT ? OFFSET ?");
-$nonveg_stmt->bind_param("ii", $limit, $offset);
+$nonveg_stmt = $conn->prepare("SELECT * FROM food_items WHERE category = 'non-veg' ORDER BY created_at DESC");
 $nonveg_stmt->execute();
 $nonveg_items = $nonveg_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-$special_count = $conn->query("SELECT COUNT(*) as total FROM food_items WHERE category = 'special'")->fetch_assoc()['total'];
-$special_pages = ceil($special_count / $limit);
-$special_stmt = $conn->prepare("SELECT * FROM food_items WHERE category = 'special' ORDER BY created_at DESC LIMIT ? OFFSET ?");
-$special_stmt->bind_param("ii", $limit, $offset);
+$special_stmt = $conn->prepare("SELECT * FROM food_items WHERE category = 'special' ORDER BY created_at DESC");
 $special_stmt->execute();
 $special_items = $special_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -50,7 +35,7 @@ $special_items = $special_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             </thead>
             <tbody>
                 <?php 
-                $sn = $offset + 1;
+                $sn = 1;
                 foreach($veg_items as $item): 
                 ?>
                 <tr>
@@ -74,19 +59,6 @@ $special_items = $special_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 <?php endif; ?>
             </tbody>
         </table>
-        <?php if($veg_pages > 1): ?>
-        <div class="pagination">
-            <?php if($page > 1): ?>
-                <a href="?p=<?= $page-1 ?>#menu_items" class="page-btn">Previous</a>
-            <?php endif; ?>
-            <?php for($i = 1; $i <= $veg_pages; $i++): ?>
-                <a href="?p=<?= $i ?>#menu_items" class="page-btn <?= $i == $page ? 'active' : '' ?>"><?= $i ?></a>
-            <?php endfor; ?>
-            <?php if($page < $veg_pages): ?>
-                <a href="?p=<?= $page+1 ?>#menu_items" class="page-btn">Next</a>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
         <button class="menu-add-button" onclick="openAddModal('vegetarian')">
             <i class="fas fa-plus"></i> Add New Vegetarian Item
         </button>
@@ -111,7 +83,7 @@ $special_items = $special_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             </thead>
             <tbody>
                 <?php 
-                $sn = $offset + 1;
+                $sn = 1;
                 foreach($nonveg_items as $item): 
                 ?>
                 <tr>
@@ -135,19 +107,6 @@ $special_items = $special_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 <?php endif; ?>
             </tbody>
         </table>
-        <?php if($nonveg_pages > 1): ?>
-        <div class="pagination">
-            <?php if($page > 1): ?>
-                <a href="?p=<?= $page-1 ?>#menu_items" class="page-btn">Previous</a>
-            <?php endif; ?>
-            <?php for($i = 1; $i <= $nonveg_pages; $i++): ?>
-                <a href="?p=<?= $i ?>#menu_items" class="page-btn <?= $i == $page ? 'active' : '' ?>"><?= $i ?></a>
-            <?php endfor; ?>
-            <?php if($page < $nonveg_pages): ?>
-                <a href="?p=<?= $page+1 ?>#menu_items" class="page-btn">Next</a>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
         <button class="menu-add-button" onclick="openAddModal('non-vegetarian')">
             <i class="fas fa-plus"></i> Add New Non-Vegetarian Item
         </button>
@@ -173,7 +132,7 @@ $special_items = $special_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             </thead>
             <tbody>
                 <?php 
-                $sn = $offset + 1;
+                $sn = 1;
                 foreach($special_items as $item): 
                 ?>
                 <tr>
@@ -229,19 +188,6 @@ $special_items = $special_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 <?php endif; ?>
             </tbody>
         </table>
-        <?php if($special_pages > 1): ?>
-        <div class="pagination">
-            <?php if($page > 1): ?>
-                <a href="?p=<?= $page-1 ?>#menu_items" class="page-btn">Previous</a>
-            <?php endif; ?>
-            <?php for($i = 1; $i <= $special_pages; $i++): ?>
-                <a href="?p=<?= $i ?>#menu_items" class="page-btn <?= $i == $page ? 'active' : '' ?>"><?= $i ?></a>
-            <?php endfor; ?>
-            <?php if($page < $special_pages): ?>
-                <a href="?p=<?= $page+1 ?>#menu_items" class="page-btn">Next</a>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
         <button class="menu-add-button" onclick="openAddModal('special')">
             <i class="fas fa-plus"></i> Add New Special Item
         </button>

@@ -266,6 +266,11 @@ $userFirstName = ($isLoggedIn && isset($_SESSION['user_first_name'])) ? $_SESSIO
                     <img src="assets/images/logo.png" alt="Hotel Annapurna Logo">
                 </a>
             </div>
+            <div class="menu-toggle" aria-label="Toggle navigation" role="button" tabindex="0">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
             <div class="top-menuitems">
                 <ul>
                     <li><a href="index.php">Home</a></li>
@@ -342,4 +347,48 @@ $userFirstName = ($isLoggedIn && isset($_SESSION['user_first_name'])) ? $_SESSIO
                 menu.classList.remove('show');
             }
         });
+
+        function toggleSearch() {
+            if (window.innerWidth <= 900) return;
+            const searchContainer = document.querySelector('.search-container');
+            const searchIcon = document.querySelector('.search-icon');
+            if (!searchContainer || !searchIcon) return;
+            const isActive = !searchContainer.classList.contains('active');
+            searchContainer.classList.toggle('active', isActive);
+            searchIcon.classList.toggle('hidden', isActive);
+            if (isActive) {
+                const input = searchContainer.querySelector('input');
+                if (input) input.focus();
+            }
+        }
+
+        const menuToggle = document.querySelector('.menu-toggle');
+        const topMenu = document.querySelector('.top-menuitems');
+
+        function setMenuState(isOpen) {
+            if (!topMenu || !menuToggle) return;
+            topMenu.classList.toggle('open', isOpen);
+            menuToggle.classList.toggle('active', isOpen);
+            if (!isOpen) {
+                const searchIcon = topMenu.querySelector('.search-icon');
+                const searchContainer = document.querySelector('.search-container');
+                if (searchIcon) searchIcon.classList.remove('hidden');
+                if (searchContainer) searchContainer.classList.remove('active');
+            }
+        }
+
+        if (menuToggle && topMenu) {
+            menuToggle.addEventListener('click', function() {
+                const isOpen = topMenu.classList.contains('open');
+                setMenuState(!isOpen);
+            });
+
+            menuToggle.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    const isOpen = topMenu.classList.contains('open');
+                    setMenuState(!isOpen);
+                }
+            });
+        }
     </script>

@@ -1433,7 +1433,7 @@ window.addEventListener('click', function(e) {
 let currentCustomerData = null;
 
 // Add Customer Modal
-function openAddModal() {
+function openAddCustomerModal() {
     const modal = document.getElementById('addModal');
     if (modal) {
         modal.style.display = 'block';
@@ -1455,31 +1455,70 @@ function closeAddCustomerModal() {
 
 // View Customer
 function viewCustomer(id) {
+    console.log('Fetching customer with ID:', id);
     fetch(`../api/admin-users.php?action=get&id=${id}`)
-        .then(res => res.json())
+        .then(res => {
+            console.log('Response status:', res.status);
+            return res.json();
+        })
         .then(data => {
+            console.log('Customer data received:', data);
             if(data.success) {
                 const user = data.user;
                 currentCustomerData = user;
                 
                 const profilePic = document.getElementById('viewProfilePic');
-                profilePic.src = user.profile_pic ? '../' + user.profile_pic : '../assets/images/default-avatar.png';
+                if(profilePic) {
+                    profilePic.src = user.profile_pic ? '../' + user.profile_pic : '../assets/images/default-avatar.png';
+                }
                 
-                document.getElementById('viewName').textContent = user.first_name + ' ' + user.last_name;
-                document.getElementById('viewEmail').textContent = user.email;
+                const fullNameEl = document.getElementById('viewFullName');
+                if(fullNameEl) fullNameEl.textContent = (user.first_name || '') + ' ' + (user.last_name || '');
+                
+                const emailEl = document.getElementById('viewEmail');
+                if(emailEl) emailEl.textContent = user.email || 'N/A';
                 
                 const statusBadge = document.getElementById('viewStatusBadge');
-                statusBadge.textContent = user.status;
-                statusBadge.className = `status-badge status-${user.status.toLowerCase()}`;
+                if(statusBadge) {
+                    statusBadge.textContent = user.status || 'unknown';
+                    statusBadge.className = `status-badge status-${(user.status || 'unknown').toLowerCase()}`;
+                }
                 
-                document.getElementById('viewContact').textContent = user.contact || 'N/A';
-                document.getElementById('viewCreatedAt').textContent = new Date(user.created_at).toLocaleDateString();
-                document.getElementById('viewLastLogin').textContent = new Date(user.updated_at).toLocaleString();
-                document.getElementById('viewOrderCount').textContent = user.order_count || '0';
-                document.getElementById('viewAddress').textContent = user.address || 'No address provided';
+                const contactEl = document.getElementById('viewContact');
+                if(contactEl) contactEl.textContent = user.contact || 'N/A';
                 
-                document.getElementById('viewModal').style.display = 'block';
+                const createdEl = document.getElementById('viewCreatedAt');
+                if(createdEl && user.created_at) {
+                    createdEl.textContent = new Date(user.created_at).toLocaleDateString();
+                }
+                
+                const lastLoginEl = document.getElementById('viewLastLogin');
+                if(lastLoginEl && user.updated_at) {
+                    lastLoginEl.textContent = new Date(user.updated_at).toLocaleString();
+                }
+                
+                const orderCountEl = document.getElementById('viewOrderCount');
+                if(orderCountEl) orderCountEl.textContent = user.order_count || '0';
+                
+                const addressEl = document.getElementById('viewAddress');
+                if(addressEl) addressEl.textContent = user.address || 'No address provided';
+                
+                const modal = document.getElementById('viewModal');
+                console.log('Modal element:', modal);
+                if(modal) {
+                    modal.style.display = 'flex';
+                    console.log('Modal display set to flex');
+                } else {
+                    console.error('Modal element not found!');
+                }
+            } else {
+                console.error('API Error:', data.message);
+                alert('Error loading customer: ' + (data.message || 'Unknown error'));
             }
+        })
+        .catch(err => {
+            console.error('Fetch error:', err);
+            alert('Failed to load customer details: ' + err.message);
         });
 }
 

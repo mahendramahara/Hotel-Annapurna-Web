@@ -193,7 +193,7 @@ if ($action === 'get') {
         exit();
     }
     
-    $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+    $stmt = $conn->prepare("SELECT u.*, (SELECT COUNT(*) FROM orders WHERE user_id = u.id) as order_count FROM users u WHERE u.id = ?");
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -203,7 +203,8 @@ if ($action === 'get') {
         exit();
     }
     
-    echo json_encode(['success' => true, 'user' => $result->fetch_assoc()]);
+    $user = $result->fetch_assoc();
+    echo json_encode(['success' => true, 'user' => $user]);
     exit();
 }
 

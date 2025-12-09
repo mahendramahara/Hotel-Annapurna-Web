@@ -2,6 +2,8 @@
 require_once("includes/sidebar.php"); 
 require_once('../config/db.php');
 
+$_GET['blogs_page'] = isset($_GET['p']) ? max(1, (int)$_GET['p']) : 1;
+
 $customers_count = $conn->query("SELECT COUNT(*) as total FROM users WHERE role = 'customer'")->fetch_assoc()['total'];
 $services_count = $conn->query("SELECT COUNT(*) as total FROM food_items")->fetch_assoc()['total'] + 
                   $conn->query("SELECT COUNT(*) as total FROM rooms")->fetch_assoc()['total'] + 
@@ -154,7 +156,7 @@ $recent_activities = $conn->query("SELECT al.*, CONCAT(u.first_name, ' ', u.last
     </div>
 </section>
 
-<script src="assets/js/script.js"></script>
+<script src="assets/js/script.js?v=<?= time() ?>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>

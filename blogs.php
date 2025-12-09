@@ -39,8 +39,8 @@ while($row = mysqli_fetch_assoc($blogs_result)) {
         <section class="blogs-grid">
             <?php foreach($blogs as $index => $blog): 
                 $tags = explode(',', $blog['tags']);
-                $featured_image = $blog['featured_image'] ? $blog['featured_image'] : '/api/placeholder/300/300';
-                $excerpt = substr($blog['content'], 0, 150) . '...';
+                $featured_image = !empty($blog['featured_image']) ? htmlspecialchars($blog['featured_image']) : 'assets/images/placeholder.jpg';
+                $excerpt = substr(strip_tags($blog['content']), 0, 150) . '...';
             ?>
             <article class="blogs-card">
                 <div class="blogs-card-image-wrapper">

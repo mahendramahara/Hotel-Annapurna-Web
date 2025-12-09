@@ -272,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     showError(blogId ? 'Blog updated successfully!' : 'Blog created successfully!');
                     setTimeout(() => {
-                        window.location.href = '../index.php?page=blogs';
+                        window.location.href = '../index.php#blogs';
                     }, 1500);
                 } else {
                     showError('Error: ' + (data.message || 'Failed to save blog'));
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 showError('Blog deleted successfully!');
                 setTimeout(() => {
-                    window.location.href = '../index.php?page=blogs';
+                    window.location.href = '../index.php#blogs';
                 }, 1500);
             } else {
                 showError('Error: ' + (data.message || 'Failed to delete blog'));
@@ -361,7 +361,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 deletePost();
                 break;
             case 'cancel':
-                window.location.href = '../index.php?page=blogs';
+                window.location.href = '../index.php#blogs';
                 break;
         }
         hideModal();

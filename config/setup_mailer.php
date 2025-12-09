@@ -7,44 +7,38 @@ require __DIR__ . '/../vendor/autoload.php';
 function getMailer() {
     $mail = new PHPMailer(true);
 
+    // Gmail SMTP
     $mail->isSMTP();
     $mail->Host       = 'smtp.gmail.com';
     $mail->SMTPAuth   = true;
-
-    // your smtp email here
-    $mail->Username   = 'your_email@gmail.com';
-
-    // your smtp app pwd here
-    $mail->Password   = 'your_app_password_here';
-
+    $mail->Username   = 'thebcatu@gmail.com';
+    $mail->Password   = 'bocvhrfpnksedtvw';  
     $mail->SMTPSecure = 'tls';
     $mail->Port       = 587;
 
-    $mail->setFrom('your_email@gmail.com', 'Annapurna Hotel - No Reply');
+    $mail->setFrom('thebcatu@gmail.com', 'Annapurna Hotel - No Reply');
 
     return $mail;
 }
 
-function sendMail($to, $subject, $body, $from = 'your_email@gmail.com', $fromName = 'Annapurna Hotel - No Reply') {
+function sendMail($to, $subject, $body, $from = 'thebcatu@gmail.com', $fromName = 'Annapurna Hotel - No Reply') {
     $mail = new PHPMailer(true);
 
     try {
+        // Gmail SMTP
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-
-        // your smtp email here
-        $mail->Username   = 'your_email@gmail.com';
-
-        // your smtp app pwd here
-        $mail->Password   = 'your_app_password_here';
-
+        $mail->Username   = 'thebcatu@gmail.com';
+        $mail->Password   = 'bocvhrfpnksedtvw';
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
+        // Sender
         $mail->setFrom($from, $fromName);
         $mail->addAddress($to);
 
+        // Content
         $mail->isHTML(true);
         $mail->Subject = $subject;
         $mail->Body    = $body;

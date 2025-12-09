@@ -96,7 +96,7 @@ $customers = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         </div>
         <?php endif; ?>
 
-        <button class="add-customer-btn" onclick="openAddModal()">
+        <button class="add-customer-btn" onclick="openAddCustomerModal()">
             <ion-icon name="add-outline"></ion-icon>
             Add New Customer
         </button>

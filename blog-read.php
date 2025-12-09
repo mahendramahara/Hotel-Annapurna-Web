@@ -120,7 +120,14 @@ $stmt_update_views->execute();
 <div class="blog-wrap">
     <article class="blog-main">
         <div class="blog-body">
-            <?php echo nl2br(htmlspecialchars($blog['content'])); ?>
+            <?php 
+            $content = $blog['content'];
+            $content = preg_replace('/<h2>(.*?)<\/h2>/', '<h2>$1</h2>', $content);
+            $content = preg_replace('/<h3>(.*?)<\/h3>/', '<h3>$1</h3>', $content);
+            $content = preg_replace('/<p>(.*?)<\/p>/', '<p>$1</p>', $content);
+            $content = preg_replace('/(?<!>)\n(?!<)/', '<br>', $content);
+            echo $content;
+            ?>
 
             <?php if($author): ?>
             <div class="author-card">

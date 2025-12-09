@@ -209,6 +209,8 @@
     background: rgba(0,0,0,0.6);
     z-index: 99999;
     animation: fadeIn 0.3s ease;
+    align-items: center;
+    justify-content: center;
     overflow: auto;
     backdrop-filter: blur(4px);
 }

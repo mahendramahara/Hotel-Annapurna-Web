@@ -2,19 +2,7 @@
 require_once('includes/auth-guard.php');
 require_once('../config/db.php');
 
-parse_str(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_QUERY) ?? '', $query_params);
-$page = isset($query_params['p']) ? (int)$query_params['p'] : 1;
-if(isset($_GET['p'])) $page = (int)$_GET['p'];
-$limit = 10;
-$offset = ($page - 1) * $limit;
-
-$count_stmt = $conn->prepare("SELECT COUNT(*) as total FROM blogs");
-$count_stmt->execute();
-$total_records = $count_stmt->get_result()->fetch_assoc()['total'];
-$total_pages = ceil($total_records / $limit);
-
-$stmt = $conn->prepare("SELECT b.*, CONCAT(u.first_name, ' ', u.last_name) as author_name FROM blogs b LEFT JOIN users u ON b.author_id = u.id ORDER BY b.created_at DESC LIMIT ? OFFSET ?");
-$stmt->bind_param("ii", $limit, $offset);
+$stmt = $conn->prepare("SELECT b.*, CONCAT(u.first_name, ' ', u.last_name) as author_name FROM blogs b LEFT JOIN users u ON b.author_id = u.id ORDER BY b.created_at DESC");
 $stmt->execute();
 $blogs = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -41,7 +29,7 @@ $blogs = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             </thead>
             <tbody>
                 <?php 
-                $sn = $offset + 1;
+                $sn = 1;
                 foreach($blogs as $blog): 
                 ?>
                 <tr>
@@ -85,22 +73,6 @@ $blogs = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 <?php endif; ?>
             </tbody>
         </table>
-        
-        <?php if($total_pages > 1): ?>
-        <div class="pagination">
-            <?php if($page > 1): ?>
-                <a href="?p=<?= $page-1 ?>#blogs" class="page-btn">Previous</a>
-            <?php endif; ?>
-            
-            <?php for($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?p=<?= $i ?>#blogs" class="page-btn <?= $i == $page ? 'active' : '' ?>"><?= $i ?></a>
-            <?php endfor; ?>
-            
-            <?php if($page < $total_pages): ?>
-                <a href="?p=<?= $page+1 ?>#blogs" class="page-btn">Next</a>
-            <?php endif; ?>
-        </div>
-        <?php endif; ?>
     </div>
 
     <button class="add-blog-btn" onclick="location.href='blogs/blog.php?mode=add'">
@@ -111,7 +83,7 @@ $blogs = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
 <script>
 function viewBlog(id) {
-    window.open('../blog-read-new.php?id=' + id, '_blank');
+    window.open('../blog-read.php?id=' + id, '_blank');
 }
 
 function editBlog(id) {

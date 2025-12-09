@@ -4,7 +4,7 @@ require_once('config/db.php');
 
 $is_logged_in = isset($_SESSION['logged_in']) && $_SESSION['logged_in'];
 
-$limit = 8;
+$limit = 9;
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 $total_limit = $limit * $page;
 
