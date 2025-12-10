@@ -5,7 +5,11 @@ require_once 'includes/activity-logger.php';
 
 // Log logout before destroying session
 if(isset($_SESSION['user_id'])) {
-    logActivity($conn, $_SESSION['user_id'], 'logout', 'logged out from the system');
+    try {
+        logActivity($conn, $_SESSION['user_id'], 'logout', 'logged out from the system');
+    } catch (Exception $e) {
+        error_log('Logout activity log failed: ' . $e->getMessage());
+    }
 }
 
 $_SESSION = array();

@@ -1,5 +1,21 @@
 # 🏨 Hotel Annapurna - Room Booking, Food Ordering & Table Reservation System
 
+## 🌐 Live Demo URLs
+
+> ⚠️ **Important:** These are FREE hosting URLs with limitations. **Not recommended for production data.**
+> For testing: Use the credentials below or register with a **Gmail account only** (Gmail SMTP is configured)
+
+### Live URLs (Test at with your test machine):
+- 🔗 **URL 1:** https://hotel-annapurna.infinityfreeapp.com/
+- 🔗 **URL 2:** https://hotel-annapurna.liveblog365.com/
+
+**Test Credentials (User Only):**
+- Email: `suresh.bdr@gmail.com`
+- Password: `12345678`
+- Or register a new account with any Gmail address
+
+---
+
 ## 📖 Project Introduction
 
 **Hotel Annapurna** is a comprehensive **hotel management and booking system** built with **Core PHP, HTML, CSS, and JavaScript** (no frameworks, no heavy dependencies except Fetch API). This system is designed to reduce the complexity of in-counter menu ordering and provide a seamless digital experience for both hotel staff and customers.
@@ -295,6 +311,20 @@ $success_url = $base_url . "/esewa-success.php";
 $failure_url = $base_url . "/esewa-failure.php";
 ```
 
+**Also update: `payment.php`**
+
+In the JavaScript payment form, update eSewa redirect URLs:
+```javascript
+success_url: window.location.origin + '/Hotel-Annapurna-Web/esewa-success.php',
+failure_url: window.location.origin + '/Hotel-Annapurna-Web/esewa-failure.php',
+```
+
+For production, change to:
+```javascript
+success_url: 'https://yourdomain.com/esewa-success.php',
+failure_url: 'https://yourdomain.com/esewa-failure.php',
+```
+
 Also check: `api/esewa-status-check.php`
 ```php
 // Verify URLs match your domain
@@ -555,101 +585,6 @@ Hotel-Annapurna-Web/
 
 ---
 
-## 🐛 Troubleshooting
-
-### ❌ Issue: "Connection refused" / Database Error
-
-**Solutions:**
-1. Ensure MySQL is running in XAMPP Control Panel
-2. Verify correct credentials in `config/db.php`
-3. Check database name: `hotel_annapurna`
-4. Run `database_setup.php` again
-5. Check MySQL port (default: 3306)
-
-```bash
-# Test MySQL connection
-mysql -u root -h localhost
-```
-
----
-
-### ❌ Issue: "Email not sending" / SMTP Error
-
-**Solutions:**
-1. Verify SMTP credentials in `config/setup_mailer.php`
-2. For Gmail:
-   - Enable 2-Factor Authentication
-   - Use App Password (16-char), not actual password
-3. For Mailtrap:
-   - Check credentials in dashboard
-   - Verify port: 2525
-4. Test with simpler SMTP first (Mailtrap)
-5. Check firewall/antivirus blocking SMTP ports
-
-**Test Email Script:**
-```php
-// Create test in config/setup_mailer.php
-$mail->addAddress('your-test@email.com');
-$mail->Subject = 'Test Email';
-$mail->Body = 'Test message';
-if(!$mail->send()) {
-    echo 'Error: ' . $mail->ErrorInfo;
-}
-```
-
----
-
-### ❌ Issue: "eSewa Payment Error" / URL Mismatch
-
-**Solutions:**
-1. Check base URL in `includes/esewa-helper.php`:
-   ```php
-   $base_url = "http://localhost/Hotel-Annapurna-Web";
-   ```
-2. Ensure URLs match your domain exactly
-3. Clear browser cache
-4. Test with eSewa test account
-5. Verify callback URLs are accessible
-
----
-
-### ❌ Issue: "404 Not Found" / Page Not Found
-
-**Solutions:**
-1. Verify file exists in correct location
-2. Check URL path matches folder structure
-3. Ensure Apache is running
-4. Clear browser cache
-5. Test: `http://localhost/phpmyadmin` to verify server
-
----
-
-### ❌ Issue: "Images Not Uploading" / Upload Fails
-
-**Solutions:**
-1. Create required folders:
-   ```
-   images/rooms/
-   images/food/
-   images/tables/
-   images/blogs/
-   images/profiles/
-   uploads/profiles/
-   ```
-
-2. Set proper permissions:
-   - Right-click folder → Properties → Security
-   - Grant Full Control or 777 permissions
-   - Or via terminal: `chmod -R 755 images/ uploads/`
-
-3. Check PHP upload limits in `php.ini`:
-   ```ini
-   upload_max_filesize = 10M
-   post_max_size = 10M
-   ```
-
----
-
 ## 🎟️ Sample Coupon Codes (After Seeding)
 
 After running `seed_database.php`, use these codes:
@@ -704,48 +639,6 @@ Use these test card numbers for testing Stripe payments:
 
 ---
 
-## 📚 Database Schema
-
-### Core Tables:
-
-**users**
-- id, first_name, last_name, email, contact, password
-- profile_pic, address, role, status, salary
-- created_at, updated_at
-
-**food_items**
-- id, category, food_name, price, discount_price
-- image_path, available_days, short_description
-- created_at, updated_at
-
-**rooms**
-- id, room_no, room_type, total_beds, bed_size
-- status, price, price_today, image_path, amenities
-- created_at, updated_at
-
-**tables**
-- id, table_no, total_chairs, booking_status
-- price_main, price_today, location, image_path
-- created_at, updated_at
-
-**orders**
-- id, user_id, order_type, item_id, item_name
-- quantity, price, payment_method, payment_status
-- booking_reference, status, notes
-- created_at, updated_at
-
-**blogs**
-- id, title, category, content, featured_image
-- author_id, views, status
-- created_at, updated_at
-
-**coupons**
-- id, code, discount_type, discount_value
-- min_purchase, max_discount, usage_limit
-- valid_from, valid_until, status
-
----
-
 ## 💻 Technology Stack
 
 | Technology | Details |
@@ -757,41 +650,6 @@ Use these test card numbers for testing Stripe payments:
 | **Payment** | eSewa API, Stripe |
 | **APIs** | RESTful endpoints, Fetch API |
 | **Security** | Prepared Statements, Password Hashing |
-
----
-
-## 🎓 Learning Outcomes
-
-This project demonstrates:
-
-✨ **Core PHP**
-- OOP concepts
-- Session management
-- File handling
-- Error handling
-
-✨ **Database**
-- SQL queries
-- Prepared statements
-- Transactions
-- Relationships
-
-✨ **Web Development**
-- MVC architecture
-- API design
-- User authentication
-- Authorization
-
-✨ **Integration**
-- Payment gateway integration
-- Email services
-- Third-party APIs
-
-✨ **Security**
-- Input validation
-- SQL injection prevention
-- Password security
-- Session security
 
 ---
 
@@ -816,20 +674,44 @@ This project demonstrates:
 
 ---
 
-## 📞 Support
+## 📞 Support & Contact
 
-For help and support:
+### Get in Touch:
 
-1. **GitHub Issues:** Open an issue on GitHub repository
-2. **Email:** Contact project owner
-3. **Documentation:** Check comments in code
-4. **API:** See comments in `api/` folder files
+**Developer:** Mahendra Mahara
+
+**Connect on:**
+- 💼 **LinkedIn:** [mahendramahara](https://www.linkedin.com/in/mahendramahara)
+- 👍 **Facebook:** [Mahendra Mahara](https://www.facebook.com/profile.php?id=61581358584753)
+
+### How to Get Support:
+
+1. **Check Documentation** - Review README and code comments
+2. **Test Locally First** - Run on localhost with XAMPP
+3. **Use Test Credentials** - Email: `suresh.bdr@gmail.com`, Password: `12345678`
+4. **Gmail Required** - For email features, use Gmail account only
+5. **GitHub Issues:** Open an issue on GitHub repository
+6. **Email:** Contact project owner
+7. **API:** See comments in `api/` folder files
 
 ---
 
 ## 📜 License
 
 This project is **open-source** and free for educational use.
+
+---
+
+## 🌟 Key Highlights
+
+✅ **Complete System** - From customer interface to admin dashboard  
+✅ **Multiple Payment Methods** - Cash, eSewa, Stripe  
+✅ **Email Integration** - Notifications and verification  
+✅ **Responsive Design** - Works on all devices  
+✅ **Admin Control** - Full CRUD operations  
+✅ **Real-time Tracking** - Order status updates  
+✅ **Security First** - Prepared statements, password hashing  
+✅ **User Friendly** - Intuitive interface and navigation  
 
 ---
 
@@ -849,20 +731,7 @@ This project is **open-source** and free for educational use.
 
 ---
 
-## 🌟 Key Highlights
-
-✅ **Complete System** - From customer interface to admin dashboard  
-✅ **Multiple Payment Methods** - Cash, eSewa, Stripe  
-✅ **Email Integration** - Notifications and verification  
-✅ **Responsive Design** - Works on all devices  
-✅ **Admin Control** - Full CRUD operations  
-✅ **Real-time Tracking** - Order status updates  
-✅ **Security First** - Prepared statements, password hashing  
-✅ **User Friendly** - Intuitive interface and navigation  
-
----
-
-**Version:** 2.1.2  
+**Version:** 2.2.0  
 **Last Updated:** December 2025  
 **Status:** ✅ Production Ready
 
